@@ -1,6 +1,11 @@
 <!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#EFF8F3"><title>숲속친구들 키우기</title><link rel="stylesheet" href="style.css"><script type="module" src="app.js"></script></head>
-<body><header class="mast"><div class="mast-creator"><span aria-hidden="true">✦</span> 사자대장</div><div class="brand">숲속친구들 키우기</div><p>문제를 풀고 먹이를 얻어 친구를 키워요!</p></header><main id="app"></main><dialog id="forest-intro" class="forest-intro" aria-labelledby="forest-intro-title">
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#EFF8F3"><title>숲속친구들 키우기</title><link rel="stylesheet" href="style.css"><script type="module" src="app.js"></script><script type="module" src="forest-music.js"></script><style>
+.forest-music{position:fixed;z-index:21;top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));min-height:36px;padding:4px 9px;border:1px solid #a69665;border-radius:20px;background:#183126;color:#f7ebc6;font-size:12px;white-space:nowrap}
+.forest-music[aria-pressed=true]{background:#3b4930;color:#fff0af}
+.forest-music:focus-visible{outline:2px solid #ffe69b;outline-offset:2px}
+.quiz-page .mast,.care-page .mast{padding-top:42px}
+</style></head>
+<body><button class="forest-music" type="button" aria-label="숲 배경 음악" aria-pressed="false" hidden><span aria-hidden="true">♫</span> <span>음악 꺼짐</span></button><header class="mast"><div class="mast-creator"><span aria-hidden="true">✦</span> 사자대장</div><div class="brand">숲속친구들 키우기</div><p>문제를 풀고 먹이를 얻어 친구를 키워요!</p></header><main id="app"></main><dialog id="forest-intro" class="forest-intro" aria-labelledby="forest-intro-title">
   <div class="intro-canopy" aria-hidden="true"></div>
   <div class="intro-path" aria-hidden="true"></div><div class="intro-foreground" aria-hidden="true"></div>
   <div class="intro-fireflies" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
