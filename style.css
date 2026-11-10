@@ -417,3 +417,77 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
   background:none;
 }
 .forest-set:has(.forest-slot-5) .forest-slot-1{left:30%;width:22%}
+
+/* Reserve ground in the wardrobe for props in front of the friend. */
+.wardrobe .reveal-stage{
+  padding-block:8px clamp(32px,10vw,48px);
+}
+.wardrobe .forest-set{--clearing-ground:3%}
+.wardrobe .forest-set .forest-slot-1{
+  left:34%;
+  width:32%;
+  height:17%;
+}
+.wardrobe .forest-set:has(.forest-slot-5) .forest-slot-1{left:25%}
+.wardrobe .forest-slot-1::before{
+  content:"";
+  position:absolute;
+  inset:54% -15% -5%;
+  z-index:-1;
+  background:radial-gradient(ellipse,#e4b64783,transparent 69%),
+    radial-gradient(ellipse at 50% 82%,#142918c4,transparent 70%);
+}
+.wardrobe .forest-set .forest-slot-2{
+  right:5%;
+  bottom:12%;
+  width:27%;
+  height:36%;
+}
+.wardrobe .forest-set .forest-slot-3{
+  left:5%;
+  bottom:15%;
+  width:24%;
+  height:32%;
+}
+.wardrobe .forest-set .forest-slot-0{
+  filter:none;
+  opacity:.92;
+  background:conic-gradient(from 122deg at 8% -10%,transparent 2deg,var(--aura) 13deg,transparent 21deg,var(--aura) 29deg,transparent 43deg),
+    radial-gradient(ellipse at 16% 10%,var(--aura),transparent 56%);
+}
+.wardrobe .forest-set .forest-slot-5{
+  left:32%;
+  bottom:1%;
+  width:39%;
+  height:15%;
+}
+
+/* Keep the quiz controls within reach even when a question or explanation is long. */
+@media (max-width:640px){
+  body.quiz-page main{padding-top:8px;padding-bottom:calc(92px + env(safe-area-inset-bottom,0px))}
+  .quiz-page .mast{padding-block:8px}
+  .quiz-page .quiz-companion{min-height:40px;margin:4px 0}
+  .quiz-page .quiz-companion .pet{width:48px;flex-basis:48px}
+  .quiz-page .quiz .intro{margin:8px 0}
+  .quiz-page .quiz h1{font-size:clamp(19px,5.4vw,24px);word-break:keep-all}
+  .quiz-page .quiz .options{gap:6px}
+  .quiz-page .quiz .option{min-height:44px;padding-block:6px}
+  .quiz-page .quiz>.actions{
+    position:fixed;
+    inset:auto 0 0;
+    z-index:20;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    align-items:center;
+    gap:8px;
+    margin:0 auto;
+    max-width:560px;
+    padding:8px 16px calc(8px + env(safe-area-inset-bottom,0px));
+    background:#142c21;
+    border-top:1px solid #4a6a50;
+    box-shadow:0 -4px 18px #0c1f1960;
+  }
+  .quiz-page .quiz>.actions button{min-height:44px;padding:6px 10px}
+  .quiz-page .quiz>.actions button:only-child{grid-column:1/-1}
+  .quiz-page .quiz>.actions .text-button{font-size:13px}
+}
