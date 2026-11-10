@@ -1,5 +1,6 @@
 import {pets,subjects,questionsFor} from './content.js';
 import {playQuizSound} from './quiz-sounds.js';
+import {animateFriend,ornamentReaction} from './play-motion.js';
 
 const key='lion-grow-v2';
 const root=document.querySelector('#app');
@@ -50,9 +51,9 @@ function glyph(pet,slot){
   ];
   return ornamentSvg(art[slot===0?0:slot-3]);
 }
-function scenery(pet,equipped){
+function scenery(pet,equipped,interactive=false,activeSlot=null){
   const ids=worn({equipped});
-  return ids.length?`<div class="forest-set gear-${pet}" aria-hidden="true">${ids.map(slot=>`<div class="forest-piece forest-slot-${slot}">${glyph(pet,slot)}</div>`).join('')}</div>`:'';
+  return ids.length?`<div class="forest-set gear-${pet}" ${interactive?'':'aria-hidden="true"'}>${ids.map(slot=>`<div class="forest-piece forest-slot-${slot} ${activeSlot===slot?'ornament-active':''}">${glyph(pet,slot)}${interactive?`<button class="ornament-touch" type="button" data-action="play-ornament:${slot}" aria-label="${sets[pet][slot]} 반응 보기"></button>`:''}</div>`).join('')}</div>`:'';
 }
 const worn=s=>Array.isArray(s.equipped)?s.equipped:Number.isInteger(s.equipped)?[s.equipped]:[];
 const unlocked=s=>Math.max(s.legacyDecorations,decorationMilestones.filter(goal=>s.correct.length>=goal).length);
@@ -112,7 +113,7 @@ const playthings = [
   ['🔔 달빛 방울 흔들기','🔔','토끼가 방울 소리에 맞춰 통통 뛰어요!'],
   ['🍁 낙엽 날리기','🍁','여우가 날아오는 낙엽을 꼬리 곁으로 받아요!'],
 ];
-let playing=false, playAction=null;
+let playing=false, playAction=null, playSlot=null;
 
 function render(focus=true) {
   const pet = pets[state?.pet];
@@ -141,7 +142,7 @@ function render(focus=true) {
     const xp=Math.min(state.xp,goal??0);
     const play=playing&&state.stage===goals.length;
     const [toy,icon,reaction]=playthings[state.pet];
-    html=`<div class="home-grid"><section class="home-grove"><div class="stage-top"><span class="tag">진화 ${state.stage} / 5</span><span class="tag food">${pet.meal} 먹이 ${state.food}개</span></div><div class="reveal-stage grove-scene ${motion?'fed':''} ${playAction?`friend-play friend-${state.pet} play-${playAction}`:''}"><div class="habitat" aria-hidden="true"></div>${scenery(state.pet,state.equipped)}${art(state.pet,state.stage,motion?'feeding':'idle')}${playAction?`<span class="play-prop" aria-hidden="true">${playAction==='snack'?pet.meal:icon}</span>`:''}${motion?`<span class="meal-fx" aria-hidden="true">${pet.meal}</span>`:''}</div><div class="speech" role="status">${playAction==='snack'?'냠냠! 간식을 먹고 기분이 좋아졌어요!':playAction==='toy'?reaction:motion?'냠냠! 맛있어요!':ready?'이제 진화할 수 있어요!':goal?'함께 쑥쑥 자라요!':'오늘도 숲을 지켜요!'}</div>${play?`<div class="play-controls" aria-label="친구와 놀기">${button(pet.meal+' 간식 주기','play-snack','secondary')}${button(toy,'play-toy','secondary')}${button('놀이 마치기','play-end','text-button')}</div>`:''}</section><section class="panel ${ready?'evolution-ready':''}">${intro('나의 친구',stageName(pet,state.stage))}
+    html=`<div class="home-grid"><section class="home-grove"><div class="stage-top"><span class="tag">진화 ${state.stage} / 5</span><span class="tag food">${pet.meal} 먹이 ${state.food}개</span></div><div class="reveal-stage grove-scene ${motion?'fed':''} ${playAction?`friend-play friend-${state.pet} play-${playAction}`:''}"><div class="habitat" aria-hidden="true"></div>${scenery(state.pet,state.equipped,play,playSlot)}${art(state.pet,state.stage,motion?'feeding':'idle')}${playAction&&playAction!=='ornament'?`<span class="play-prop" aria-hidden="true">${playAction==='snack'?pet.meal:icon}</span>`:''}${motion?`<span class="meal-fx" aria-hidden="true">${pet.meal}</span>`:''}</div><div class="speech" role="status">${playAction==='snack'?'냠냠! 간식을 먹고 기분이 좋아졌어요!':playAction==='toy'?reaction:playAction==='ornament'?ornamentReaction(state.pet,playSlot):motion?'냠냠! 맛있어요!':ready?'이제 진화할 수 있어요!':goal?'함께 쑥쑥 자라요!':'오늘도 숲을 지켜요!'}</div>${play?`<div class="play-controls" aria-label="친구와 놀기">${button(pet.meal+' 간식 주기','play-snack','secondary')}${button(toy,'play-toy','secondary')}${button('놀이 마치기','play-end','text-button')}</div>`:''}</section><section class="panel ${ready?'evolution-ready':''}">${intro('나의 친구',stageName(pet,state.stage))}
     ${goal?`<div class="xp"><div><strong>성장 경험치</strong><b>${xp} / ${goal}</b></div><progress value="${xp}" max="${goal}" aria-label="성장 경험치"></progress></div>`:'<div class="done">✦ 다섯 번의 진화 완료</div>'}
     <p>${ready?'진화할 준비가 됐어요!':!goal?'퀴즈와 꾸미기를 계속 즐겨요.':xp===goal?'이번 단계에서 먹이를 한 번 주면 진화할 수 있어요.':state.food?'먹이를 주면 경험치가 올라요.':'단원 문제를 모두 맞히면 먹이를 받아요.'}</p>
     <div class="actions">${ready?button('진화하기','evolve'):''}${state.food&&!ready?button('먹이 주기','feed'):''}${!goal&&!play?button('친구와 놀기','play-start'):''}${button('문제 풀러 가기','subjects',ready||state.food?'secondary':'primary')}<div class="care-links">${button('꾸미기','wardrobe','text-button')}${button('다른 친구 키우기','choose-new','text-button')}</div></div></section></div>`;
@@ -177,17 +178,24 @@ root.addEventListener('click', event => {
   clearTimeout(feedTimer);
   motion=false;
   playAction=null;
+  playSlot=null;
   const isPlay=action.startsWith('play-');
   if(!isPlay) playing=false;
   switch(action) {
     case 'play-start':
     case 'play-end':
+    case 'play-ornament':
     case 'play-snack':
     case 'play-toy':
       if(page!=='home'||state.stage!==goals.length) return;
       if(action==='play-start') playing=true;
       else if(action==='play-end') playing=false;
-      else if(playing) playAction=action==='play-snack'?'snack':'toy';
+      else if(playing&&action==='play-ornament'){
+        const slot=Number(value);
+        if(!worn(state).includes(slot)) return;
+        playSlot=slot;
+        playAction='ornament';
+      } else if(playing) playAction=action==='play-snack'?'snack':'toy';
       break;
     case 'pet': pick=Number(value); render(false); root.querySelector(`[data-action="pet:${pick}"]`)?.focus(); return;
     case 'start':
@@ -244,9 +252,10 @@ root.addEventListener('click', event => {
   const editingDecoration=['equip','equip-all','unequip'].includes(action);
   render(!editingDecoration&&!isPlay);
   if(isPlay){
-    const target=action==='play-start'?'play-snack':action==='play-end'?'play-start':action;
+    const target=action==='play-start'?'play-snack':action==='play-end'?'play-start':control.dataset.action;
     root.querySelector(`[data-action="${target}"]`)?.focus({preventScroll:true});
     if(action==='play-start'||action==='play-end') root.querySelector(`[data-action="${target}"]`)?.scrollIntoView({block:'nearest'});
+    if(playAction) void animateFriend(root.querySelector('.grove-scene'),state.pet,playAction,playSlot);
   }
   if(editingDecoration) (root.querySelector(`[data-action="${control.dataset.action}"]`)??root.querySelector('.wardrobe-items button:not(:disabled)'))?.focus({preventScroll:true});
   if(action==='feed') {

@@ -7,20 +7,23 @@
 .play-controls{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:12px auto}
 .play-controls button{padding:8px 12px;min-height:44px;word-break:keep-all}
 .play-prop{position:absolute;z-index:4;top:62%;left:50%;font-size:clamp(25px,8vw,40px);pointer-events:none;animation:toy-twinkle 1s ease-out both}
-.friend-play .pet{animation:happy-hop .65s ease-out}
-.play-toy.friend-0 .play-prop{animation:roll-cone 1s ease-out both}
-.play-toy.friend-1 .play-prop{top:30%;left:72%;transform-origin:top center;animation:ring-bell .8s ease-in-out both}
-.play-toy.friend-1 .pet{animation:rabbit-hop .8s ease-in-out}
-.play-toy.friend-2 .play-prop{animation:drift-leaf 1s ease-out both}
-.play-toy.friend-2 .pet{animation:fox-sway .75s ease-in-out}
+.play-toy.friend-0 .play-prop{animation:roll-cone 2.2s ease-out both}
+.play-toy.friend-1 .play-prop{top:30%;left:72%;transform-origin:top center;animation:ring-bell 2.2s ease-in-out both}
+.play-toy.friend-2 .play-prop{animation:drift-leaf 2.2s ease-out both}
 @keyframes toy-twinkle{0%{transform:translate(-100%,60%) scale(.6);opacity:0}35%{transform:translate(-50%,-35%) scale(1.12);opacity:1}100%{transform:translate(-50%,-60%);opacity:0}}
-@keyframes happy-hop{40%{transform:translateY(-4%) rotate(-2deg)}70%{transform:scale(1.02,.97)}}
 @keyframes roll-cone{0%{transform:translateX(-38vw) rotate(-200deg);opacity:0}18%{opacity:1}75%{transform:translateX(-50%) rotate(10deg);opacity:1}100%{transform:translateX(-50%);opacity:0}}
 @keyframes ring-bell{20%,60%{transform:rotate(-22deg)}40%,80%{transform:rotate(19deg)}100%{opacity:0}}
-@keyframes rabbit-hop{25%,70%{transform:translateY(-8%)}45%,90%{transform:scale(1.03,.96)}}
 @keyframes drift-leaf{0%{transform:translate(-38vw,-140%) rotate(-35deg);opacity:0}22%{opacity:1}68%{transform:translate(36%,-32%) rotate(115deg);opacity:1}100%{transform:translate(85%,15%) rotate(145deg);opacity:0}}
-@keyframes fox-sway{36%{transform:rotate(3deg) translateX(2%)}70%{transform:rotate(-2deg)}}
 @media(prefers-reduced-motion:reduce){.friend-play .pet,.friend-play .play-prop{animation:none!important}.play-prop{transform:translateX(-50%)}}
+.friend-play .pet .play-pose{animation:none}
+.ornament-touch{position:absolute;inset:0;width:100%;height:100%;min-height:0;padding:0;border:0;background:transparent;pointer-events:auto;cursor:pointer}
+.ornament-touch:hover,.ornament-touch:focus-visible{background:#ffe8a51a;outline:1px solid #ffe9ab;border-radius:12px}
+.forest-slot-0>.ornament-touch,.forest-slot-4>.ornament-touch{inset:0 auto auto 1%;width:21%;height:24%}
+.forest-slot-4>.ornament-touch{inset:0 0 auto auto}
+.forest-slot-5>.ornament-touch{inset:0 22%;width:56%}
+.ornament-active .gear-art{animation:ornament-shine 1.7s ease both}
+@keyframes ornament-shine{25%,70%{filter:brightness(1.35) drop-shadow(0 0 7px #ffe9ae)}}
+@media(prefers-reduced-motion:reduce){.ornament-active .gear-art{animation:none;filter:brightness(1.22)}}
 </style></head>
 <body><button class="forest-music" type="button" aria-label="숲 배경 음악" aria-pressed="false" hidden><span aria-hidden="true">♫</span> <span>음악 꺼짐</span></button><header class="mast"><div class="mast-creator"><span aria-hidden="true">✦</span> 사자대장</div><div class="brand">숲속친구들 키우기</div><p>문제를 풀고 먹이를 얻어 친구를 키워요!</p></header><main id="app"></main><dialog id="forest-intro" class="forest-intro" aria-labelledby="forest-intro-title">
   <div class="intro-canopy" aria-hidden="true"></div>
