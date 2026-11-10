@@ -548,3 +548,19 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
   background:radial-gradient(ellipse,var(--ground-glow),transparent 71%);
 }
 .forest-set .forest-slot-5 svg{filter:drop-shadow(0 0 3px var(--jewel))}
+
+/* Hang the crown and constellation in the canopy, clear of the portrait. */
+.wardrobe .forest-set .forest-slot-0 svg,
+.wardrobe .forest-set .forest-slot-4 svg{
+  position:absolute;
+  display:block;
+  width:22%;
+  height:29%;
+  filter:drop-shadow(0 0 5px var(--aura));
+}
+.wardrobe .forest-set .forest-slot-0 svg{top:1%;left:3%}
+.wardrobe .forest-set .forest-slot-4 svg{top:0;right:1%;opacity:.78}
+.wardrobe .forest-set .forest-slot-1{height:20%}
+.wardrobe .forest-set .forest-slot-2{height:38%}
+.wardrobe .forest-set .forest-slot-3{height:35%}
+.wardrobe .forest-set .forest-slot-5 svg{transform:scaleX(1.9)}
