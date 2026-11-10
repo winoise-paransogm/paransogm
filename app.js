@@ -268,6 +268,7 @@ root.addEventListener('click', event => {
   }
   const editingDecoration=['equip','equip-all','unequip'].includes(action);
   render(!editingDecoration&&!isPlay);
+  if(action==='play-start') root.querySelector('.grove-scene')?.classList.add('show-ornament-hints');
   if(isPlay){
     const target=action==='play-start'?'play-snack':action==='play-end'?'play-start':control.dataset.action;
     root.querySelector(`[data-action="${target}"]`)?.focus({preventScroll:true});

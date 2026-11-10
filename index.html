@@ -32,6 +32,18 @@ html:has(.forest-intro[open]),body:has(.forest-intro[open]){overflow:hidden;over
 .intro-video.intro-bounce{animation:intro-resist 340ms cubic-bezier(.2,.75,.25,1)}
 .intro-sound{position:absolute;z-index:2;left:max(16px,env(safe-area-inset-left));bottom:max(16px,env(safe-area-inset-bottom));padding:8px 15px;background:#10231aeb;color:#fff9e9;border:1px solid #ffe69b88}
 .intro-sound[hidden]{display:none}
+.forest-piece .ornament-touch::before{content:"";position:absolute;inset:-12%;border-radius:50%;pointer-events:none;opacity:0;background:radial-gradient(ellipse,var(--ornament-halo,#ffd479b0),transparent 69%)}
+.gear-1{--ornament-halo:#d9cbffbd}
+.gear-2{--ornament-halo:#ffb16cbd}
+.show-ornament-hints .forest-piece .ornament-touch::before{animation:ornament-hint 950ms ease-out both;animation-delay:var(--hint-delay,0ms)}
+.show-ornament-hints .forest-piece:nth-child(2){--hint-delay:150ms}
+.show-ornament-hints .forest-piece:nth-child(3){--hint-delay:300ms}
+.show-ornament-hints .forest-piece:nth-child(4){--hint-delay:450ms}
+.show-ornament-hints .forest-piece:nth-child(5){--hint-delay:600ms}
+.show-ornament-hints .forest-piece:nth-child(6){--hint-delay:750ms}
+.ornament-active .ornament-touch::before{animation:ornament-hint 1.3s ease-out both}
+@keyframes ornament-hint{0%,100%{opacity:0;transform:scale(.88)}38%{opacity:.85;transform:scale(1.04)}}
+@media(prefers-reduced-motion:reduce){.show-ornament-hints .forest-piece .ornament-touch::before,.ornament-active .ornament-touch::before{animation:none;opacity:.38}}
 </style></head>
 <body><button class="forest-music" type="button" aria-label="숲 배경 음악" aria-pressed="false" hidden><span aria-hidden="true">♫</span> <span>음악 꺼짐</span></button><header class="mast"><div class="mast-creator"><span aria-hidden="true">✦</span> 사자대장</div><div class="brand">숲속친구들 키우기</div><p>문제를 풀고 먹이를 얻어 친구를 키워요!</p></header><main id="app"></main><dialog id="forest-intro" class="forest-intro" aria-labelledby="forest-intro-title">
   <video class="intro-video" muted playsinline preload="none" aria-hidden="true"></video>
