@@ -723,3 +723,42 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 .pet-0.stage-5 .friend-image:not(.before-evolution){
   filter:url(#fox-portrait-matte);
 }
+
+/* Prominent, illustrated care menus. */
+.care-links{grid-template-columns:1fr;gap:12px;margin-top:14px}
+.care-menu{display:grid;grid-template-columns:70px 1fr 18px;align-items:center;gap:12px;min-height:88px;padding:10px 16px;text-align:left;border:1px solid #d7b969;border-radius:19px;background:linear-gradient(120deg,#304c38,#142e23);color:#fff1c4;box-shadow:inset 0 1px 0 #fff4c32b,0 5px 16px #071b242c;overflow:hidden}
+.shop-menu{background:linear-gradient(115deg,#62451f,#302d1d);border-color:#edc56e}
+.care-menu>span:nth-child(2){font-size:18px;font-weight:800;word-break:keep-all}
+.care-menu small{display:block;margin-top:5px;color:#e2dec7;font-size:12px;font-weight:400}
+.care-menu>b{font-size:28px;color:#ebd394}
+.care-menu-art{display:block;position:relative;width:70px;height:64px;background:radial-gradient(ellipse,#e8c97545,transparent 70%)}
+.care-menu-art img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 4px #0005)}
+.friends-menu-art img{position:absolute;bottom:0;width:42px;height:56px}
+.friends-menu-art img:nth-child(1){left:-6px;transform:rotate(-9deg)}
+.friends-menu-art img:nth-child(2){left:16px;bottom:5px;z-index:1}
+.friends-menu-art img:nth-child(3){right:-8px;transform:rotate(9deg)}
+.care-menu:hover{filter:brightness(1.12);border-color:#fff0a9}
+.care-menu:active{transform:scale(.98)}
+.care-menu:focus-visible{outline:3px solid #ffe69b;outline-offset:3px}
+.opening .choice-icon{width:64px;height:68px;display:block}
+.choice-icon img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 2px 3px #0005)}
+.opening .pet-option{padding:8px 4px;gap:4px}
+/* Keep original portrait quality and compose motion in the same frame. */
+.friend-play .pet .play-pose{object-fit:contain;image-rendering:auto}
+.interaction-effect{position:absolute;inset:0;pointer-events:none;z-index:8;color:#ffe9aa}
+.interaction-effect i{position:absolute;left:45%;top:38%;width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor;animation:companion-sparks 2.6s ease-out both}
+.interaction-effect i:nth-child(2){left:25%;animation-delay:.16s}
+.interaction-effect i:nth-child(3){left:68%;animation-delay:.3s}
+.effect-splash,.effect-sip,.effect-inspect{color:#a9e5ff}
+.effect-splash i,.effect-sip i{border-radius:60% 40% 60% 40%;animation-name:companion-droplets}
+.effect-pluck i,.effect-listen i,.effect-ring i{background:transparent;border:2px solid currentColor;width:14px;height:14px;box-shadow:none;animation-name:companion-rings}
+.effect-warm{color:#ffc170}
+.effect-sniff{color:#e8bbe5}
+.ornament-active[data-interaction] .gear-art{animation:companion-glow 2.6s ease both}
+.ornament-active:is([data-interaction=ring],[data-interaction=listen],[data-interaction=sway]) .gear-art{transform-origin:50% 10%;animation:companion-swing 2.6s ease both}
+@keyframes companion-sparks{0%,15%{opacity:0;transform:translateY(8px) scale(.2)}35%{opacity:1}85%,100%{opacity:0;transform:translateY(-40px) scale(.5)}}
+@keyframes companion-droplets{0%,25%{opacity:0;transform:translate(0,0) scale(.3)}45%{opacity:1;transform:translate(-8px,-25px)}80%,100%{opacity:0;transform:translate(12px,12px) scale(.5)}}
+@keyframes companion-rings{0%,20%{opacity:0;transform:scale(.3)}40%{opacity:.9}90%,100%{opacity:0;transform:scale(3)}}
+@keyframes companion-glow{0%,100%{filter:brightness(1)}40%,65%{filter:brightness(1.3) drop-shadow(0 0 7px #ffe5a3)}}
+@keyframes companion-swing{0%,100%{transform:rotate(0)}35%,65%{transform:rotate(-7deg)}50%,80%{transform:rotate(7deg)}}
+@media(prefers-reduced-motion:reduce){.interaction-effect{display:none}.ornament-active[data-interaction] .gear-art{animation:none}.care-menu:active{transform:none}}
