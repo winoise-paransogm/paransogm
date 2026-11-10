@@ -24,8 +24,15 @@
 .ornament-active .gear-art{animation:ornament-shine 1.7s ease both}
 @keyframes ornament-shine{25%,70%{filter:brightness(1.35) drop-shadow(0 0 7px #ffe9ae)}}
 @media(prefers-reduced-motion:reduce){.ornament-active .gear-art{animation:none;filter:brightness(1.22)}}
+.intro-video{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#10231a;z-index:1;transform:scale(1.035)}
+.intro-video-playing .intro-video{display:block}
+html:has(.forest-intro[open]),body:has(.forest-intro[open]){overflow:hidden;overscroll-behavior:none}
+.forest-intro{touch-action:none;overscroll-behavior:none}
+@keyframes intro-resist{0%,100%{transform:scale(1.035)}42%{transform:translateY(var(--intro-push)) scale(1.05)}70%{transform:translateY(calc(var(--intro-push) * -.18)) scale(1.035)}}
+.intro-video.intro-bounce{animation:intro-resist 340ms cubic-bezier(.2,.75,.25,1)}
 </style></head>
 <body><button class="forest-music" type="button" aria-label="숲 배경 음악" aria-pressed="false" hidden><span aria-hidden="true">♫</span> <span>음악 꺼짐</span></button><header class="mast"><div class="mast-creator"><span aria-hidden="true">✦</span> 사자대장</div><div class="brand">숲속친구들 키우기</div><p>문제를 풀고 먹이를 얻어 친구를 키워요!</p></header><main id="app"></main><dialog id="forest-intro" class="forest-intro" aria-labelledby="forest-intro-title">
+  <video class="intro-video" muted playsinline preload="none" aria-hidden="true"></video>
   <div class="intro-canopy" aria-hidden="true"></div>
   <div class="intro-path" aria-hidden="true"></div><div class="intro-foreground" aria-hidden="true"></div>
   <div class="intro-fireflies" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
