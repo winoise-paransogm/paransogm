@@ -193,7 +193,7 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 .unit-group summary{padding:11px 4px;cursor:pointer;font-weight:800;min-height:48px;color:#fff6dc}
 .unit-options{display:grid;gap:6px;padding:0 0 10px}
 .quiz-page .unit-options .subject{grid-template-columns:1fr auto}
-.wardrobe .reveal-stage{min-height:200px}.wardrobe .reveal-stage .pet{width:min(100%,235px);background:transparent;mask-image:none}
+.grove-scene{min-height:200px}.grove-scene .pet{width:min(100%,235px);background:transparent;mask-image:none}
 .wardrobe-progress{margin:12px 0 6px}.wardrobe-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 .wardrobe-items .option{background:#213e30;color:#fff9e9;border-color:#55745b;font-size:14px;padding:8px}
 .wardrobe-items .option span{background:#395543}
@@ -250,7 +250,7 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 .reveal-pet-1 .evolution-halo{background:radial-gradient(ellipse,#d4bafaab,transparent 65%)}
 .reveal-pet-2 .evolution-halo{background:radial-gradient(ellipse,#ffad6c9c,transparent 65%)}
 .reveal-level-4 .friend-image:not(.before-evolution),.reveal-level-5 .friend-image:not(.before-evolution){filter:drop-shadow(0 0 16px #f9cc6540)}
-.stage .mature-pet .friend-image,.wardrobe .mature-pet .friend-image{width:96%}
+.stage .mature-pet .friend-image,.grove-scene .mature-pet .friend-image{width:96%}
 
 /* Wearables follow pose anchors; the wand has its own lane in the scene. */
 .gear-slot-1{left:var(--chest-x,50%);top:var(--chest-y,64%);width:11%;transform:translate(-50%,-50%)}
@@ -261,7 +261,7 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 .gear-slot-2 .gear-art{object-position:center bottom}
 .gear-slot-5{width:70%;left:15%;bottom:0;opacity:.46}
 .quiz-companion .gear-slot-2{left:89%;width:13%;height:35%}
-.wardrobe .reveal-stage,.result .reveal-stage{padding-inline:clamp(24px,9%,55px)}
+.grove-scene,.result .reveal-stage{padding-inline:clamp(24px,9%,55px)}
 .stage:has(.gear-slot-2){padding-inline:clamp(24px,9%,55px)}
 .wardrobe-items .option{min-width:0;overflow:hidden}
 .wardrobe-items .gear-thumb{position:relative;display:block;flex:0 0 37px;width:37px;min-width:37px;height:37px;overflow:hidden;padding:0}
@@ -419,17 +419,17 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 .forest-set:has(.forest-slot-5) .forest-slot-1{left:30%;width:22%}
 
 /* Reserve ground in the wardrobe for props in front of the friend. */
-.wardrobe .reveal-stage{
+.grove-scene{
   padding-block:8px clamp(32px,10vw,48px);
 }
-.wardrobe .forest-set{--clearing-ground:3%}
-.wardrobe .forest-set .forest-slot-1{
+.grove-scene .forest-set{--clearing-ground:3%}
+.grove-scene .forest-set .forest-slot-1{
   left:34%;
   width:32%;
   height:17%;
 }
-.wardrobe .forest-set:has(.forest-slot-5) .forest-slot-1{left:25%}
-.wardrobe .forest-slot-1::before{
+.grove-scene .forest-set:has(.forest-slot-5) .forest-slot-1{left:25%}
+.grove-scene .forest-slot-1::before{
   content:"";
   position:absolute;
   inset:54% -15% -5%;
@@ -437,25 +437,25 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
   background:radial-gradient(ellipse,#e4b64783,transparent 69%),
     radial-gradient(ellipse at 50% 82%,#142918c4,transparent 70%);
 }
-.wardrobe .forest-set .forest-slot-2{
+.grove-scene .forest-set .forest-slot-2{
   right:5%;
   bottom:12%;
   width:27%;
   height:36%;
 }
-.wardrobe .forest-set .forest-slot-3{
+.grove-scene .forest-set .forest-slot-3{
   left:5%;
   bottom:15%;
   width:24%;
   height:32%;
 }
-.wardrobe .forest-set .forest-slot-0{
+.grove-scene .forest-set .forest-slot-0{
   filter:none;
   opacity:.92;
   background:conic-gradient(from 122deg at 8% -10%,transparent 2deg,var(--aura) 13deg,transparent 21deg,var(--aura) 29deg,transparent 43deg),
     radial-gradient(ellipse at 16% 10%,var(--aura),transparent 56%);
 }
-.wardrobe .forest-set .forest-slot-5{
+.grove-scene .forest-set .forest-slot-5{
   left:32%;
   bottom:1%;
   width:39%;
@@ -550,83 +550,83 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 .forest-set .forest-slot-5 svg{filter:drop-shadow(0 0 3px var(--jewel))}
 
 /* Hang the crown and constellation in the canopy, clear of the portrait. */
-.wardrobe .forest-set .forest-slot-0 svg,
-.wardrobe .forest-set .forest-slot-4 svg{
+.grove-scene .forest-set .forest-slot-0 svg,
+.grove-scene .forest-set .forest-slot-4 svg{
   position:absolute;
   display:block;
   width:22%;
   height:29%;
   filter:drop-shadow(0 0 5px var(--aura));
 }
-.wardrobe .forest-set .forest-slot-0 svg{top:1%;left:3%}
-.wardrobe .forest-set .forest-slot-4 svg{top:0;right:1%;opacity:.78}
-.wardrobe .forest-set .forest-slot-1{height:20%}
-.wardrobe .forest-set .forest-slot-2{height:38%}
-.wardrobe .forest-set .forest-slot-3{height:35%}
-.wardrobe .forest-set .forest-slot-5 svg{transform:scaleX(1.9)}
+.grove-scene .forest-set .forest-slot-0 svg{top:1%;left:3%}
+.grove-scene .forest-set .forest-slot-4 svg{top:0;right:1%;opacity:.78}
+.grove-scene .forest-set .forest-slot-1{height:20%}
+.grove-scene .forest-set .forest-slot-2{height:38%}
+.grove-scene .forest-set .forest-slot-3{height:35%}
+.grove-scene .forest-set .forest-slot-5 svg{transform:scaleX(1.9)}
 
 /* Reserve separate ground for the seal and foreground prop. */
-.wardrobe .reveal-stage:has(.forest-slot-2,.forest-slot-3)>.mature-pet{
+.grove-scene:has(.forest-slot-2,.forest-slot-3)>.mature-pet{
   width:min(76%,220px);
 }
-.wardrobe .reveal-stage:has(.forest-slot-5){
+.grove-scene:has(.forest-slot-5){
   padding-bottom:clamp(55px,16vw,75px);
 }
-.wardrobe .forest-set .forest-slot-5{
+.grove-scene .forest-set .forest-slot-5{
   left:18%;
   bottom:2%;
   width:64%;
   height:24%;
   opacity:.9;
 }
-.wardrobe .forest-set .forest-slot-5 svg{transform:scaleX(2.35)}
-.wardrobe .forest-set:has(.forest-slot-5) .forest-slot-1{
+.grove-scene .forest-set .forest-slot-5 svg{transform:scaleX(2.35)}
+.grove-scene .forest-set:has(.forest-slot-5) .forest-slot-1{
   left:5%;
   bottom:4%;
   width:24%;
   height:22%;
 }
-.wardrobe .forest-set.gear-0 .forest-slot-2{
+.grove-scene .forest-set.gear-0 .forest-slot-2{
   right:3%;
   width:25%;
   bottom:16%;
 }
-.wardrobe .forest-set.gear-0 .forest-slot-3{
+.grove-scene .forest-set.gear-0 .forest-slot-3{
   left:3%;
   width:22%;
   bottom:19%;
 }
-.wardrobe .forest-set.gear-0 .forest-slot-0 svg{
+.grove-scene .forest-set.gear-0 .forest-slot-0 svg{
   top:0;
   left:1%;
   width:18%;
   height:22%;
   opacity:.72;
 }
-.wardrobe .forest-set.gear-0 .forest-slot-4 svg{display:none}
+.grove-scene .forest-set.gear-0 .forest-slot-4 svg{display:none}
 
 /* Keep the pond and brazier clear of the two ground emblems. */
-.wardrobe .forest-set.gear-1 .forest-slot-1{left:28%;width:44%;height:23%}
-.wardrobe .forest-set.gear-2 .forest-slot-1{left:35%;width:30%;height:24%}
-.wardrobe .forest-set.gear-1:has(.forest-slot-5) .forest-slot-1{
+.grove-scene .forest-set.gear-1 .forest-slot-1{left:28%;width:44%;height:23%}
+.grove-scene .forest-set.gear-2 .forest-slot-1{left:35%;width:30%;height:24%}
+.grove-scene .forest-set.gear-1:has(.forest-slot-5) .forest-slot-1{
   left:4%;bottom:4%;width:34%;
 }
-.wardrobe .forest-set.gear-2:has(.forest-slot-5) .forest-slot-1{
+.grove-scene .forest-set.gear-2:has(.forest-slot-5) .forest-slot-1{
   left:72%;bottom:4%;width:24%;
 }
-.wardrobe .forest-set:is(.gear-1,.gear-2) .forest-slot-2{
+.grove-scene .forest-set:is(.gear-1,.gear-2) .forest-slot-2{
   right:2%;bottom:20%;width:27%;height:39%;
 }
-.wardrobe .forest-set:is(.gear-1,.gear-2) .forest-slot-3{
+.grove-scene .forest-set:is(.gear-1,.gear-2) .forest-slot-3{
   left:2%;bottom:22%;width:21%;height:38%;
 }
-.wardrobe .forest-set:is(.gear-1,.gear-2) .forest-slot-5 svg{
+.grove-scene .forest-set:is(.gear-1,.gear-2) .forest-slot-5 svg{
   transform:scaleX(1.7);
 }
-.wardrobe .forest-set:is(.gear-1,.gear-2) .forest-slot-0 svg{
+.grove-scene .forest-set:is(.gear-1,.gear-2) .forest-slot-0 svg{
   top:0;left:2%;width:17%;height:21%;
 }
-.wardrobe .forest-set:is(.gear-1,.gear-2) .forest-slot-4 svg{
+.grove-scene .forest-set:is(.gear-1,.gear-2) .forest-slot-4 svg{
   top:-5%;right:0;width:17%;height:23%;opacity:.56;
 }
 
@@ -648,14 +648,14 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 .wardrobe-items .gear-label{background:none;overflow-wrap:anywhere}
 .wardrobe-items .gear-thumb{filter:none}
 
-.wardrobe .reveal-stage{
+.grove-scene{
   --portrait-floor:clamp(32px,10vw,48px);
   padding-bottom:var(--portrait-floor);
 }
-.wardrobe .reveal-stage:has(.forest-slot-5){
+.grove-scene:has(.forest-slot-5){
   --portrait-floor:clamp(55px,16vw,75px);
 }
-.wardrobe .reveal-stage::before{
+.grove-scene::before{
   content:"";
   position:absolute;
   z-index:1;
@@ -666,20 +666,20 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
   height:20px;
   background:radial-gradient(ellipse,#18281bb3,transparent 72%);
 }
-.wardrobe .forest-set .forest-slot-5{
+.grove-scene .forest-set .forest-slot-5{
   background:none;
   opacity:.78;
 }
-.wardrobe .forest-set .forest-slot-5 svg{
+.grove-scene .forest-set .forest-slot-5 svg{
   filter:drop-shadow(0 1px 1px #211708b3);
 }
-.wardrobe .forest-set.gear-2 .forest-slot-5 svg{transform:scale(1.7,.84)}
-.wardrobe .forest-set.gear-2 .forest-slot-0 svg{width:12%;opacity:.65}
-.wardrobe .forest-set.gear-2 .forest-slot-4 svg{width:13%;top:-2%}
-.wardrobe .forest-set.gear-2:has(.forest-slot-5) .forest-slot-1{
+.grove-scene .forest-set.gear-2 .forest-slot-5 svg{transform:scale(1.7,.84)}
+.grove-scene .forest-set.gear-2 .forest-slot-0 svg{width:12%;opacity:.65}
+.grove-scene .forest-set.gear-2 .forest-slot-4 svg{width:13%;top:-2%}
+.grove-scene .forest-set.gear-2:has(.forest-slot-5) .forest-slot-1{
   left:4%;bottom:3%;width:23%;height:22%;
 }
-.wardrobe .forest-set.gear-2 .forest-slot-2{right:3%;bottom:17%;width:25%}
+.grove-scene .forest-set.gear-2 .forest-slot-2{right:3%;bottom:17%;width:25%}
 
 @media(max-width:360px){
   .wardrobe-items .option{padding-inline:6px}
@@ -689,5 +689,37 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 /* Remove the faint matte on the last two fox portraits while keeping soft fur edges. */
 .pet-2:is(.stage-4,.stage-5) .friend-image:not(.before-evolution),
 .pet-2.stage-5 .before-evolution{
+  filter:url(#fox-portrait-matte);
+}
+
+/* Keep status controls outside the same composition used by the wardrobe. */
+.home-grove .stage-top{
+  position:static;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:8px;
+}
+.home-grove .speech{
+  position:static;
+  display:table;
+  margin:8px auto 0;
+}
+.home-grove .grove-scene{margin:0}
+.care-links{grid-template-columns:repeat(2,minmax(0,1fr))}
+.care-links .text-button{
+  padding-inline:4px;
+  font-size:clamp(13px,3.8vw,16px);
+  white-space:nowrap;
+}
+.grove-scene .forest-set.gear-0 .forest-slot-3{bottom:23%}
+.grove-scene .forest-set.gear-0:has(.forest-slot-5) .forest-slot-1{
+  left:3%;
+  width:20%;
+}
+.grove-scene .forest-set.gear-0 .forest-slot-5{
+  opacity:.64;
+}
+.pet-0.stage-5 .friend-image:not(.before-evolution){
   filter:url(#fox-portrait-matte);
 }
