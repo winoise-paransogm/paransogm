@@ -30,6 +30,8 @@ html:has(.forest-intro[open]),body:has(.forest-intro[open]){overflow:hidden;over
 .forest-intro{touch-action:none;overscroll-behavior:none}
 @keyframes intro-resist{0%,100%{transform:scale(1.035)}42%{transform:translateY(var(--intro-push)) scale(1.05)}70%{transform:translateY(calc(var(--intro-push) * -.18)) scale(1.035)}}
 .intro-video.intro-bounce{animation:intro-resist 340ms cubic-bezier(.2,.75,.25,1)}
+.intro-sound{position:absolute;z-index:2;left:max(16px,env(safe-area-inset-left));bottom:max(16px,env(safe-area-inset-bottom));padding:8px 15px;background:#10231aeb;color:#fff9e9;border:1px solid #ffe69b88}
+.intro-sound[hidden]{display:none}
 </style></head>
 <body><button class="forest-music" type="button" aria-label="숲 배경 음악" aria-pressed="false" hidden><span aria-hidden="true">♫</span> <span>음악 꺼짐</span></button><header class="mast"><div class="mast-creator"><span aria-hidden="true">✦</span> 사자대장</div><div class="brand">숲속친구들 키우기</div><p>문제를 풀고 먹이를 얻어 친구를 키워요!</p></header><main id="app"></main><dialog id="forest-intro" class="forest-intro" aria-labelledby="forest-intro-title">
   <video class="intro-video" muted playsinline preload="none" aria-hidden="true"></video>
@@ -40,6 +42,7 @@ html:has(.forest-intro[open]),body:has(.forest-intro[open]){overflow:hidden;over
   <div class="intro-runner intro-runner-rabbit" aria-hidden="true"><div class="intro-ground-shadow"></div><div class="intro-stride"><img class="stride stride-0" data-src="run-rabbit-0.png" alt=""><img class="stride stride-1" data-src="run-rabbit-1.png" alt=""><img class="stride stride-2" data-src="run-rabbit-2.png" alt=""><img class="stride stride-3" data-src="run-rabbit-3.png" alt=""></div></div>
   <div class="intro-runner intro-runner-fox" aria-hidden="true"><div class="intro-ground-shadow"></div><div class="intro-stride"><img class="stride stride-0" data-src="run-fox-0.png" alt=""><img class="stride stride-1" data-src="run-fox-1.png" alt=""><img class="stride stride-2" data-src="run-fox-2.png" alt=""><img class="stride stride-3" data-src="run-fox-3.png" alt=""></div></div>
   <div class="intro-end"><p>✦ 사자대장</p><h2 id="forest-intro-title">숲속친구들 키우기</h2></div>
+  <button class="intro-sound" type="button" hidden>🔊 소리 켜기</button>
   <button class="intro-skip" type="button" autofocus>건너뛰기 <span aria-hidden="true">›</span></button>
 </dialog>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><filter id="fox-portrait-matte"><feComponentTransfer><feFuncA type="linear" slope="1.1435" intercept="-.1435"/></feComponentTransfer></filter></defs></svg>

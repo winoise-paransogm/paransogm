@@ -314,6 +314,32 @@ function playOpening(){
   skip.addEventListener('click',finish,{once:true});
   intro.addEventListener('cancel',event=>{event.preventDefault();finish()},{once:true});
   const video=intro.querySelector('.intro-video');
+  const sound=intro.querySelector('.intro-sound');
+  const audio=new Audio('./forest-opening.m4a');
+  audio.preload='auto';
+  sound.addEventListener('click',()=>{
+    if(!audio.paused){
+      audio.pause();
+      sound.textContent='🔊 소리 켜기';
+      return;
+    }
+    audio.currentTime=video.currentTime;
+    audio.play().then(()=>{
+      if(intro.open&&!video.paused) sound.textContent='🔇 소리 끄기';
+      else audio.pause();
+    }).catch(()=>{});
+  });
+  video.addEventListener('pause',()=>{
+    audio.pause();
+    sound.textContent='🔊 소리 켜기';
+  });
+  video.addEventListener('waiting',()=>audio.pause());
+  video.addEventListener('playing',()=>{
+    if(sound.textContent==='🔇 소리 끄기'){
+      audio.currentTime=video.currentTime;
+      audio.play().catch(()=>{sound.textContent='🔊 소리 켜기'});
+    }
+  });
   let touchStart=null, wheelAt=-Infinity;
   function bounce(delta){
     if(!delta||!intro.classList.contains('intro-video-playing')||video.classList.contains('intro-bounce'))return;
@@ -342,6 +368,7 @@ function playOpening(){
     clearTimeout(timer);
     if(!intro.open||intro.classList.contains('intro-playing'))return;
     video.pause();
+    sound.hidden=true;
     intro.classList.remove('intro-video-playing');
     for(const img of intro.querySelectorAll('img[data-src]')) img.src=img.dataset.src;
     intro.classList.add('intro-playing');
@@ -354,6 +381,7 @@ function playOpening(){
     if(!intro.open||intro.classList.contains('intro-playing'))return;
     clearTimeout(timer);
     intro.classList.add('intro-video-playing');
+    sound.hidden=false;
     timer=setTimeout(finish,11000);
   },{once:true});
   intro.showModal();
