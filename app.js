@@ -2,7 +2,8 @@ import {pets,subjects} from './content.js';
 
 const key='lion-grow-v2';
 const root=document.querySelector('#app');
-const goals=[50,60,70,80,90];
+const goals=[75,90,105,120,140];
+const decorationMilestones=[3,8,15,24,36,51];
 const sets=[
   ['햇살 기둥','황금 금화 더미','햇살꽃 군락','태양 수정','황금 반딧불','태양 마법 문장'],
   ['달빛 기둥','달빛 금화 더미','달맞이꽃 군락','달빛 수정','은빛 별무리','초승달 마법 문장'],
@@ -30,8 +31,8 @@ function scenery(pet,equipped){
   return ids.length?`<div class="forest-set gear-${pet}" aria-hidden="true">${ids.map(slot=>`<div class="forest-piece forest-slot-${slot}">${glyph(pet,slot)}</div>`).join('')}</div>`:'';
 }
 const worn=s=>Array.isArray(s.equipped)?s.equipped:Number.isInteger(s.equipped)?[s.equipped]:[];
-const unlocked=s=>Math.min(items.length,Math.floor(s.correct.length/3));
-const fresh=pet=>({pet,xp:0,food:0,fed:0,stage:0,stageFed:0,correct:[],hinted:[],rewarded:[],active:null,equipped:[]});
+const unlocked=s=>Math.max(s.legacyDecorations,decorationMilestones.filter(goal=>s.correct.length>=goal).length);
+const fresh=pet=>({pet,xp:0,food:0,fed:0,stage:0,stageFed:0,correct:[],hinted:[],rewarded:[],active:null,equipped:[],legacyDecorations:0});
 function read(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}
 let roster=read(key);
 if(!Array.isArray(roster?.friends)){
@@ -39,7 +40,12 @@ if(!Array.isArray(roster?.friends)){
   const old=read('lion-grow-v1');
   if(pets[old?.pet]&&Array.isArray(old.correct)){
     roster.active=old.pet;
-    roster.friends[old.pet]={...fresh(old.pet),...old,stage:old.evolved?1:0,xp:old.evolved?0:old.xp,stageFed:old.evolved?0:old.fed};
+    roster.friends[old.pet]={...fresh(old.pet),...old,stage:old.evolved?1:0,xp:old.evolved?0:old.xp,stageFed:old.evolved?0:old.fed,legacyDecorations:Math.min(items.length,Math.floor(old.correct.length/3))};
+  }
+}
+for(const friend of roster.friends){
+  if(friend && !Number.isInteger(friend.legacyDecorations)){
+    friend.legacyDecorations=Math.min(items.length,Math.floor(friend.correct.length/3));
   }
 }
 let state=roster.friends[roster.active]??null;
@@ -109,8 +115,8 @@ function render(focus=true) {
   } else if(page==='wardrobe'){
     const count=unlocked(state), wearing=worn(state);
     html=`<section class="panel wardrobe">${intro('숲 꾸미기',themeName[state.pet],'장식을 눌러 숲에 놓거나 거둬요. 여섯 가지를 함께 놓을 수 있어요.')}
-    <div class="reveal-stage"><div class="habitat" aria-hidden="true"></div>${scenery(state.pet,state.equipped)}${art(state.pet,state.stage,'idle')}</div><p class="wardrobe-progress">모은 장식 ${count} / 6 · 배치 ${wearing.length}개<br><small>새 문제 3개를 맞힐 때마다 장식 하나를 받아요.</small></p>
-    <div class="wardrobe-items gear-${state.pet}">${sets[state.pet].map((name,i)=>`<button class="option ${wearing.includes(i)?'picked':''}" data-action="equip:${i}" aria-pressed="${wearing.includes(i)}" ${i>=count?'disabled':''}><span class="gear-thumb">${glyph(state.pet,i)}</span><span class="gear-label">${name}<small>${i>=count?`새 문제 ${(i+1)*3}개 정답`:wearing.includes(i)?'숲에 놓음':'숲에 놓기'}</small></span></button>`).join('')}</div>
+    <div class="reveal-stage"><div class="habitat" aria-hidden="true"></div>${scenery(state.pet,state.equipped)}${art(state.pet,state.stage,'idle')}</div><p class="wardrobe-progress">모은 장식 ${count} / 6 · 배치 ${wearing.length}개<br><small>${count<items.length?`다음 장식까지 새 문제 ${decorationMilestones[count]-state.correct.length}개`: '장식을 모두 모았어요!'}</small></p>
+    <div class="wardrobe-items gear-${state.pet}">${sets[state.pet].map((name,i)=>`<button class="option ${wearing.includes(i)?'picked':''}" data-action="equip:${i}" aria-pressed="${wearing.includes(i)}" ${i>=count?'disabled':''}><span class="gear-thumb">${glyph(state.pet,i)}</span><span class="gear-label">${name}<small>${i>=count?`새 문제 ${decorationMilestones[i]}개 정답`:wearing.includes(i)?'숲에 놓음':'숲에 놓기'}</small></span></button>`).join('')}</div>
     <div class="actions">${count>wearing.length?button('모은 장식 모두 놓기','equip-all','secondary'):''}${wearing.length?button('장식 모두 거두기','unequip','text-button'):''}${button('육성 화면으로','home')}</div></section>`;
   } else if (page==='subjects') {
     html=intro('쉬는 시간 퀴즈','어떤 단원을 풀까요?','한 단원의 3문제를 모두 맞히면 전용 먹이를 받아요.')+
