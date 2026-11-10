@@ -629,3 +629,65 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 .wardrobe .forest-set:is(.gear-1,.gear-2) .forest-slot-4 svg{
   top:-5%;right:0;width:17%;height:23%;opacity:.56;
 }
+
+/* Korean names wrap at spaces across character, ornament and unit cards. */
+.intro :is(h1,p),.opening-caption,.opening-controls .primary,.pet-option strong,
+.wardrobe-items .gear-label,.unit-group summary,.subject strong,.quiz-meta .tag,
+.quiz .option,.item-unlock{word-break:keep-all}
+
+.wardrobe-items .option{
+  gap:7px;
+  border-radius:13px;
+  background:#233d31;
+}
+.wardrobe-items .option.picked{
+  background:#2c4838;
+  border-color:#a5905b!important;
+  box-shadow:none;
+}
+.wardrobe-items .gear-label{background:none;overflow-wrap:anywhere}
+.wardrobe-items .gear-thumb{filter:none}
+
+.wardrobe .reveal-stage{
+  --portrait-floor:clamp(32px,10vw,48px);
+  padding-bottom:var(--portrait-floor);
+}
+.wardrobe .reveal-stage:has(.forest-slot-5){
+  --portrait-floor:clamp(55px,16vw,75px);
+}
+.wardrobe .reveal-stage::before{
+  content:"";
+  position:absolute;
+  z-index:1;
+  pointer-events:none;
+  bottom:calc(var(--portrait-floor) - 8px);
+  left:31%;
+  width:38%;
+  height:20px;
+  background:radial-gradient(ellipse,#18281bb3,transparent 72%);
+}
+.wardrobe .forest-set .forest-slot-5{
+  background:none;
+  opacity:.78;
+}
+.wardrobe .forest-set .forest-slot-5 svg{
+  filter:drop-shadow(0 1px 1px #211708b3);
+}
+.wardrobe .forest-set.gear-2 .forest-slot-5 svg{transform:scale(1.7,.84)}
+.wardrobe .forest-set.gear-2 .forest-slot-0 svg{width:12%;opacity:.65}
+.wardrobe .forest-set.gear-2 .forest-slot-4 svg{width:13%;top:-2%}
+.wardrobe .forest-set.gear-2:has(.forest-slot-5) .forest-slot-1{
+  left:4%;bottom:3%;width:23%;height:22%;
+}
+.wardrobe .forest-set.gear-2 .forest-slot-2{right:3%;bottom:17%;width:25%}
+
+@media(max-width:360px){
+  .wardrobe-items .option{padding-inline:6px}
+  .wardrobe-items .gear-thumb{flex-basis:28px;min-width:28px;width:28px;height:32px}
+}
+
+/* Remove the faint matte on the last two fox portraits while keeping soft fur edges. */
+.pet-2:is(.stage-4,.stage-5) .friend-image:not(.before-evolution),
+.pet-2.stage-5 .before-evolution{
+  filter:url(#fox-portrait-matte);
+}
