@@ -1,4 +1,4 @@
-import {pets,subjects} from './content.js';
+import {pets,subjects,questionsFor} from './content.js';
 
 const key='lion-grow-v2';
 const root=document.querySelector('#app');
@@ -123,7 +123,7 @@ function render(focus=true) {
       `<div class="quiz-companion">${art(state.pet,state.stage,"idle")}<p>어떤 문제부터 풀어 볼까요?</p></div><div class="subject-list">${[...new Set(subjects.map(s=>s.name))].map(name=>`<details class="unit-group"><summary>${subjects.find(s=>s.name===name).icon} ${name}</summary><div class="unit-options">${subjects.map((s,i)=>s.name===name?`<button class="subject" data-action="subject:${i}"><span><strong>${s.unit}</strong><small>${state.rewarded.includes(i)?'복습':`${s.questions.filter((_,j)=>state.correct.includes(`${i}:${j}`)).length} / ${s.questions.length}문제`}</small></span><span aria-hidden="true">›</span></button>`:'').join('')}</div></details>`).join('')}</div><div class="actions">${button('육성 화면으로','home','secondary')}</div>`;
   } else if (page==='quiz') {
     const unit=subjects[subject];
-    const [prompt,options,,,explanation] = unit.questions[question]; const last=question===unit.questions.length-1;
+    const [prompt,options,,,explanation] = questionsFor(subject,state.pet)[question]; const last=question===unit.questions.length-1;
     const wrong=feedback?.type==='wrong', right=feedback?.type==='right';
     html=`<section class="quiz panel ${right?(feedback.reward?"reward-scene":"correct-scene"):""}"><div class="quiz-meta"><span class="tag">${unit.name} · ${unit.unit}</span><b>${question+1} / ${unit.questions.length}</b></div><div class="quiz-companion ${right?"cheer":""}">${art(state.pet,state.stage,wrong?"sad":"idle")}<p>${wrong?"천천히 다시 해 봐요.":right?(feedback.reward?"우와, 먹이를 찾았어요!":"해냈어요!"):"같이 풀어 봐요!"}</p></div>${intro('보기 중 하나를 골라요',prompt)}<div class="options" role="group" aria-label="답 보기">${options.map((value,i)=>`<button type="button" class="option ${selected===i?'picked':''}" data-action="option:${i}" aria-pressed="${selected===i}" ${feedback?'disabled':''}><span>${i+1}</span>${value}</button>`).join('')}</div>${wrong?`<div class="notice wrong" role="status"><div class="sad-pet" role="img" aria-label="아쉬워하는 ${pet.name}">${art(state.pet,state.stage,"sad")}<span aria-hidden="true">💧</span></div><div><strong>아쉬워요. 다시 풀어 볼까요?</strong>${feedback.hint?`<p>${feedback.hint}</p>`:''}</div></div>`:''}${right?`<div class="notice right ${feedback.reward?"reward-notice":"correct-notice"}" role="status"><span class="reward-icon" aria-hidden="true">${feedback.reward?pet.meal:'✓'}</span><span class="reward-rays" aria-hidden="true"></span><div><strong>${feedback.reward?`단원 완료! ${pet.food} 1개를 받았어요.`:'정답이에요!'}</strong>${feedback.points&&state.stage<goals.length?'<p>경험치 +5</p>':''}${feedback.item?`<p class="item-unlock">✦ 꾸미기 아이템 · ${feedback.item}</p>`:''}${explanation?`<p>${explanation}</p>`:''}</div></div>`:''}<div class="actions">${wrong?button('다시 풀기','retry'):right?button(last?(feedback.reward?'먹이 주러 가기':'육성 화면으로'):'다음 문제',last?'home':'next'):button('정답 확인','check','primary',selected===null)}${!(right&&last)?button('과목 고르기','subjects','text-button'):''}</div></section>`;
   } else {
@@ -160,7 +160,7 @@ root.addEventListener('click', event => {
     case 'retry': selected=null; feedback=null; break;
     case 'check': {
       if(selected===null || feedback) return;
-      const id=`${subject}:${question}`, [, ,answer,hint]=subjects[subject].questions[question];
+      const id=`${subject}:${question}`, [, ,answer,hint]=questionsFor(subject,state.pet)[question];
       if(selected!==answer) {
         feedback={type:'wrong',hint:state.hinted.includes(id)?null:hint};
         if(feedback.hint) state.hinted.push(id);
