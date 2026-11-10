@@ -1,18 +1,18 @@
-// A 16-bar orchestral loop in D major, played only after an explicit tap.
+// A bright woodland dance with a lilting 6/8 pulse.
 const button = document.querySelector('.forest-music');
 const chords = [
-  [38, 57, 62, 66], [33, 57, 61, 64], [35, 54, 59, 62], [31, 55, 59, 62],
-  [30, 57, 62, 66], [31, 55, 59, 67], [28, 55, 59, 64], [33, 57, 61, 67],
-  [38, 57, 62, 66], [37, 57, 61, 64], [35, 54, 59, 62], [31, 55, 59, 67],
-  [28, 55, 59, 64], [31, 55, 59, 66], [33, 57, 62, 64], [33, 57, 61, 67],
+  [48, 60, 64, 67], [43, 59, 62, 67], [45, 60, 64, 69], [40, 59, 64, 67],
+  [41, 60, 65, 69], [48, 60, 64, 67], [43, 59, 62, 67], [48, 60, 64, 67],
+  [41, 60, 65, 69], [48, 60, 64, 67], [45, 60, 64, 69], [43, 59, 62, 67],
+  [41, 60, 65, 69], [50, 62, 65, 69], [43, 59, 62, 67], [48, 60, 64, 67],
 ];
 const melody = [
-  [69, 74, 76, 78], [76, 73, 69], [71, 74, 78], [76, 74, 71],
-  [69, 74, 78, 81], [79, 78, 74], [76, 71, 67], [69, 73, 76],
-  [78, 81, 83, 86], [85, 81, 76], [78, 81, 83], [86, 83, 79],
-  [76, 79, 83], [81, 79, 78], [76, 74, 69], [73, 76, 69],
+  [76, 79, 81, 79], [74, 76, 74, 71], [72, 76, 81, 84], [83, 79, 76, 74],
+  [77, 81, 79, 77], [76, 72, 76, 79], [74, 79, 77, 74], [72, 76, 79, 76],
+  [81, 84, 86, 84], [79, 76, 79, 81], [84, 81, 76, 72], [74, 79, 83, 79],
+  [81, 77, 76, 77], [74, 77, 81, 77], [79, 77, 74, 71], [72, 76, 79, 72],
 ];
-const beat = 60 / 72;
+const pulse = 60 / (96 * 3);
 let context;
 let output;
 let timer;
@@ -36,23 +36,20 @@ function note(pitch, start, length, volume, waveform, attack, release, detune = 
 
 function schedule() {
   while (nextBar < context.currentTime + .25) {
-    const [bass, ...strings] = chords[bar];
-    const swell = bar >= 8 && bar < 12 ? 1.22 : 1;
-    note(bass, nextBar, 3.9 * beat, .058 * swell, 'sine', .5, .8);
-    strings.forEach((pitch, index) => {
-      note(pitch, nextBar, 3.9 * beat, .025 * swell, 'triangle', .7, .85, index * 2 - 2);
-      note(pitch + 12, nextBar, 3.8 * beat, .009 * swell, 'sine', .9, .85, 3);
+    const [bass, root, third, fifth] = chords[bar];
+    note(bass, nextBar, pulse * 1.6, .048, 'sine', .025, .22);
+    note(bass + 12, nextBar + pulse * 3, pulse * 1.35, .031, 'triangle', .018, .14);
+    [root, fifth, third, fifth, third + 12].forEach((pitch, index) => {
+      note(pitch, nextBar + (index + 1) * pulse, pulse * .8, .020, 'triangle', .012, .15);
     });
-    for (const [index, pitch] of [strings[0], strings[2], strings[1], strings[2] + 12].entries()) {
-      note(pitch, nextBar + index * beat, .32, .018, 'triangle', .025, .72);
-    }
-    melody[bar].forEach((pitch, index, phrase) => {
-      const offset = (phrase.length === 3 ? [0, 1.5, 2.5] : [0, 1, 2, 3])[index];
-      const length = (index === phrase.length - 1 ? 3.88 - offset : .86) * beat;
-      note(pitch, nextBar + offset * beat, length, .045, 'sine', .14, .46);
-      note(pitch + 12, nextBar + offset * beat, length, .006, 'sine', .16, .4);
+    const rhythm = bar % 2 === 0 ? [0, 1, 3, 4] : [0, 2, 3, 5];
+    melody[bar].forEach((pitch, index) => {
+      const start = nextBar + rhythm[index] * pulse;
+      const length = ((rhythm[index + 1] ?? 6) - rhythm[index]) * pulse * .78;
+      note(pitch, start, length, .061, 'sine', .012, .14);
+      note(pitch + 12, start, .07, .012, 'sine', .009, .1);
     });
-    nextBar += 4 * beat;
+    nextBar += 6 * pulse;
     bar = (bar + 1) % chords.length;
   }
 }
