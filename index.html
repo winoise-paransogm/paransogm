@@ -60,6 +60,13 @@ html:has(.forest-intro[open]),body:has(.forest-intro[open]){overflow:hidden;over
 .grove-scene .gear-2 .forest-slot-0:not(.new-ornament){inset:auto 6% 4% auto;width:21%;height:23%;z-index:3;background:none;opacity:1}
 .grove-scene .gear-2 .forest-slot-0:not(.new-ornament)>:is(.forest-prop,.ornament-touch){inset:0;width:100%;height:100%}
 .grove-scene .gear-2 .forest-slot-0:not(.new-ornament)>.forest-prop{object-position:center bottom;filter:drop-shadow(0 4px 4px #26191180)}
+.grove-scene .mature-pet.stage-0>.friend-image{width:72%;height:72%}
+.grove-scene .mature-pet.stage-1>.friend-image{width:80%;height:80%}
+.grove-scene .mature-pet.stage-2>.friend-image{width:87%;height:87%}
+.grove-scene .mature-pet.stage-3>.friend-image{width:93%;height:93%}
+.grove-scene .mature-pet:is(.stage-0,.stage-1,.stage-2,.stage-3)>.friend-image{inset:auto 0 0;margin-inline:auto}
+@media(prefers-reduced-motion:no-preference){.mature-pet.pose-feeding .friend-image{animation:growth-chew .32s ease-in-out 3}}
+@keyframes growth-chew{45%{transform:scale(1.03,.95)}}
 </style></head>
 <body><button class="forest-music" type="button" aria-label="숲 배경 음악" aria-pressed="false" hidden><span aria-hidden="true">♫</span> <span>음악 꺼짐</span></button><header class="mast"><div class="mast-creator"><span aria-hidden="true">✦</span> 사자대장</div><div class="brand">숲속친구들 키우기</div><p>문제를 풀고 먹이를 얻어 친구를 키워요!</p></header><main id="app"></main><dialog id="forest-intro" class="forest-intro" aria-labelledby="forest-intro-title">
   <video class="intro-video" muted playsinline preload="none" aria-hidden="true"></video>

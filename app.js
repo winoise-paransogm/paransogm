@@ -67,17 +67,10 @@ const formNotes=[
 ];
 const button = (label,action,kind='primary',off=false) =>
   `<button type="button" class="${kind}" data-action="${action}" ${off?'disabled':''}>${label}</button>`;
-const baseArt = (id,grown=false,pose="idle") => `<div class="pet pet-${id} pose-${pose} ${grown?'grown':''}" style="--pet-color:${pets[id].color}" role="img" aria-label="${grown?pets[id].grown:'아기 '+pets[id].name}"><span aria-hidden="true">${pets[id].icon}</span>${id!==0?`<img class="friend-image" src="pet-${id}-${pose==="sad"?(grown?"sad-grown":"sad"):(grown?"grown":"baby")}.png" alt="" width="420" height="630">${pose==="reveal"?`<img class="friend-image before-evolution" src="pet-${id}-baby.png" alt="" width="420" height="630">`:''}`:''}${id===0?`<i class="lion-cel open"></i><i class="lion-cel blink"></i><i class="lion-cel perk"></i><i class="lion-cel sad"></i><i class="lion-cel chew"></i><i class="lion-cel adult"></i>`:''}</div>`;
 function picture(id,stage){
-  if(stage===goals.length) return `pet-${id}-stage-5.webp`;
-  if(stage>=1) return `pet-${id}-stage-${stage}.png`;
-  return id===0?(stage?'lion-adult.png':'lion-open.png'):`pet-${id}-${stage?'grown':'baby'}.png`;
+  return `pet-${id}-stage-${stage}.webp`;
 }
 function art(id,stage,pose="idle"){
-  if(stage===0&&pose!=="reveal"){
-    const base=baseArt(id,stage===1,pose);
-    return base;
-  }
   return `<div class="pet pet-${id} mature-pet pose-${pose} stage-${stage}" role="img" aria-label="${stageName(pets[id],stage)}"><img class="friend-image" src="${picture(id,stage)}" alt="">${pose==='reveal'?`<img class="friend-image before-evolution" src="${picture(id,stage-1)}" alt="">`:''}</div>`;
 }
 const intro = (label,title,desc='') => `<div class="intro"><span class="eyebrow">${label}</span><h1 tabindex="-1">${title}</h1>${desc?`<p>${desc}</p>`:''}</div>`;
@@ -100,7 +93,7 @@ function render(focus=true) {
     const savedFriend=roster.friends[featured];
     const displayName=stageName(friend,savedFriend?.stage??0);
     html=`<section class="opening opening-${featured} ${savedFriend?.stage?"":"opening-baby"}" aria-label="첫 만남">
-      <div class="opening-art"><div class="opening-forest" aria-hidden="true"></div><div class="opening-floor" aria-hidden="true"></div>${savedFriend?`${scenery(featured,savedFriend.equipped)}<div class="opening-friend opening-saved">${art(featured,savedFriend.stage)}</div>`:`<img class="opening-friend" src="${["opening-lion.png","opening-rabbit.png","opening-fox.png"][featured]}" alt="" fetchpriority="high">`}</div>
+      <div class="opening-art"><div class="opening-forest" aria-hidden="true"></div><div class="opening-floor" aria-hidden="true"></div>${savedFriend?`${scenery(featured,savedFriend.equipped)}<div class="opening-friend opening-saved">${art(featured,savedFriend.stage)}</div>`:`<img class="opening-friend" src="${picture(featured,0)}" alt="" fetchpriority="high">`}</div>
       <div class="opening-shade" aria-hidden="true"></div><div class="opening-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
       <div class="opening-copy">
         <p class="opening-kicker"><span aria-hidden="true">✦</span> 사자대장</p>
@@ -278,36 +271,6 @@ root.addEventListener('click', event => {
   if(action==='retry') root.querySelector('.option')?.focus();
 });
 render(false);
-const sprites = new Image();
-sprites.onload = () => document.documentElement.classList.add('has-art');
-sprites.src = 'pet-1-baby.png';
-const lionSheet = new Image();
-lionSheet.onload = () => document.documentElement.classList.add('has-lion');
-lionSheet.src = 'lion-open.png';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function playOpening(){
   if(!window.matchMedia||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
