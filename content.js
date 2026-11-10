@@ -1,3 +1,4 @@
+import {additionalUnits} from './additional-questions.js';
 import {challengeUnits} from './challenge-questions.js';
 
 export const pets = [
@@ -136,6 +137,17 @@ challengeUnits.forEach(([subject, title, entries], unitIndex) => {
   unit(subject, title, entries.map(([prompt, answer, distractors, hint, explanation], questionIndex) => {
     const correctIndex = answerPositions[(unitIndex * 3 + questionIndex) % answerPositions.length];
     const options = [...distractors];
+    options.splice(correctIndex, 0, answer);
+    return [prompt, options, correctIndex, hint, explanation];
+  }));
+});
+
+// New rounds go after the original 30 so saved progress keeps its meaning.
+additionalUnits.forEach(([subject, title, rows], unitIndex) => {
+  unit(subject, title, rows.map((row, questionIndex) => {
+    const [prompt, answer, first, second, third, hint, explanation] = row.split('|');
+    const options = [first, second, third];
+    const correctIndex = (unitIndex + questionIndex) % 4;
     options.splice(correctIndex, 0, answer);
     return [prompt, options, correctIndex, hint, explanation];
   }));
