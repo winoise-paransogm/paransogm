@@ -113,6 +113,7 @@ const playthings = [
   ['🔔 달빛 방울 흔들기','🔔','토끼가 방울 소리에 맞춰 통통 뛰어요!'],
   ['🍁 낙엽 날리기','🍁','여우가 날아오는 낙엽을 꼬리 곁으로 받아요!'],
 ];
+let openSubject=null;
 let playing=false, playAction=null, playSlot=null;
 
 function render(focus=true) {
@@ -153,13 +154,29 @@ function render(focus=true) {
     <div class="wardrobe-items gear-${state.pet}">${sets[state.pet].map((name,i)=>`<button class="option ${wearing.includes(i)?'picked':''}" data-action="equip:${i}" aria-pressed="${wearing.includes(i)}" ${i>=count?'disabled':''}><span class="gear-thumb">${glyph(state.pet,i)}</span><span class="gear-label">${name}<small>${i>=count?`새 문제 ${decorationMilestones[i]}개 정답`:wearing.includes(i)?'숲에 놓음':'숲에 놓기'}</small></span></button>`).join('')}</div>
     <div class="actions">${count>wearing.length?button('모은 장식 모두 놓기','equip-all','secondary'):''}${wearing.length?button('장식 모두 거두기','unequip','text-button'):''}${button('육성 화면으로','home')}</div></section>`;
   } else if (page==='subjects') {
-    html=intro('쉬는 시간 퀴즈','어떤 단원을 풀까요?','한 단원의 3문제를 모두 맞히면 전용 먹이를 받아요.')+
-      `<div class="quiz-companion">${art(state.pet,state.stage,"idle")}<p>어떤 문제부터 풀어 볼까요?</p></div><div class="subject-list">${[...new Set(subjects.map(s=>s.name))].map(name=>`<details class="unit-group"><summary>${subjects.find(s=>s.name===name).icon} ${name}</summary><div class="unit-options">${subjects.map((s,i)=>s.name===name?`<button class="subject" data-action="subject:${i}"><span><strong>${s.unit}</strong><small>${state.rewarded.includes(i)?'복습':`${s.questions.filter((_,j)=>state.correct.includes(`${i}:${j}`)).length} / ${s.questions.length}문제`}</small></span><span aria-hidden="true">›</span></button>`:'').join('')}</div></details>`).join('')}</div><div class="actions">${button('육성 화면으로','home','secondary')}</div>`;
+    const groups=[...new Set(subjects.map(unit=>unit.name))];
+    html=intro('쉬는 시간 퀴즈','어떤 단원을 풀까요?','단원을 마치면 먹이가 자동으로 쌓여요.')+
+      `<div class="quiz-companion">${art(state.pet,state.stage,'idle')}<p>과목을 펼쳐 단원을 골라요.</p></div>
+      <div class="subject-list">${groups.map(name=>{
+        const units=subjects.map((unit,index)=>({unit,index})).filter(({unit})=>unit.name===name);
+        const unfinished=units.filter(({index})=>!state.rewarded.includes(index));
+        const completed=units.filter(({index})=>state.rewarded.includes(index));
+        function cards(entries,review){
+          return entries.map(({unit,index})=>{
+            const solved=unit.questions.filter((_,j)=>state.correct.includes(`${index}:${j}`)).length;
+            return `<button class="subject" data-action="subject:${index}"><span><strong>${unit.unit}</strong><small>${review?'복습':`${solved} / ${unit.questions.length}문제`}</small></span><span aria-hidden="true">›</span></button>`;
+          }).join('');
+        }
+        return `<details class="unit-group" ${openSubject===name?'open':''}><summary>${units[0].unit.icon} ${name} · 미완료 ${unfinished.length}</summary>
+          <div class="unit-options">${cards(unfinished,false)}${completed.length?`<p>완료한 단원 · 복습</p>${cards(completed,true)}`:''}</div></details>`;
+      }).join('')}</div><div class="actions">${button('육성 화면으로','home','secondary')}</div>`;
   } else if (page==='quiz') {
     const unit=subjects[subject];
+    const pendingUnits=subjects.map((candidate,index)=>candidate.name===unit.name&&index!==subject&&!state.rewarded.includes(index)?index:-1).filter(index=>index>=0);
+    const nextUnit=pendingUnits.find(index=>index>subject)??pendingUnits[0]??-1;
     const [prompt,options,,,explanation] = questionsFor(subject,state.pet)[question]; const last=question===unit.questions.length-1;
     const wrong=feedback?.type==='wrong', right=feedback?.type==='right';
-    html=`<section class="quiz panel ${right?(feedback.reward?"reward-scene":"correct-scene"):""}"><div class="quiz-meta"><span class="tag">${unit.name} · ${unit.unit}</span><b>${question+1} / ${unit.questions.length}</b></div><div class="quiz-companion ${right?"cheer":""}">${art(state.pet,state.stage,wrong?"sad":"idle")}<p>${wrong?"천천히 다시 해 봐요.":right?(feedback.reward?"우와, 먹이를 찾았어요!":"해냈어요!"):"같이 풀어 봐요!"}</p></div>${intro('보기 중 하나를 골라요',prompt)}<div class="options" role="group" aria-label="답 보기">${options.map((value,i)=>`<button type="button" class="option ${selected===i?'picked':''}" data-action="option:${i}" aria-pressed="${selected===i}" ${feedback?'disabled':''}><span>${i+1}</span>${value}</button>`).join('')}</div>${wrong?`<div class="notice wrong" role="status"><div class="sad-pet" role="img" aria-label="아쉬워하는 ${pet.name}">${art(state.pet,state.stage,"sad")}<span aria-hidden="true">💧</span></div><div><strong>아쉬워요. 다시 풀어 볼까요?</strong>${feedback.hint?`<p>${feedback.hint}</p>`:''}</div></div>`:''}${right?`<div class="notice right ${feedback.reward?"reward-notice":"correct-notice"}" role="status"><span class="reward-icon" aria-hidden="true">${feedback.reward?pet.meal:'✓'}</span><span class="reward-rays" aria-hidden="true"></span><div><strong>${feedback.reward?`단원 완료! ${pet.food} 1개를 받았어요.`:'정답이에요!'}</strong>${feedback.points&&state.stage<goals.length?'<p>경험치 +5</p>':''}${feedback.item?`<p class="item-unlock">✦ 꾸미기 아이템 · ${feedback.item}</p>`:''}${explanation?`<p>${explanation}</p>`:''}</div></div>`:''}<div class="actions">${wrong?button('다시 풀기','retry'):right?button(last?(feedback.reward?'먹이 주러 가기':'육성 화면으로'):'다음 문제',last?'home':'next'):button('정답 확인','check','primary',selected===null)}${!(right&&last)?button('과목 고르기','subjects','text-button'):''}</div></section>`;
+    html=`<section class="quiz panel ${right?(feedback.reward?"reward-scene":"correct-scene"):""}"><div class="quiz-meta"><span class="tag">${unit.name} · ${unit.unit}</span><b>${question+1} / ${unit.questions.length}</b></div><div class="quiz-companion ${right?"cheer":""}">${art(state.pet,state.stage,wrong?"sad":"idle")}<p>${wrong?"천천히 다시 해 봐요.":right?(feedback.reward?"우와, 먹이를 찾았어요!":"해냈어요!"):"같이 풀어 봐요!"}</p></div>${intro('보기 중 하나를 골라요',prompt)}<div class="options" role="group" aria-label="답 보기">${options.map((value,i)=>`<button type="button" class="option ${selected===i?'picked':''}" data-action="option:${i}" aria-pressed="${selected===i}" ${feedback?'disabled':''}><span>${i+1}</span>${value}</button>`).join('')}</div>${wrong?`<div class="notice wrong" role="status"><div class="sad-pet" role="img" aria-label="아쉬워하는 ${pet.name}">${art(state.pet,state.stage,"sad")}<span aria-hidden="true">💧</span></div><div><strong>아쉬워요. 다시 풀어 볼까요?</strong>${feedback.hint?`<p>${feedback.hint}</p>`:''}</div></div>`:''}${right?`<div class="notice right ${feedback.reward?"reward-notice":"correct-notice"}" role="status"><span class="reward-icon" aria-hidden="true">${feedback.reward?pet.meal:'✓'}</span><span class="reward-rays" aria-hidden="true"></span><div><strong>${feedback.reward?`단원 완료! ${pet.food} 1개를 모아뒀어요.`:'정답이에요!'}</strong>${feedback.points&&state.stage<goals.length?'<p>경험치 +5</p>':''}${feedback.item?`<p class="item-unlock">✦ 꾸미기 아이템 · ${feedback.item}</p>`:''}${explanation?`<p>${explanation}</p>`:''}</div></div>`:''}<div class="actions">${wrong?button('다시 풀기','retry'):right?button(last?(nextUnit<0?'단원 고르기':'다음 단원 풀기'):'다음 문제',last?(nextUnit<0?'subjects':`subject:${nextUnit}`):'next'):button('정답 확인','check','primary',selected===null)}${right&&last?(nextUnit<0?button('육성 화면으로','home','text-button'):button('단원 고르기','subjects','text-button')):button('과목 고르기','subjects','text-button')}</div></section>`;
   } else {
     html=`<section class="result panel reveal-pet-${state.pet} reveal-level-${state.stage} ${motion?'transform':''}">${intro(`${state.stage}번째 진화 성공`,stageName(pet,state.stage),formNotes[state.pet][state.stage-1])}<div class="reveal-stage"><div class="habitat" aria-hidden="true"></div><div class="evolution-halo" aria-hidden="true"></div>${scenery(state.pet,state.equipped)}${art(state.pet,state.stage,"reveal")}</div><div class="actions">${button('새로운 모습 보기','home')}</div></section>`;
   }
@@ -202,7 +219,7 @@ root.addEventListener('click', event => {
       if(pick===null || (reset && state.pet===pick)) return;
       state=roster.friends[pick]??fresh(pick); roster.friends[pick]=state; roster.active=pick; reset=false; page='home'; save(); break;
     case 'home': state.active=null; page='home'; save(); break;
-    case 'subjects': state.active=null; page='subjects'; save(); break;
+    case 'subjects': openSubject=page==='quiz'?subjects[subject].name:null; state.active=null; page='subjects'; save(); break;
     case 'subject': {
       subject=Number(value);
       const first=subjects[subject].questions.findIndex((_,i)=>!state.correct.includes(`${subject}:${i}`));
