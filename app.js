@@ -5,26 +5,36 @@ const root=document.querySelector('#app');
 const goals=[75,90,105,120,140];
 const decorationMilestones=[3,8,15,24,36,51];
 const sets=[
-  ['햇살 기둥','황금 금화 더미','햇살꽃 군락','태양 수정','황금 반딧불','태양 마법 문장'],
-  ['달빛 기둥','달빛 금화 더미','달맞이꽃 군락','달빛 수정','은빛 별무리','초승달 마법 문장'],
-  ['노을빛 기둥','노을 금화 더미','노을꽃 군락','노을 수정','여우불 무리','불꽃 마법 문장'],
+  ['태양 왕관의 광채','왕실 황금 보물함','황금 장미 화분','태양석 오벨리스크','황금 반딧불 성좌','태양 수호 인장'],
+  ['초승달 왕관의 광채','은월 보석함','은빛 달꽃 화분','월광석 오벨리스크','은하 별무리','초승달 수호 인장'],
+  ['불꽃 왕관의 광채','노을 루비 보물함','노을 동백 화분','불꽃석 오벨리스크','여우불 성좌','불꽃 수호 인장'],
 ];
 const items=sets[0];
 const themeName=['햇살 숲','달빛 정원','노을 숲'];
+const palettes=[
+  {light:'#fff0af',metal:'#dfa544',dark:'#75401f',gem:'#65e1bf',deep:'#12694e',bloom:'#ffdc7d',leaf:'#4d8953'},
+  {light:'#f7efff',metal:'#c5afe8',dark:'#52466f',gem:'#c9b7ff',deep:'#6953a0',bloom:'#ede1ff',leaf:'#538b86'},
+  {light:'#ffe3b6',metal:'#e6a062',dark:'#75362d',gem:'#ff9f87',deep:'#a33042',bloom:'#ffa98e',leaf:'#59804e'},
+];
 const emblems=[
-  '<circle cx="24" cy="24" r="5"/><path d="M24 12v5m0 14v5M12 24h5m14 0h5M15 15l4 4m10 10 4 4M15 33l4-4m10-10 4-4"/>',
-  '<path d="M27 12a12 12 0 1 0 8 18 12 12 0 0 1-8-18Z"/>',
-  '<path d="M24 11c3 7 1 9 5 12l3-4c5 8 3 16-8 17-10 0-13-9-7-15 0 4 2 5 4 6-1-7 1-10 3-16Z"/>',
+  '<circle cx="48" cy="36" r="7"/><path d="M48 23v-6m0 38v-6M35 36h-6m38 0h-6M39 27l-4-4m26 26-4-4M39 45l-4 4m26-26-4 4"/>',
+  '<path d="M51 22a14 14 0 1 0 9 22 13 13 0 0 1-9-22Z"/><path d="M61 23v8m-4-4h8"/>',
+  '<path d="M48 19c7 9 4 14 8 17l3-5c6 11 1 21-11 22-12 0-16-11-10-21 0 6 3 8 5 8-2-7 5-10 5-21Z"/>',
 ];
 function glyph(pet,slot){
-  const prop=['','coins','flowers','crystals'][slot];
-  if(prop) return `<img class="gear-art forest-prop" src="forest-${prop}.png" alt="" aria-hidden="true">`;
-  const paths={
-    0:'<path d="M8 42 17 6h14l9 36M13 42l8-36m6 0 8 36"/><path d="M18 25h12M24 19v12"/>',
-    4:'<path d="m24 4 3 10 10 3-10 3-3 10-3-10-10-3 10-3Zm14 24 2 5 5 2-5 2-2 5-2-5-5-2 5-2ZM9 26l2 5 5 2-5 2-2 5-2-5-5-2 5-2Z"/>',
-    5:'<circle cx="24" cy="24" r="22"/><circle cx="24" cy="24" r="18" stroke-dasharray="1 3"/><path d="m24 4 18 30H6Zm0 40L6 14h36Z"/>'+emblems[pet],
-  };
-  return `<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round">${paths[slot]}</svg>`;
+  const {light,metal,dark,gem,deep,bloom,leaf}=palettes[pet];
+  const frame=`fill="${metal}" stroke="${light}" stroke-width="1.4"`;
+  const diamond=`<path d="m48 33 7 6-7 8-7-8Z" fill="${gem}" stroke="${light}" stroke-width="1.2"/>`;
+  const flower=(x,y,size)=>`<g transform="translate(${x} ${y}) scale(${size})"><path d="M0-10C7-16 13-7 9-3 17 1 11 12 4 9 2 17-9 13-8 6-17 5-15-6-8-7-7-14-2-15 0-10Z" fill="${bloom}" stroke="${light}" stroke-width="1.2"/><path d="M-5 2q3-9 10-5-5 1-4 6 4 1 5-2" fill="none" stroke="${metal}" stroke-width="1.6"/><circle r="2.2" fill="${light}"/></g>`;
+  const art=[
+    `<path d="M25 48 19 26l15 10 14-17 14 17 15-10-6 22Z" ${frame}/><path d="M25 54h46" stroke="${metal}" stroke-width="4"/><path d="M48 6v7M12 16l8 5m56 0 8-5M11 50l8-3m58 0 8 3" stroke="${light}" stroke-width="2"/>${diamond}`,
+    `<ellipse cx="48" cy="67" rx="40" ry="5" fill="#101b16" opacity=".55"/><path d="M12 31q2-17 19-21h34q15 4 19 21l-8 10H20Z" fill="${deep}" stroke="${metal}" stroke-width="3"/><path d="M13 33h70v23l-8 10H21l-8-10Z" fill="${dark}" stroke="${metal}" stroke-width="3"/><path d="M17 34h62v9H17Zm4 23h54v6H21ZM24 14h6l-4 18h-7Zm42 0h6l5 18h-7Z" ${frame}/><path d="M34 51h28M34 54h28M40 21q8-6 16 0" fill="none" stroke="${metal}" stroke-width="1.5"/>${diamond}<circle cx="11" cy="58" r="5" ${frame}/><circle cx="83" cy="62" r="6" ${frame}/><path d="M5 67h19m50 1h17" stroke="${light}" stroke-width="2" opacity=".7"/>`,
+    `<path d="M47 46Q38 29 24 18m24 27Q54 23 69 15M48 48V12" fill="none" stroke="${leaf}" stroke-width="3"/><path d="M45 44Q19 42 18 30q21-3 27 14m5-3q11-18 27-14-1 14-27 14" fill="${leaf}" stroke="${light}" stroke-width="1"/>${flower(26,22,.75)}${flower(68,20,.84)}${flower(48,14,1)}<path d="M31 48h34l-7 16H38Z" fill="${deep}" stroke="${metal}" stroke-width="2.5"/><path d="M28 44h40v6H28Zm7 19h26l5 6H30Z" ${frame}/><path d="m48 51 5 4-5 5-5-5Z" fill="${gem}"/>`,
+    `<path d="M24 59h48l9 7-6 4H21l-6-4Z" fill="${dark}" stroke="${metal}" stroke-width="2"/><path d="M32 58h32l6 6H26Z" ${frame}/><path d="M48 5 65 26 61 53 48 61 35 53 31 26Z" fill="${deep}" stroke="${metal}" stroke-width="2.5"/><path d="M48 5v56L35 53 31 26Z" fill="${gem}"/><path d="m48 5 8 24-8 32V5Zm-17 21 17 7 17-7" fill="none" stroke="${light}" stroke-width="1.5"/><path d="m22 37 5 7-5 7-5-7Zm52-7 5 7-5 7-5-7Z" fill="${gem}" stroke="${light}"/>`,
+    `<path d="m20 44 18-22 18 13 20-17M38 22l11 30 27-34" fill="none" stroke="${metal}" stroke-width="1.5" stroke-dasharray="2 3"/><path d="m20 37 2 5 5 2-5 2-2 5-2-5-5-2 5-2Zm18-23 2 5 5 3-5 2-2 5-2-5-5-2 5-3Zm38-4 2 6 6 2-6 2-2 6-2-6-6-2 6-2Z" fill="${light}"/><circle cx="56" cy="35" r="3" fill="${gem}"/><circle cx="49" cy="52" r="3" fill="${light}"/>`,
+    `<g fill="none" stroke="${light}" stroke-width="1.35"><circle cx="48" cy="36" r="31"/><circle cx="48" cy="36" r="26" stroke="${metal}" stroke-dasharray="1 3"/><circle cx="48" cy="36" r="21"/><path d="M48 5 75 51H21Zm0 62L21 21h54Z" stroke="${metal}"/>${emblems[pet]}</g><path d="m48 2 3 3-3 3-3-3Zm0 62 3 3-3 3-3-3ZM17 33l3 3-3 3-3-3Zm62 0 3 3-3 3-3-3Z" fill="${gem}"/>`,
+  ];
+  return `<svg class="gear-art" viewBox="0 0 96 72" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">${art[slot]}</svg>`;
 }
 function scenery(pet,equipped){
   const ids=worn({equipped});
