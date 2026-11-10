@@ -349,55 +349,71 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 @keyframes grove-tracking{0%{transform:scale(1.14) translateX(2%)}52%{transform:scale(1.2) translateX(-3%)}100%{transform:scale(1.08) translateX(-1%)}}
 @keyframes foreground-parallax{from{transform:scale(1.22) translateX(4%)}to{transform:scale(1.04) translateX(-4%)}}
 
-/* Compose the clearing in depth, using its full width instead of the portrait box. */
-.forest-set{display:block;position:absolute;inset:0;z-index:0;pointer-events:none}
-.forest-piece{z-index:auto}
-.stage>.pet,.reveal-stage>.pet{z-index:2}
-.forest-set .forest-slot-0{inset:0;z-index:0;opacity:.5;background:conic-gradient(from 154deg at 41% -12%,transparent 0deg,var(--aura) 11deg,transparent 23deg);filter:blur(6px)}
+/* Layer the decorations behind and in front of the friend. */
+.forest-set{
+  display:block;
+  position:absolute;
+  inset:0;
+  z-index:auto;
+  pointer-events:none;
+  --clearing-ground:4%;
+}
+.stage>.pet,.reveal-stage>.pet,.opening-art>.opening-saved{z-index:2}
+.stage>.forest-set{--clearing-ground:13%}
+.opening-art>.forest-set{--clearing-ground:calc(100% - var(--forest-floor))}
 .forest-set .forest-prop{object-position:center bottom}
-.forest-set .forest-slot-4{inset:4% 3% 20%;z-index:1;background:radial-gradient(circle at 13% 26%,var(--jewel) 0 1px,transparent 3px),radial-gradient(circle at 28% 38%,var(--jewel) 0 1px,transparent 3px),radial-gradient(circle at 87% 23%,var(--jewel) 0 1px,transparent 3px),radial-gradient(circle at 80% 58%,var(--jewel) 0 2px,transparent 4px),radial-gradient(circle at 90% 48%,var(--jewel) 0 1px,transparent 3px)}
-.forest-set .forest-slot-5{left:31%;bottom:4%;width:38%;height:18%;aspect-ratio:auto;transform:none;z-index:1;opacity:.75;filter:drop-shadow(0 0 5px var(--jewel))}
-.forest-set .forest-slot-5 svg{width:100%;height:100%;overflow:visible;transform:scaleX(2.65);background:none}
-.stage:has(>.forest-set)>.pet,.result .reveal-stage:has(>.forest-set)>.pet{max-width:58%}
-.opening-art>.forest-set{z-index:1}
-.opening-art:has(>.forest-set)>.opening-saved{z-index:2;width:66%}
-.opening-art>.opening-art>.opening-art>.opening-art>.forest-set .forest-slot-5{bottom:calc(100% - var(--forest-floor) - 5%);height:14%}
-@media(max-width:420px){
-/* Arrange the equipped props around the friend according to how many are equipped. */
-.forest-set{--prop-ground:14%}
-.opening-art>.forest-set{--prop-ground:calc(100% - var(--forest-floor))}
-.forest-set :is(.forest-slot-1,.forest-slot-2,.forest-slot-3){
-  left:var(--prop-left,16%);
+.forest-set .forest-slot-0{
+  inset:0;
+  z-index:0;
+  opacity:.65;
+  background:conic-gradient(from 146deg at 36% -10%,transparent 0deg,var(--aura) 13deg,transparent 27deg);
+}
+.forest-set .forest-slot-1{
+  left:38%;
   right:auto;
-  bottom:calc(var(--prop-ground) + var(--prop-depth,0%));
-  width:var(--prop-width,22%);
-  height:var(--prop-height,24%);
-  z-index:2;
+  bottom:var(--clearing-ground);
+  width:24%;
+  height:24%;
+  z-index:3;
 }
-.forest-set .forest-slot-2{--prop-height:32%}
-.forest-set .forest-slot-3{--prop-height:28%}
-.forest-set :nth-child(2 of .forest-slot-1,.forest-slot-2,.forest-slot-3){
-  --prop-left:62%;
-  --prop-depth:2%;
-}
-.forest-set:has(:nth-child(3 of .forest-slot-1,.forest-slot-2,.forest-slot-3))
-  :nth-child(1 of .forest-slot-1,.forest-slot-2,.forest-slot-3){--prop-left:8%}
-.forest-set :nth-child(3 of .forest-slot-1,.forest-slot-2,.forest-slot-3){
-  --prop-left:76%;
-  --prop-width:17%;
-  --prop-depth:9%;
+.forest-set .forest-slot-2{
+  left:auto;
+  right:8%;
+  bottom:calc(var(--clearing-ground) + 5%);
+  width:24%;
+  height:34%;
   z-index:1;
 }
-.wardrobe .forest-set{
-  --prop-ground:4%;
-  --prop-left:8%;
-  --prop-width:18%;
+.forest-set .forest-slot-3{
+  left:8%;
+  right:auto;
+  bottom:calc(var(--clearing-ground) + 8%);
+  width:21%;
+  height:31%;
+  z-index:1;
 }
-.wardrobe .forest-set :nth-child(2 of .forest-slot-1,.forest-slot-2,.forest-slot-3){
-  --prop-left:74%;
+.forest-set .forest-slot-4{
+  inset:8% 5% 24%;
+  z-index:1;
+  background:radial-gradient(circle at 15% 37%,var(--jewel) 0 1px,transparent 3px),
+    radial-gradient(circle at 26% 23%,var(--jewel) 0 1px,transparent 3px),
+    radial-gradient(circle at 78% 26%,var(--jewel) 0 1px,transparent 3px),
+    radial-gradient(circle at 89% 49%,var(--jewel) 0 2px,transparent 4px),
+    radial-gradient(circle at 84% 69%,var(--jewel) 0 1px,transparent 3px);
 }
-.wardrobe .forest-set :nth-child(3 of .forest-slot-1,.forest-slot-2,.forest-slot-3){
-  --prop-left:82%;
-  --prop-width:15%;
-  --prop-depth:16%;
+.forest-set .forest-slot-5{
+  left:31%;
+  bottom:calc(var(--clearing-ground) - 2%);
+  width:38%;
+  height:17%;
+  aspect-ratio:auto;
+  transform:none;
+  z-index:1;
+  opacity:.65;
 }
+.forest-set .forest-slot-5 svg{
+  overflow:visible;
+  transform:scaleX(2.35);
+  background:none;
+}
+.forest-set:has(.forest-slot-5) .forest-slot-1{left:30%;width:22%}
