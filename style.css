@@ -574,3 +574,44 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 .wardrobe .forest-set.gear-2:has(.forest-slot-5) .forest-slot-1{left:24%}
 .wardrobe .forest-set.gear-2 .forest-slot-2{right:3%;width:32%;height:45%}
 .wardrobe .forest-set.gear-2 .forest-slot-3{left:4%;width:26%;height:35%}
+
+/* Reserve separate ground for the seal and foreground prop. */
+.wardrobe .reveal-stage:has(.forest-slot-2,.forest-slot-3)>.mature-pet{
+  width:min(76%,220px);
+}
+.wardrobe .reveal-stage:has(.forest-slot-5){
+  padding-bottom:clamp(55px,16vw,75px);
+}
+.wardrobe .forest-set .forest-slot-5{
+  left:18%;
+  bottom:2%;
+  width:64%;
+  height:24%;
+  opacity:.9;
+}
+.wardrobe .forest-set .forest-slot-5 svg{transform:scaleX(2.35)}
+.wardrobe .forest-set:has(.forest-slot-5) .forest-slot-1{
+  left:5%;
+  bottom:4%;
+  width:24%;
+  height:22%;
+}
+.wardrobe .forest-set.gear-1:has(.forest-slot-5) .forest-slot-1{width:29%}
+.wardrobe .forest-set.gear-0 .forest-slot-2{
+  right:3%;
+  width:25%;
+  bottom:16%;
+}
+.wardrobe .forest-set.gear-0 .forest-slot-3{
+  left:3%;
+  width:22%;
+  bottom:19%;
+}
+.wardrobe .forest-set.gear-0 .forest-slot-0 svg{
+  top:0;
+  left:1%;
+  width:18%;
+  height:22%;
+  opacity:.72;
+}
+.wardrobe .forest-set.gear-0 .forest-slot-4 svg{display:none}
