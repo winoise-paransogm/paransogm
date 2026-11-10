@@ -22,31 +22,45 @@ const toyBeats = [
   [[1,7, -8,10, 2,6, -4,2],[5,-5, 12,-9, -8,8, 5,-19],[2,6, -5,8, 3,5, 9,1],[-5,-5, 9,-9, 8,6, 1,-14]],
   [[-6,5, -3,3, -8,5, -5,2],[8,-5, 7,-10, 14,-11, 7,-8],[5,2, 1,0, -9,7, 10,0],[-4,-6, -2,-4, 12,-8, 1,-3]],
 ];
-const ornamentBeats = [
-  [0,-8, 1,-7, -3,-7, 0,-3],
-  [-6,8, -8,-7, 4,4, -7,1],
-  [8,2, 7,-5, 8,-6, 8,-2],
-  [-8,-3, -6,-5, -4,5, -7,-2],
-  [6,-7, 3,-8, 10,-10, 4,-7],
-  [0,5, 8,-15, 2,5, 2,-3],
+// Each item has a named action rather than a shared lateral nudge.
+export const ornamentActions = [
+  ['look','reach','sniff','inspect','follow','stamp','follow','inspect','splash','listen','step','reach'],
+  ['perk','inspect','hop','look','follow','hop','pluck','look','sip','splash','double-hop','listen'],
+  ['sway','warm','sway','look','follow','stamp','sway','look','sniff','reach','inspect','ring'],
 ];
-const newBeats = [
-  [[-9,2,0,-2,6,-3,-4,0],[6,5,4,-4,0,1,5,0],[5,-4,14,-15,-4,7,6,-2],[-5,-12,1,-3,6,-5,-2,-3],[5,-3,12,-12,3,6,13,-5],[-4,-2,-12,-14,5,-3,-7,-1]],
-  [[-4,2,9,-9,12,-10,-5,-2],[7,-9,8,-13,0,5,7,-5],[1,9,-7,7,0,2,4,2],[6,-5,-5,-11,7,5,4,-18],[-7,-5,7,-9,12,6,9,-20],[1,-7,13,-13,0,3,0,-4]],
-  [[-8,-3,2,-4,16,-9,-3,-2],[7,-13,4,-5,10,5,4,-8],[-8,8,-3,-3,-6,6,-7,1],[4,7,12,-13,5,-3,5,-2],[-8,-2,0,1,-12,10,-4,0],[5,-6,14,-15,7,3,6,-5]],
-];
+const beats = {
+  look: [[0,-9,0,-3,2,-3,0,0],[4,-12,0,-2,3,-4,0,0],[0,-8,0,0,0,0,0,0]],
+  reach: [[-2,4,0,4,0,0,0,0],[2,3,17,-22,2,-2,0,0],[1,1,10,-14,0,0,0,0]],
+  sniff: [[-3,6,0,1,1,2,0,0],[-6,13,1,3,2,3,0,1],[-4,10,0,2,0,1,0,0],[-6,13,1,3,2,2,0,1]],
+  inspect: [[-6,7,0,2,0,2,0,0],[-9,12,0,4,2,3,0,1],[3,8,0,1,-1,1,0,0]],
+  follow: [[-11,-5,-3,-3,-5,-2,0,0],[10,-9,3,-5,7,-6,0,0],[-7,-4,0,-2,-4,0,0,0]],
+  stamp: [[0,2,8,-20,0,2,0,0],[0,5,4,9,0,2,0,1],[0,-3,7,-9,1,-2,0,-1]],
+  perk: [[0,-3,0,10,0,0,0,0],[0,-7,0,-16,1,-1,0,0],[1,-4,-7,-12,0,0,0,0]],
+  hop: [[0,6,0,7,0,6,0,3],[0,-6,0,-8,0,-6,0,-15],[0,4,0,3,0,5,0,2]],
+  'double-hop': [[0,5,0,6,0,5,0,3],[0,-5,0,-8,0,-6,0,-12],[0,4,0,5,0,4,0,2],[0,-6,0,-9,0,-6,0,-17],[0,3,0,4,0,3,0,1]],
+  splash: [[0,3,8,-15,0,0,0,0],[0,5,12,8,0,0,0,1],[0,-4,-3,-9,0,-3,0,-10],[0,3,0,3,0,2,0,1]],
+  listen: [[-6,-2,9,-13,0,0,0,0],[6,-2,-7,-9,0,0,0,0],[-4,-1,8,-12,0,0,0,0]],
+  step: [[0,-2,10,-14,-4,8,0,-2],[0,2,-5,7,6,-10,0,0],[0,-2,8,-10,-3,5,0,-1]],
+  pluck: [[-2,4,-5,5,0,0,0,0],[0,1,17,-18,0,0,0,0],[0,-2,-9,-9,0,0,0,0],[0,0,13,-15,0,0,0,0]],
+  sip: [[0,7,-3,4,0,1,0,1],[0,12,4,-7,0,2,0,2],[0,10,2,-6,0,0,0,1],[0,-3,0,0,0,0,0,0]],
+  sway: [[-5,1,0,0,-17,-7,0,0],[5,-2,0,0,17,-10,0,0],[-4,0,0,0,-14,-5,0,0],[3,-1,0,0,12,-7,0,0]],
+  warm: [[0,6,7,-8,-5,3,0,2],[0,9,10,-10,5,3,0,2],[0,6,7,-8,-4,3,0,1]],
+  ring: [[0,-5,3,-8,2,-2,0,0],[2,-4,16,-23,5,-3,0,-1],[0,0,0,3,0,2,0,0]],
+};
 const rest = Array(8).fill(0);
 const lerp = (a,b,t) => a+(b-a)*t;
 
 export async function animateFriend(scene, pet, action, slot) {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if(!scene) return;
   const image = scene.querySelector('.friend-image');
+  if(!image) return;
   try { await image.decode(); } catch { return; }
   if (!scene.isConnected) return;
   const canvas = document.createElement('canvas');
   canvas.className = image.className + ' play-pose';
   canvas.setAttribute('aria-hidden','true');
-  const width = 230, height = Math.round(width*image.naturalHeight/image.naturalWidth);
+  const width = 320, height = Math.round(width*image.naturalHeight/image.naturalWidth);
   canvas.width=width;
   canvas.height=height;
   const ctx=canvas.getContext('2d',{willReadFrequently:true});
@@ -65,17 +79,29 @@ export async function animateFriend(scene, pet, action, slot) {
   let poses=toyBeats[pet];
   if(action==='snack') poses=[[3,6,3,-6,0,2,1,0],[0,-4,-2,-3,2,-3,0,-1],[3,5,2,0,-2,4,0,0],[-2,-4,0,-2,5,-4,0,-4]];
   if(action==='ornament'){
-    const reach=slot<6?ornamentBeats[slot]:newBeats[pet][slot-6];
-    poses=[reach.map(n=>-n*.35),reach,reach.map(n=>n*.55),reach.map(n=>n*.85)];
+    const name=ornamentActions[pet]?.[slot];
+    poses=beats[name]??beats.look;
+    scene.dataset.interaction=name;
+    const ornament=scene.querySelector('.ornament-active');
+    if(ornament){
+      ornament.dataset.interaction=name;
+      const effect=document.createElement('span');
+      effect.className='interaction-effect effect-'+name;
+      effect.setAttribute('aria-hidden','true');
+      effect.innerHTML='<i></i><i></i><i></i>';
+      ornament.append(effect);
+    }
   }
   const sequence=[rest,...poses,rest];
   image.after(canvas);
   image.style.visibility='hidden';
   const start=performance.now();
-  const duration=action==='toy'?2400:1700;
+  const duration=action==='toy'?2400:2600;
   function tick(now){
     if(!scene.isConnected) return;
     if(now-start>=duration){
+      scene.querySelectorAll('.interaction-effect').forEach(el=>el.remove());
+      delete scene.dataset.interaction;
       canvas.remove();
       image.style.removeProperty('visibility');
       return;
