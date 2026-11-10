@@ -491,3 +491,60 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
   .quiz-page .quiz>.actions button:only-child{grid-column:1/-1}
   .quiz-page .quiz>.actions .text-button{font-size:13px}
 }
+
+/* Ground the props and give each forest theme its own lighting. */
+.forest-set.gear-0{--canopy-glow:#ffdc8b80;--ground-glow:#e5ae4e55}
+.forest-set.gear-1{--canopy-glow:#d9c8ff85;--ground-glow:#af9dec55}
+.forest-set.gear-2{--canopy-glow:#ffc09988;--ground-glow:#ff976052}
+
+.forest-set .forest-slot-0{
+  filter:none;
+  opacity:.9;
+  background:
+    conic-gradient(from 119deg at 11% -12%,transparent 0deg,var(--canopy-glow) 12deg,transparent 22deg,var(--aura) 30deg,transparent 44deg),
+    radial-gradient(ellipse at 14% 7%,var(--canopy-glow),transparent 54%);
+}
+
+.forest-set :is(.forest-slot-1,.forest-slot-2,.forest-slot-3)::before{
+  content:"";
+  position:absolute;
+  inset:auto 6% -7%;
+  height:37%;
+  z-index:-1;
+  background:
+    radial-gradient(ellipse at 50% 56%,#091a14a8,transparent 61%),
+    radial-gradient(ellipse,var(--ground-glow),transparent 72%);
+}
+
+.forest-set .forest-slot-4{
+  inset:8% 6% 15%;
+  filter:drop-shadow(0 0 5px var(--jewel));
+  background:
+    radial-gradient(circle at 13% 24%,#fffbe8 0 1px,var(--jewel) 2px,transparent 4px),
+    radial-gradient(circle at 28% 12%,var(--jewel) 0 1px,transparent 3px),
+    radial-gradient(circle at 18% 66%,var(--jewel) 0 1px,transparent 3px),
+    radial-gradient(circle at 79% 20%,#fffbe8 0 1px,var(--jewel) 2px,transparent 4px),
+    radial-gradient(circle at 86% 55%,#fffbe8 0 1px,var(--jewel) 2px,transparent 4px),
+    radial-gradient(circle at 93% 36%,var(--jewel) 0 1px,transparent 3px);
+}
+.forest-set .forest-slot-4::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 23% 41%,#fffbe8 0 1px,transparent 3px),
+    radial-gradient(circle at 11% 52%,var(--jewel) 0 1px,transparent 3px),
+    radial-gradient(circle at 91% 67%,var(--jewel) 0 1px,transparent 3px),
+    radial-gradient(circle at 73% 9%,var(--jewel) 0 1px,transparent 3px);
+  animation:forest-fireflies-drift 5s ease-in-out infinite alternate;
+}
+@keyframes forest-fireflies-drift{
+  from{transform:translateY(3%);opacity:.55}
+  to{transform:translateY(-5%);opacity:1}
+}
+
+.forest-set .forest-slot-5{
+  opacity:.88;
+  background:radial-gradient(ellipse,var(--ground-glow),transparent 71%);
+}
+.forest-set .forest-slot-5 svg{filter:drop-shadow(0 0 3px var(--jewel))}
