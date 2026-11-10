@@ -313,16 +313,53 @@ function playOpening(){
   }
   skip.addEventListener('click',finish,{once:true});
   intro.addEventListener('cancel',event=>{event.preventDefault();finish()},{once:true});
-  const loaded=[...intro.querySelectorAll('img[data-src]')].map(img=>{
-    img.src=img.dataset.src;
-    return img.decode?.().catch(()=>{})??Promise.resolve();
-  });
-  intro.showModal();
-  Promise.race([Promise.all(loaded),new Promise(resolve=>setTimeout(resolve,750))]).then(()=>{
-    if(!intro.open)return;
+  const video=intro.querySelector('.intro-video');
+  let touchStart=null, wheelAt=-Infinity;
+  function bounce(delta){
+    if(!delta||!intro.classList.contains('intro-video-playing')||video.classList.contains('intro-bounce'))return;
+    video.style.setProperty('--intro-push',delta>0?'10px':'-10px');
+    video.classList.add('intro-bounce');
+  }
+  video.addEventListener('animationend',()=>video.classList.remove('intro-bounce'));
+  intro.addEventListener('touchstart',event=>{
+    touchStart=event.touches.length===1?event.touches[0].clientY:null;
+  },{passive:true});
+  intro.addEventListener('touchmove',event=>{
+    if(touchStart===null||event.touches.length!==1)return;
+    const delta=event.touches[0].clientY-touchStart;
+    if(Math.abs(delta)<14)return;
+    touchStart=null;
+    bounce(delta);
+  },{passive:true});
+  intro.addEventListener('wheel',event=>{
+    event.preventDefault();
+    const now=performance.now();
+    if(now-wheelAt>180)bounce(-event.deltaY);
+    wheelAt=now;
+  },{passive:false});
+
+  function playFallback(){
+    clearTimeout(timer);
+    if(!intro.open||intro.classList.contains('intro-playing'))return;
+    video.pause();
+    intro.classList.remove('intro-video-playing');
+    for(const img of intro.querySelectorAll('img[data-src]')) img.src=img.dataset.src;
     intro.classList.add('intro-playing');
     timer=setTimeout(finish,5000);
-  });
+  }
+  intro.addEventListener('close',()=>{clearTimeout(timer);video.pause()},{once:true});
+  video.addEventListener('ended',finish,{once:true});
+  video.addEventListener('error',playFallback,{once:true});
+  video.addEventListener('playing',()=>{
+    if(!intro.open||intro.classList.contains('intro-playing'))return;
+    clearTimeout(timer);
+    intro.classList.add('intro-video-playing');
+    timer=setTimeout(finish,11000);
+  },{once:true});
+  intro.showModal();
+  video.src='./forest-opening.mp4';
+  timer=setTimeout(playFallback,2200);
+  video.play().catch(playFallback);
 }
 
 if(typeof window!=='undefined')playOpening();
