@@ -23,7 +23,7 @@ const themedOrnaments=[
   [
     '<path d="M48 8c14 11 13 20 6 28 9-1 14-6 17-11 9 21-7 33-24 33-20 0-31-13-26-28 3 7 8 9 12 10-3-14 9-19 15-32Z" fill="#fd8d52" stroke="#ffd099" stroke-width="2"/><path d="M48 29c9 10 6 15 13 15-3 12-22 13-24 1 5-1 8-9 11-16Z" fill="#ffe6a0"/>',
     '<g fill="#ffb879" stroke="#ffdfae"><path d="M24 24c12 9 9 17 2 20-9 3-13-6-9-11 1 4 7 2 7-9Z"/><path d="M63 11c13 10 14 22 3 25-10 3-16-6-11-13 1 6 7 3 8-12Z"/><path d="M74 38c8 7 6 13 1 15-7 2-9-4-6-8 1 3 4 2 5-7Z"/></g><path d="M28 50q20 11 38-9" fill="none" stroke="#e98261" stroke-dasharray="2 4"/>',
-    '<path d="m48 7 39 29-39 29L9 36Z" fill="none" stroke="#ffba85" stroke-width="2"/><path d="m48 13 31 23-31 23-31-23Z" fill="none" stroke="#db705a" stroke-width="2" stroke-dasharray="4 3"/><path d="M48 22c8 7 5 12 10 14 5 10-5 15-10 15-8 0-14-6-9-14 0 4 4 5 6 4-2-6 4-11 3-19Z" fill="#ffb477" stroke="#ffe9bc"/>',
+    '<path d="m48 7 39 29-39 29L9 36Z" fill="#482f24" fill-opacity=".38" stroke="#e0a16a" stroke-width="1.5"/><path d="m48 13 31 23-31 23-31-23Z" fill="none" stroke="#e7ae79" stroke-width=".85"/><path d="m48 10 3 3-3 3-3-3Zm0 46 3 3-3 3-3-3ZM13 36l4-3 4 3-4 3Zm62 0 4-3 4 3-4 3Z" fill="#edbc84"/><path d="M48 22c8 7 5 12 10 14 5 10-5 15-10 15-8 0-14-6-9-14 0 4 4 5 6 4-2-6 4-11 3-19Z" fill="#7e492d" fill-opacity=".48" stroke="#edbc84"/>',
   ],
 ];
 
