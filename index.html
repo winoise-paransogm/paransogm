@@ -44,6 +44,19 @@ html:has(.forest-intro[open]),body:has(.forest-intro[open]){overflow:hidden;over
 .ornament-active .ornament-touch::before{animation:ornament-hint 1.3s ease-out both}
 @keyframes ornament-hint{0%,100%{opacity:0;transform:scale(.88)}38%{opacity:.85;transform:scale(1.04)}}
 @media(prefers-reduced-motion:reduce){.show-ornament-hints .forest-piece .ornament-touch::before,.ornament-active .ornament-touch::before{animation:none;opacity:.38}}
+.care-page .habitat-0,.opening-0 .opening-forest{background:linear-gradient(#16291916,#10291a44),url('ornaments/habitat-0.webp') center 61%/cover}
+.care-page .habitat-1,.opening-1 .opening-forest{background:linear-gradient(#1919310f,#111a3144),url('ornaments/habitat-1.webp') center 61%/cover}
+.care-page .habitat-2,.opening-2 .opening-forest{background:linear-gradient(#40251b12,#35221842),url('ornaments/habitat-2.webp') center 61%/cover}
+.forest-set .forest-slot-0>.forest-prop,.forest-set .forest-slot-4>.forest-prop{position:absolute;inset:1% auto auto 2%;width:17%;height:24%;object-position:center}
+.forest-set .forest-slot-4>.forest-prop{inset:0 1% auto auto;width:18%;height:27%}
+.forest-set .forest-slot-5>.forest-prop{object-position:center}
+.forest-set .forest-slot-5.new-ornament{height:27%}
+.forest-set .new-ornament.ornament-active>.forest-prop{animation:ornament-awake 1.7s ease both}
+@keyframes ornament-awake{22%,68%{filter:brightness(1.28) drop-shadow(0 0 8px #ffdf9c);transform:translateY(-4%) rotate(-3deg)}46%{transform:rotate(3deg)}}
+@media(prefers-reduced-motion:reduce){.forest-set .new-ornament.ornament-active>.forest-prop{animation:none}}
+.forest-set .forest-slot-0.new-ornament>:is(.forest-prop,.ornament-touch){top:34%;height:31%;width:18%}
+.forest-set .forest-slot-4.new-ornament>:is(.forest-prop,.ornament-touch){top:31%;height:37%;width:21%}
+.forest-set.gear-2 .forest-slot-0.new-ornament>:is(.forest-prop,.ornament-touch){top:12%;height:30%}
 </style></head>
 <body><button class="forest-music" type="button" aria-label="숲 배경 음악" aria-pressed="false" hidden><span aria-hidden="true">♫</span> <span>음악 꺼짐</span></button><header class="mast"><div class="mast-creator"><span aria-hidden="true">✦</span> 사자대장</div><div class="brand">숲속친구들 키우기</div><p>문제를 풀고 먹이를 얻어 친구를 키워요!</p></header><main id="app"></main><dialog id="forest-intro" class="forest-intro" aria-labelledby="forest-intro-title">
   <video class="intro-video" muted playsinline preload="none" aria-hidden="true"></video>

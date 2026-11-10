@@ -6,55 +6,27 @@ const key='lion-grow-v2';
 const root=document.querySelector('#app');
 const goals=[75,90,105,120,140];
 const formerDecorationMilestones=[3,8,15,24,36,51];
-const ornamentPrices=[2,3,4,5,6,8];
+const ornamentPrices=[2,3,4,5,6,8,3,4,5,6,7,9];
+const positionFor=id=>id%6;
 const sets=[
-  ['태양 왕관의 광채','왕실 황금 보물함','황금 장미 화분','태양석 오벨리스크','황금 반딧불 성좌','태양 수호 인장'],
-  ['달빛 초승달','달연꽃 연못','달꽃 정원 아치','유리 달등','은하 별자리','달의 물결 문양'],
-  ['노을 불씨','노을 화로','붉은 여우 문','호박빛 등롱','춤추는 여우불','불꽃 마름모 인장'],
+  ['태양 왕관의 광채','왕실 황금 보물함','황금 장미 화분','태양석 오벨리스크','황금 반딧불 성좌','태양 수호 인장','해바라기 해시계','황금 모래시계','호박빛 분수','금빛 풍경','태양석 다리','벌집 등불'],
+  ['달빛 초승달','달연꽃 연못','달꽃 정원 아치','유리 달등','은하 별자리','달의 물결 문양','은빛 초승달 하프','달빛 망원경','클로버 찻잔 세트','자수정 분수','버섯 회전목마','초롱꽃 오르골'],
+  ['노을 불씨','노을 화로','붉은 여우 문','호박빛 등롱','춤추는 여우불','불꽃 마름모 인장','단풍 바람개비','붉은 잎 연','비취 향로','감 바구니','여우 탈 장식','구리 종 아치'],
 ];
 const items=sets[0];
 const themeName=['햇살 숲','달빛 정원','노을 숲'];
-const royalPalette={light:'#fff0af',metal:'#dfa544',gem:'#65e1bf'};
-const solarEmblem='<circle cx="48" cy="36" r="7"/><path d="M48 23v-6m0 38v-6M35 36h-6m38 0h-6M39 27l-4-4m26 26-4-4M39 45l-4 4m26-26-4 4"/>';
-
-const themedOrnaments=[
-  [
-    '<path d="M52 9a26 26 0 1 0 16 43A25 25 0 0 1 52 9Z" fill="#e8dcff" stroke="#fffbff"/><path d="M68 10v16m-8-8h16M79 29v8m-4-4h8" stroke="#e9c5ff" stroke-width="2"/>',
-    '<path d="M14 54 30 29 53 38 71 16 84 30" fill="none" stroke="#c8b5ff" stroke-dasharray="2 4"/><path d="m30 19 2 7 7 3-7 2-2 7-2-7-7-2 7-3Zm41-11 2 6 7 2-7 2-2 7-2-7-7-2 7-2Z" fill="#fff0ff"/><g fill="#cbeaff"><circle cx="14" cy="54" r="3"/><circle cx="53" cy="38" r="4"/><circle cx="84" cy="30" r="3"/></g>',
-    '<ellipse cx="48" cy="36" rx="41" ry="28" fill="none" stroke="#e7d8ff" stroke-width="2"/><ellipse cx="48" cy="36" rx="35" ry="22" fill="none" stroke="#b4a4ee" stroke-dasharray="2 4"/><path d="M50 19a18 18 0 1 0 15 24 17 17 0 0 1-15-24Z" fill="#e3d3ff"/><path d="M66 20v12m-6-6h12M19 36h9m40 0h9" stroke="#fff4ff"/>',
-  ],
-  [
-    '<path d="M48 8c14 11 13 20 6 28 9-1 14-6 17-11 9 21-7 33-24 33-20 0-31-13-26-28 3 7 8 9 12 10-3-14 9-19 15-32Z" fill="#fd8d52" stroke="#ffd099" stroke-width="2"/><path d="M48 29c9 10 6 15 13 15-3 12-22 13-24 1 5-1 8-9 11-16Z" fill="#ffe6a0"/>',
-    '<g fill="#ffb879" stroke="#ffdfae"><path d="M24 24c12 9 9 17 2 20-9 3-13-6-9-11 1 4 7 2 7-9Z"/><path d="M63 11c13 10 14 22 3 25-10 3-16-6-11-13 1 6 7 3 8-12Z"/><path d="M74 38c8 7 6 13 1 15-7 2-9-4-6-8 1 3 4 2 5-7Z"/></g><path d="M28 50q20 11 38-9" fill="none" stroke="#e98261" stroke-dasharray="2 4"/>',
-    '<path d="m48 7 39 29-39 29L9 36Z" fill="#482f24" fill-opacity=".38" stroke="#e0a16a" stroke-width="1.5"/><path d="m48 13 31 23-31 23-31-23Z" fill="none" stroke="#e7ae79" stroke-width=".85"/><path d="m48 10 3 3-3 3-3-3Zm0 46 3 3-3 3-3-3ZM13 36l4-3 4 3-4 3Zm62 0 4-3 4 3-4 3Z" fill="#edbc84"/><path d="M48 22c8 7 5 12 10 14 5 10-5 15-10 15-8 0-14-6-9-14 0 4 4 5 6 4-2-6 4-11 3-19Z" fill="#7e492d" fill-opacity=".48" stroke="#edbc84"/>',
-  ],
-];
-
-function ornamentSvg(art){
-  return `<svg class="gear-art" viewBox="0 0 96 72" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">${art}</svg>`;
-}
 const physicalOrnaments=[
   ['royal-chest','golden-roses','emerald-obelisk'],
   ['lotus-pond','wisteria-arch','moon-lantern'],
   ['copper-brazier','maple-gate','amber-lantern'],
 ];
 function glyph(pet,slot){
-  const prop=physicalOrnaments[pet][slot-1];
-  if(prop) return `<img class="gear-art forest-prop" src="./ornaments/${prop}.webp" alt="" aria-hidden="true">`;
-  if(pet>0) return ornamentSvg(themedOrnaments[pet-1][slot===0?0:slot-3]);
-  const {light,metal,gem}=royalPalette;
-  const frame=`fill="${metal}" stroke="${light}" stroke-width="1.4"`;
-  const diamond=`<path d="m48 33 7 6-7 8-7-8Z" fill="${gem}" stroke="${light}" stroke-width="1.2"/>`;
-  const art=[
-    `<path d="M25 48 19 26l15 10 14-17 14 17 15-10-6 22Z" ${frame}/><path d="M25 54h46" stroke="${metal}" stroke-width="4"/><path d="M48 6v7M12 16l8 5m56 0 8-5M11 50l8-3m58 0 8 3" stroke="${light}" stroke-width="2"/>${diamond}`,
-    `<path d="m20 44 18-22 18 13 20-17M38 22l11 30 27-34" fill="none" stroke="${metal}" stroke-width="1.5" stroke-dasharray="2 3"/><path d="m20 37 2 5 5 2-5 2-2 5-2-5-5-2 5-2Zm18-23 2 5 5 3-5 2-2 5-2-5-5-2 5-3Zm38-4 2 6 6 2-6 2-2 6-2-6-6-2 6-2Z" fill="${light}"/><circle cx="56" cy="35" r="3" fill="${gem}"/><circle cx="49" cy="52" r="3" fill="${light}"/>`,
-    `<g fill="none" stroke="${light}" stroke-width="1.35"><circle cx="48" cy="36" r="31"/><circle cx="48" cy="36" r="26" stroke="${metal}" stroke-dasharray="1 3"/><circle cx="48" cy="36" r="21"/><path d="M48 5 75 51H21Zm0 62L21 21h54Z" stroke="${metal}"/>${solarEmblem}</g><path d="m48 2 3 3-3 3-3-3Zm0 62 3 3-3 3-3-3ZM17 33l3 3-3 3-3-3Zm62 0 3 3-3 3-3-3Z" fill="${gem}"/>`,
-  ];
-  return ornamentSvg(art[slot===0?0:slot-3]);
+  const prop=physicalOrnaments[pet][slot-1]??`collection-${pet}-${slot}`;
+  return `<img class="gear-art forest-prop" src="./ornaments/${prop}.webp" alt="" aria-hidden="true">`;
 }
 function scenery(pet,equipped,interactive=false,activeSlot=null){
   const ids=worn({equipped});
-  return ids.length?`<div class="forest-set gear-${pet}" ${interactive?'':'aria-hidden="true"'}>${ids.map(slot=>`<div class="forest-piece forest-slot-${slot} ${activeSlot===slot?'ornament-active':''}">${glyph(pet,slot)}${interactive?`<button class="ornament-touch" type="button" data-action="play-ornament:${slot}" aria-label="${sets[pet][slot]} 반응 보기"></button>`:''}</div>`).join('')}</div>`:'';
+  return ids.length?`<div class="forest-set gear-${pet}" ${interactive?'':'aria-hidden="true"'}>${ids.map(slot=>`<div class="forest-piece forest-slot-${positionFor(slot)} ${slot>=6?'new-ornament':''} ${activeSlot===slot?'ornament-active':''}">${glyph(pet,slot)}${interactive?`<button class="ornament-touch" type="button" data-action="play-ornament:${slot}" aria-label="${sets[pet][slot]} 반응 보기"></button>`:''}</div>`).join('')}</div>`:'';
 }
 const worn=s=>Array.isArray(s.equipped)?s.equipped:Number.isInteger(s.equipped)?[s.equipped]:[];
 const fresh=pet=>({pet,xp:0,food:0,fed:0,stage:0,stageFed:0,correct:[],hinted:[],rewarded:[],active:null,equipped:[],ownedOrnaments:[]});
@@ -72,7 +44,7 @@ for(const friend of roster.friends){
   if(!friend||Array.isArray(friend.ownedOrnaments)) continue;
   const previousCount=Math.max(friend.legacyDecorations??Math.floor(friend.correct.length/3),
     formerDecorationMilestones.filter(goal=>friend.correct.length>=goal).length);
-  friend.ownedOrnaments=ornamentPrices.map((_,i)=>i).filter(i=>i<previousCount||worn(friend).includes(i));
+  friend.ownedOrnaments=ornamentPrices.map((_,i)=>i).filter(i=>i<Math.min(6,previousCount)||worn(friend).includes(i));
 }
 let state=roster.friends[roster.active]??null;
 let page=state?.active?'quiz':state?'home':'choose';
@@ -97,6 +69,7 @@ const button = (label,action,kind='primary',off=false) =>
   `<button type="button" class="${kind}" data-action="${action}" ${off?'disabled':''}>${label}</button>`;
 const baseArt = (id,grown=false,pose="idle") => `<div class="pet pet-${id} pose-${pose} ${grown?'grown':''}" style="--pet-color:${pets[id].color}" role="img" aria-label="${grown?pets[id].grown:'아기 '+pets[id].name}"><span aria-hidden="true">${pets[id].icon}</span>${id!==0?`<img class="friend-image" src="pet-${id}-${pose==="sad"?(grown?"sad-grown":"sad"):(grown?"grown":"baby")}.png" alt="" width="420" height="630">${pose==="reveal"?`<img class="friend-image before-evolution" src="pet-${id}-baby.png" alt="" width="420" height="630">`:''}`:''}${id===0?`<i class="lion-cel open"></i><i class="lion-cel blink"></i><i class="lion-cel perk"></i><i class="lion-cel sad"></i><i class="lion-cel chew"></i><i class="lion-cel adult"></i>`:''}</div>`;
 function picture(id,stage){
+  if(stage===goals.length) return `pet-${id}-stage-5.webp`;
   if(stage>=1) return `pet-${id}-stage-${stage}.png`;
   return id===0?(stage?'lion-adult.png':'lion-open.png'):`pet-${id}-${stage?'grown':'baby'}.png`;
 }
@@ -144,20 +117,20 @@ function render(focus=true) {
     const xp=Math.min(state.xp,goal??0);
     const play=playing&&state.stage===goals.length;
     const [toy,icon,reaction]=playthings[state.pet];
-    html=`<div class="home-grid"><section class="home-grove"><div class="stage-top"><span class="tag">진화 ${state.stage} / 5</span><span class="tag food">${pet.meal} 먹이 ${state.food}개</span></div><div class="reveal-stage grove-scene ${motion?'fed':''} ${playAction?`friend-play friend-${state.pet} play-${playAction}`:''}"><div class="habitat" aria-hidden="true"></div>${scenery(state.pet,state.equipped,play,playSlot)}${art(state.pet,state.stage,motion?'feeding':'idle')}${playAction&&playAction!=='ornament'?`<span class="play-prop" aria-hidden="true">${playAction==='snack'?pet.meal:icon}</span>`:''}${motion?`<span class="meal-fx" aria-hidden="true">${pet.meal}</span>`:''}</div><div class="speech" role="status">${playAction==='snack'?'냠냠! 간식을 먹고 기분이 좋아졌어요!':playAction==='toy'?reaction:playAction==='ornament'?ornamentReaction(state.pet,playSlot):motion?'냠냠! 맛있어요!':ready?'이제 진화할 수 있어요!':goal?'함께 쑥쑥 자라요!':'오늘도 숲을 지켜요!'}</div>${play?`<div class="play-controls" aria-label="친구와 놀기">${button(pet.meal+' 간식 주기','play-snack','secondary')}${button(toy,'play-toy','secondary')}${button('놀이 마치기','play-end','text-button')}</div>`:''}</section><section class="panel ${ready?'evolution-ready':''}">${intro('나의 친구',stageName(pet,state.stage))}
+    html=`<div class="home-grid"><section class="home-grove"><div class="stage-top"><span class="tag">진화 ${state.stage} / 5</span><span class="tag food">${pet.meal} 먹이 ${state.food}개</span></div><div class="reveal-stage grove-scene ${motion?'fed':''} ${playAction?`friend-play friend-${state.pet} play-${playAction}`:''}"><div class="habitat habitat-${state.pet}" aria-hidden="true"></div>${scenery(state.pet,state.equipped,play,playSlot)}${art(state.pet,state.stage,motion?'feeding':'idle')}${playAction&&playAction!=='ornament'?`<span class="play-prop" aria-hidden="true">${playAction==='snack'?pet.meal:icon}</span>`:''}${motion?`<span class="meal-fx" aria-hidden="true">${pet.meal}</span>`:''}</div><div class="speech" role="status">${playAction==='snack'?'냠냠! 간식을 먹고 기분이 좋아졌어요!':playAction==='toy'?reaction:playAction==='ornament'?ornamentReaction(state.pet,playSlot):motion?'냠냠! 맛있어요!':ready?'이제 진화할 수 있어요!':goal?'함께 쑥쑥 자라요!':'오늘도 숲을 지켜요!'}</div>${play?`<div class="play-controls" aria-label="친구와 놀기">${button(pet.meal+' 간식 주기','play-snack','secondary')}${button(toy,'play-toy','secondary')}${button('놀이 마치기','play-end','text-button')}</div>`:''}</section><section class="panel ${ready?'evolution-ready':''}">${intro('나의 친구',stageName(pet,state.stage))}
     ${goal?`<div class="xp"><div><strong>성장 경험치</strong><b>${xp} / ${goal}</b></div><progress value="${xp}" max="${goal}" aria-label="성장 경험치"></progress></div>`:'<div class="done">✦ 다섯 번의 진화 완료</div>'}
     <p>${ready?'진화할 준비가 됐어요!':!goal?'퀴즈와 꾸미기를 계속 즐겨요.':xp===goal?'이번 단계에서 먹이를 한 번 주면 진화할 수 있어요.':state.food?'먹이를 주면 경험치가 올라요.':'단원 문제를 모두 맞히면 먹이를 받아요.'}</p>
     <div class="actions">${ready?button('진화하기','evolve'):''}${state.food&&!ready?button('먹이 주기','feed'):''}${!goal&&!play?button('친구와 놀기','play-start'):''}${button('문제 풀러 가기','subjects',ready||state.food?'secondary':'primary')}<div class="care-links">${button('장식 상점','wardrobe','text-button')}${button('다른 친구 키우기','choose-new','text-button')}</div></div></section></div>`;
   } else if(page==='wardrobe'){
     const owned=state.ownedOrnaments, wearing=worn(state);
-    html=`<section class="panel wardrobe">${intro('장식 상점',themeName[state.pet],'모은 먹이로 장식을 사고, 산 장식은 숲에 놓거나 거둘 수 있어요.')}
-    <div class="reveal-stage grove-scene"><div class="habitat" aria-hidden="true"></div>${scenery(state.pet,state.equipped)}${art(state.pet,state.stage,'idle')}</div>
+    html=`<section class="panel wardrobe">${intro('장식 상점',themeName[state.pet],'모은 먹이로 장식을 사고, 산 장식은 숲에 놓거나 거둘 수 있어요. 같은 자리의 장식은 서로 바꿔 놓을 수 있어요.')}
+    <div class="reveal-stage grove-scene"><div class="habitat habitat-${state.pet}" aria-hidden="true"></div>${scenery(state.pet,state.equipped)}${art(state.pet,state.stage,'idle')}</div>
     <p class="wardrobe-progress" role="status">${pet.meal} 보유 먹이 ${state.food}개<br><small>보유 장식 ${owned.length} / ${items.length} · 배치 ${wearing.length}개</small></p>
     <div class="wardrobe-items gear-${state.pet}">${sets[state.pet].map((name,i)=>{
       const purchased=owned.includes(i), equipped=wearing.includes(i), price=ornamentPrices[i];
       return `<button class="option ${equipped?'picked':''}" data-action="${purchased?'equip':'buy-ornament'}:${i}" ${purchased?`aria-pressed="${equipped}"`:state.food<price?'disabled':''}><span class="gear-thumb">${glyph(state.pet,i)}</span><span class="gear-label">${name}<small>${purchased?(equipped?'숲에 놓음':'숲에 놓기'):`먹이 ${price}개 · ${state.food<price?'부족':'구매'}`}</small></span></button>`;
     }).join('')}</div>
-    <div class="actions">${owned.length>wearing.length?button('모은 장식 모두 놓기','equip-all','secondary'):''}${wearing.length?button('장식 모두 거두기','unequip','text-button'):''}${button('육성 화면으로','home')}</div></section>`;
+    <div class="actions">${owned.some(id=>!wearing.some(placed=>positionFor(placed)===positionFor(id)))?button('빈자리에 장식 놓기','equip-all','secondary'):''}${wearing.length?button('장식 모두 거두기','unequip','text-button'):''}${button('육성 화면으로','home')}</div></section>`;
   } else if (page==='subjects') {
     const groups=[...new Set(subjects.map(unit=>unit.name))];
     html=intro('쉬는 시간 퀴즈','어떤 단원을 풀까요?','단원을 마치면 먹이가 자동으로 쌓여요.')+
@@ -183,7 +156,7 @@ function render(focus=true) {
     const wrong=feedback?.type==='wrong', right=feedback?.type==='right';
     html=`<section class="quiz panel ${right?(feedback.reward?"reward-scene":"correct-scene"):""}"><div class="quiz-meta"><span class="tag">${unit.name} · ${unit.unit}</span><b>${question+1} / ${unit.questions.length}</b></div><div class="quiz-companion ${right?"cheer":""}">${art(state.pet,state.stage,wrong?"sad":"idle")}<p>${wrong?"천천히 다시 해 봐요.":right?(feedback.reward?"우와, 먹이를 찾았어요!":"해냈어요!"):"같이 풀어 봐요!"}</p></div>${intro('보기 중 하나를 골라요',prompt)}<div class="options" role="group" aria-label="답 보기">${options.map((value,i)=>`<button type="button" class="option ${selected===i?'picked':''}" data-action="option:${i}" aria-pressed="${selected===i}" ${feedback?'disabled':''}><span>${i+1}</span>${value}</button>`).join('')}</div>${wrong?`<div class="notice wrong" role="status"><div class="sad-pet" role="img" aria-label="아쉬워하는 ${pet.name}">${art(state.pet,state.stage,"sad")}<span aria-hidden="true">💧</span></div><div><strong>아쉬워요. 다시 풀어 볼까요?</strong>${feedback.hint?`<p>${feedback.hint}</p>`:''}</div></div>`:''}${right?`<div class="notice right ${feedback.reward?"reward-notice":"correct-notice"}" role="status"><span class="reward-icon" aria-hidden="true">${feedback.reward?pet.meal:'✓'}</span><span class="reward-rays" aria-hidden="true"></span><div><strong>${feedback.reward?`단원 완료! ${pet.food} 1개를 모아뒀어요.`:'정답이에요!'}</strong>${feedback.points&&state.stage<goals.length?'<p>경험치 +5</p>':''}${explanation?`<p>${explanation}</p>`:''}</div></div>`:''}<div class="actions">${wrong?button('다시 풀기','retry'):right?button(last?(nextUnit<0?'단원 고르기':'다음 단원 풀기'):'다음 문제',last?(nextUnit<0?'subjects':`subject:${nextUnit}`):'next'):button('정답 확인','check','primary',selected===null)}${right&&last?(nextUnit<0?button('육성 화면으로','home','text-button'):button('단원 고르기','subjects','text-button')):button('과목 고르기','subjects','text-button')}</div></section>`;
   } else {
-    html=`<section class="result panel reveal-pet-${state.pet} reveal-level-${state.stage} ${motion?'transform':''}">${intro(`${state.stage}번째 진화 성공`,stageName(pet,state.stage),formNotes[state.pet][state.stage-1])}<div class="reveal-stage"><div class="habitat" aria-hidden="true"></div><div class="evolution-halo" aria-hidden="true"></div>${scenery(state.pet,state.equipped)}${art(state.pet,state.stage,"reveal")}</div><div class="actions">${button('새로운 모습 보기','home')}</div></section>`;
+    html=`<section class="result panel reveal-pet-${state.pet} reveal-level-${state.stage} ${motion?'transform':''}">${intro(`${state.stage}번째 진화 성공`,stageName(pet,state.stage),formNotes[state.pet][state.stage-1])}<div class="reveal-stage"><div class="habitat habitat-${state.pet}" aria-hidden="true"></div><div class="evolution-halo" aria-hidden="true"></div>${scenery(state.pet,state.equipped)}${art(state.pet,state.stage,"reveal")}</div><div class="actions">${button('새로운 모습 보기','home')}</div></section>`;
   }
   document.body.classList.toggle("opening-page",page==="choose");
   document.body.classList.toggle("quiz-page",page==="quiz"||page==="subjects");
@@ -269,10 +242,16 @@ root.addEventListener('click', event => {
     case 'equip': {
       const id=Number(value), current=worn(state);
       if(page!=='wardrobe'||!state.ownedOrnaments.includes(id)) return;
-      state.equipped=current.includes(id)?current.filter(i=>i!==id):[...current,id].sort((a,b)=>a-b);
+      state.equipped=current.includes(id)?current.filter(i=>i!==id):[...current.filter(placed=>positionFor(placed)!==positionFor(id)),id].sort((a,b)=>a-b);
       save(); break;
     }
-    case 'equip-all': if(page!=='wardrobe') return; state.equipped=[...state.ownedOrnaments].sort((a,b)=>a-b); save(); break;
+    case 'equip-all': {
+      if(page!=='wardrobe') return;
+      const slots=new Map(worn(state).map(id=>[positionFor(id),id]));
+      for(const id of state.ownedOrnaments) if(!slots.has(positionFor(id))) slots.set(positionFor(id),id);
+      state.equipped=[...slots.values()];
+      save(); break;
+    }
     case 'unequip': if(page!=='wardrobe') return; state.equipped=[]; save(); break;
     case 'choose-new': reset=true; pick=state.pet===0?1:0; page='choose'; break;
     case 'cancel': reset=false; pick=null; page='home'; break;
