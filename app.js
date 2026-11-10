@@ -1,4 +1,5 @@
 import {pets,subjects,questionsFor} from './content.js';
+import {playQuizSound} from './quiz-sounds.js';
 
 const key='lion-grow-v2';
 const root=document.querySelector('#app');
@@ -195,6 +196,7 @@ root.addEventListener('click', event => {
         feedback={type:'right',points,reward,item:unlocked(state)>before?sets[state.pet][before]:null};
         state.active=question<subjects[subject].questions.length-1?{subject,question:question+1}:null;
       }
+      playQuizSound(feedback.type);
       save(); break;
     }
     case 'next': question++; selected=null; feedback=null; state.active={subject,question}; save(); break;
