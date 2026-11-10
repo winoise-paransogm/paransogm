@@ -11,23 +11,17 @@ const sets=[
 ];
 const items=sets[0];
 const themeName=['햇살 숲','달빛 정원','노을 숲'];
-const royalPalette={light:'#fff0af',metal:'#dfa544',dark:'#75401f',gem:'#65e1bf',deep:'#12694e',bloom:'#ffdc7d',leaf:'#4d8953'};
+const royalPalette={light:'#fff0af',metal:'#dfa544',gem:'#65e1bf'};
 const solarEmblem='<circle cx="48" cy="36" r="7"/><path d="M48 23v-6m0 38v-6M35 36h-6m38 0h-6M39 27l-4-4m26 26-4-4M39 45l-4 4m26-26-4 4"/>';
 
 const themedOrnaments=[
   [
     '<path d="M52 9a26 26 0 1 0 16 43A25 25 0 0 1 52 9Z" fill="#e8dcff" stroke="#fffbff"/><path d="M68 10v16m-8-8h16M79 29v8m-4-4h8" stroke="#e9c5ff" stroke-width="2"/>',
-    '<ellipse cx="48" cy="57" rx="43" ry="13" fill="#233e69" stroke="#a8d8fa" stroke-width="2"/><ellipse cx="48" cy="55" rx="34" ry="8" fill="#6baacb"/><path d="M19 57q12-5 24 0m13-3h18" fill="none" stroke="#d8f6ff" stroke-width="2"/><path d="M38 55Q21 49 31 40q7 0 10 9 1-15 8-14 9 5 6 15 12-9 16-3-1 8-17 10Z" fill="#f6c4eb" stroke="#fff2fd"/>',
-    '<path d="M14 64V47a34 34 0 0 1 68 0v17M23 64V47a25 25 0 0 1 50 0v17" fill="none" stroke="#d5c4f5" stroke-width="5"/><path d="M13 58Q4 38 24 27t21-15m29 46q16-15 1-32T50 12" fill="none" stroke="#72b5a7" stroke-width="3"/><path d="M19 33q-15 1-13-8 12-5 13 8m56 6q1-12 13-8 2 9-13 8" fill="#83cbbc"/><g fill="#f6d4ff"><circle cx="22" cy="25" r="5"/><circle cx="34" cy="15" r="4"/><circle cx="70" cy="24" r="5"/></g><path d="M11 65h16m42 0h16" stroke="#a496c5" stroke-width="4"/>',
-    '<path d="M49 10v52M36 65h26" stroke="#c6addd" stroke-width="5"/><path d="M48 11q19-1 22 15" fill="none" stroke="#d9c4ee" stroke-width="3"/><path d="M58 28h21l-4 19H62Z" fill="#a6dff9" stroke="#f3e8ff" stroke-width="2"/><path d="m55 28 13-9 14 9m-20 20h13m-7-19v18" fill="none" stroke="#d9c4ee" stroke-width="3"/><circle cx="68" cy="36" r="4" fill="#fff7d6"/>',
     '<path d="M14 54 30 29 53 38 71 16 84 30" fill="none" stroke="#c8b5ff" stroke-dasharray="2 4"/><path d="m30 19 2 7 7 3-7 2-2 7-2-7-7-2 7-3Zm41-11 2 6 7 2-7 2-2 7-2-7-7-2 7-2Z" fill="#fff0ff"/><g fill="#cbeaff"><circle cx="14" cy="54" r="3"/><circle cx="53" cy="38" r="4"/><circle cx="84" cy="30" r="3"/></g>',
     '<ellipse cx="48" cy="36" rx="41" ry="28" fill="none" stroke="#e7d8ff" stroke-width="2"/><ellipse cx="48" cy="36" rx="35" ry="22" fill="none" stroke="#b4a4ee" stroke-dasharray="2 4"/><path d="M50 19a18 18 0 1 0 15 24 17 17 0 0 1-15-24Z" fill="#e3d3ff"/><path d="M66 20v12m-6-6h12M19 36h9m40 0h9" stroke="#fff4ff"/>',
   ],
   [
     '<path d="M48 8c14 11 13 20 6 28 9-1 14-6 17-11 9 21-7 33-24 33-20 0-31-13-26-28 3 7 8 9 12 10-3-14 9-19 15-32Z" fill="#fd8d52" stroke="#ffd099" stroke-width="2"/><path d="M48 29c9 10 6 15 13 15-3 12-22 13-24 1 5-1 8-9 11-16Z" fill="#ffe6a0"/>',
-    '<ellipse cx="47" cy="62" rx="40" ry="7" fill="#3e2325"/><path d="M23 45h50l-9 15H33Z" fill="#784350" stroke="#e6a362" stroke-width="2"/><path d="M32 59l-4 9m35-9 5 9" stroke="#e6a362" stroke-width="3"/><ellipse cx="48" cy="45" rx="26" ry="6" fill="#3d2224" stroke="#ffbf7f" stroke-width="2"/><path d="M48 15c5 9 2 13 9 17l5-6c6 12-2 21-14 21-13 0-22-8-14-20 1 5 4 8 7 8-1-9 4-14 7-20Z" fill="#ff8d4e" stroke="#ffb469"/><path d="M48 31q11 13 0 15-10-1 0-15Z" fill="#ffe8a7"/>',
-    '<path d="M23 64 30 20m43 44-7-44M31 32h34M19 17q29 9 58 0m-53-6q24 8 48 0" fill="none" stroke="#662e30" stroke-width="9"/><path d="M23 64 30 20m43 44-7-44M31 32h34M19 17q29 9 58 0" fill="none" stroke="#d76e51" stroke-width="4"/><path d="M34 34q14 10 28 0" fill="none" stroke="#ffc588" stroke-width="2"/><path d="M44 40h8l-4 8Z" fill="#fff0bb"/>',
-    '<path d="M12 65h72M48 16v14m-26 4h52" stroke="#d58b67" stroke-width="3"/><path d="M31 34h34l5 9-7 17H33l-7-17Z" fill="#ee805c" stroke="#ffe1a9" stroke-width="2"/><path d="M42 34q-5 16 1 26m11-26q5 16-1 26M26 43h44" fill="none" stroke="#ffc27f" stroke-width="2"/><path d="M40 29q-3-13 8-15 11 2 8 15" fill="none" stroke="#bb6c56" stroke-width="2"/>',
     '<g fill="#ffb879" stroke="#ffdfae"><path d="M24 24c12 9 9 17 2 20-9 3-13-6-9-11 1 4 7 2 7-9Z"/><path d="M63 11c13 10 14 22 3 25-10 3-16-6-11-13 1 6 7 3 8-12Z"/><path d="M74 38c8 7 6 13 1 15-7 2-9-4-6-8 1 3 4 2 5-7Z"/></g><path d="M28 50q20 11 38-9" fill="none" stroke="#e98261" stroke-dasharray="2 4"/>',
     '<path d="m48 7 39 29-39 29L9 36Z" fill="none" stroke="#ffba85" stroke-width="2"/><path d="m48 13 31 23-31 23-31-23Z" fill="none" stroke="#db705a" stroke-width="2" stroke-dasharray="4 3"/><path d="M48 22c8 7 5 12 10 14 5 10-5 15-10 15-8 0-14-6-9-14 0 4 4 5 6 4-2-6 4-11 3-19Z" fill="#ffb477" stroke="#ffe9bc"/>',
   ],
@@ -36,21 +30,24 @@ const themedOrnaments=[
 function ornamentSvg(art){
   return `<svg class="gear-art" viewBox="0 0 96 72" preserveAspectRatio="xMidYMax meet" aria-hidden="true" focusable="false">${art}</svg>`;
 }
+const physicalOrnaments=[
+  ['royal-chest','golden-roses','emerald-obelisk'],
+  ['lotus-pond','wisteria-arch','moon-lantern'],
+  ['copper-brazier','maple-gate','amber-lantern'],
+];
 function glyph(pet,slot){
-  if(pet>0) return ornamentSvg(themedOrnaments[pet-1][slot]);
-  const {light,metal,dark,gem,deep,bloom,leaf}=royalPalette;
+  const prop=physicalOrnaments[pet][slot-1];
+  if(prop) return `<img class="gear-art forest-prop" src="./ornaments/${prop}.webp" alt="" aria-hidden="true">`;
+  if(pet>0) return ornamentSvg(themedOrnaments[pet-1][slot===0?0:slot-3]);
+  const {light,metal,gem}=royalPalette;
   const frame=`fill="${metal}" stroke="${light}" stroke-width="1.4"`;
   const diamond=`<path d="m48 33 7 6-7 8-7-8Z" fill="${gem}" stroke="${light}" stroke-width="1.2"/>`;
-  const flower=(x,y,size)=>`<g transform="translate(${x} ${y}) scale(${size})"><path d="M0-10C7-16 13-7 9-3 17 1 11 12 4 9 2 17-9 13-8 6-17 5-15-6-8-7-7-14-2-15 0-10Z" fill="${bloom}" stroke="${light}" stroke-width="1.2"/><path d="M-5 2q3-9 10-5-5 1-4 6 4 1 5-2" fill="none" stroke="${metal}" stroke-width="1.6"/><circle r="2.2" fill="${light}"/></g>`;
   const art=[
     `<path d="M25 48 19 26l15 10 14-17 14 17 15-10-6 22Z" ${frame}/><path d="M25 54h46" stroke="${metal}" stroke-width="4"/><path d="M48 6v7M12 16l8 5m56 0 8-5M11 50l8-3m58 0 8 3" stroke="${light}" stroke-width="2"/>${diamond}`,
-    `<ellipse cx="48" cy="67" rx="40" ry="5" fill="#101b16" opacity=".55"/><path d="M12 31q2-17 19-21h34q15 4 19 21l-8 10H20Z" fill="${deep}" stroke="${metal}" stroke-width="3"/><path d="M13 33h70v23l-8 10H21l-8-10Z" fill="${dark}" stroke="${metal}" stroke-width="3"/><path d="M17 34h62v9H17Zm4 23h54v6H21ZM24 14h6l-4 18h-7Zm42 0h6l5 18h-7Z" ${frame}/><path d="M34 51h28M34 54h28M40 21q8-6 16 0" fill="none" stroke="${metal}" stroke-width="1.5"/>${diamond}<circle cx="11" cy="58" r="5" ${frame}/><circle cx="83" cy="62" r="6" ${frame}/><path d="M5 67h19m50 1h17" stroke="${light}" stroke-width="2" opacity=".7"/>`,
-    `<path d="M47 46Q38 29 24 18m24 27Q54 23 69 15M48 48V12" fill="none" stroke="${leaf}" stroke-width="3"/><path d="M45 44Q19 42 18 30q21-3 27 14m5-3q11-18 27-14-1 14-27 14" fill="${leaf}" stroke="${light}" stroke-width="1"/>${flower(26,22,.75)}${flower(68,20,.84)}${flower(48,14,1)}<path d="M31 48h34l-7 16H38Z" fill="${deep}" stroke="${metal}" stroke-width="2.5"/><path d="M28 44h40v6H28Zm7 19h26l5 6H30Z" ${frame}/><path d="m48 51 5 4-5 5-5-5Z" fill="${gem}"/>`,
-    `<path d="M24 59h48l9 7-6 4H21l-6-4Z" fill="${dark}" stroke="${metal}" stroke-width="2"/><path d="M32 58h32l6 6H26Z" ${frame}/><path d="M48 5 65 26 61 53 48 61 35 53 31 26Z" fill="${deep}" stroke="${metal}" stroke-width="2.5"/><path d="M48 5v56L35 53 31 26Z" fill="${gem}"/><path d="m48 5 8 24-8 32V5Zm-17 21 17 7 17-7" fill="none" stroke="${light}" stroke-width="1.5"/><path d="m22 37 5 7-5 7-5-7Zm52-7 5 7-5 7-5-7Z" fill="${gem}" stroke="${light}"/>`,
     `<path d="m20 44 18-22 18 13 20-17M38 22l11 30 27-34" fill="none" stroke="${metal}" stroke-width="1.5" stroke-dasharray="2 3"/><path d="m20 37 2 5 5 2-5 2-2 5-2-5-5-2 5-2Zm18-23 2 5 5 3-5 2-2 5-2-5-5-2 5-3Zm38-4 2 6 6 2-6 2-2 6-2-6-6-2 6-2Z" fill="${light}"/><circle cx="56" cy="35" r="3" fill="${gem}"/><circle cx="49" cy="52" r="3" fill="${light}"/>`,
     `<g fill="none" stroke="${light}" stroke-width="1.35"><circle cx="48" cy="36" r="31"/><circle cx="48" cy="36" r="26" stroke="${metal}" stroke-dasharray="1 3"/><circle cx="48" cy="36" r="21"/><path d="M48 5 75 51H21Zm0 62L21 21h54Z" stroke="${metal}"/>${solarEmblem}</g><path d="m48 2 3 3-3 3-3-3Zm0 62 3 3-3 3-3-3ZM17 33l3 3-3 3-3-3Zm62 0 3 3-3 3-3-3Z" fill="${gem}"/>`,
   ];
-  return ornamentSvg(art[slot]);
+  return ornamentSvg(art[slot===0?0:slot-3]);
 }
 function scenery(pet,equipped){
   const ids=worn({equipped});
