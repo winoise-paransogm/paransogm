@@ -764,7 +764,7 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 @media(prefers-reduced-motion:reduce){.interaction-effect{display:none}.ornament-active[data-interaction] .gear-art{animation:none}.care-menu:active{transform:none}}
 
 /* Explicit placement overrides legacy slot-specific transforms and hit boxes. */
-.forest-set .forest-piece.placed-ornament{position:absolute!important;inset:auto!important;left:var(--prop-x)!important;top:var(--prop-y)!important;width:var(--prop-w)!important;height:var(--prop-h)!important;aspect-ratio:auto;transform:none!important;background:none!important;filter:none!important;opacity:1!important;animation:none!important;z-index:2}
+.forest-set .forest-piece.placed-ornament{position:absolute!important;inset:auto!important;left:var(--prop-x)!important;top:var(--prop-y)!important;width:var(--prop-w)!important;height:var(--prop-h)!important;aspect-ratio:auto;transform:none!important;background:none!important;filter:none!important;opacity:1!important;animation:none!important;z-index:var(--prop-z,1)}
 .forest-set .placed-ornament::before,.forest-set .placed-ornament::after{display:none!important}
 .forest-set .placed-ornament>.forest-prop,.forest-set .placed-ornament>.ornament-touch{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;transform:none;object-fit:contain;object-position:center bottom}
 .forest-set .placed-ornament>.forest-prop{filter:drop-shadow(0 4px 3px #10201666)}
