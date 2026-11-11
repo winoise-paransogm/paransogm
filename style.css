@@ -954,7 +954,7 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 @media(min-width:640px) and (max-width:759px) and (orientation:landscape){.opening-baby .opening-art .opening-friend{width:74%;max-width:565px;height:62%}}
 
 /* Keep every decoration reachable even when a mature portrait fills the scene. */
-.grove-scene>.forest-set{z-index:3;pointer-events:none}
+.grove-scene>.forest-set{z-index:auto;pointer-events:none}
 .grove-scene>.pet{pointer-events:none}
 .forest-set .placed-ornament>.ornament-touch{pointer-events:auto;min-width:44px;min-height:44px;max-width:100%;padding:0;border:0;background:transparent;box-shadow:none;border-radius:8px;touch-action:manipulation}
 .forest-set .placed-ornament>.ornament-touch:focus-visible{outline:3px solid #ffe6a2;outline-offset:2px;background:#fff0b31c}
