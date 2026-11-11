@@ -24,12 +24,44 @@ function loadSheet(pet,stage){
   return sheets.get(path);
 }
 const actionRows={look:1,reach:0,sniff:1,inspect:1,follow:1,stamp:0,perk:1,hop:2,'double-hop':2,splash:0,listen:1,step:2,pluck:0,sip:3,sway:2,warm:1,ring:0};
+// First trial uses newly drawn consecutive key poses and baked motion-compensated frames.
+const feedingTrials=new Map([['0:0',{motion:'./motion/feeding-0-0.webp',idle:'./motion/feeding-idle-0-0.webp',duration:3360}]]);
+const feedingAssets=new Map();
+function loadFeedingTrial(config){
+  if(!feedingAssets.has(config.motion))feedingAssets.set(config.motion,(async()=>{
+    const idle=new Image();idle.src=config.idle;
+    const response=await fetch(config.motion);if(!response.ok)throw new Error('Feeding animation unavailable');
+    const blob=await response.blob();await idle.decode();return {blob,idle};
+  })().catch(error=>{feedingAssets.delete(config.motion);throw error;}));
+  return feedingAssets.get(config.motion);
+}
+async function playFeedingTrial(scene,body,image,config,job){
+  let assets;try{assets=await loadFeedingTrial(config);}catch{return false;}
+  if(!body.isConnected||pending.get(body)!==job)return true;
+  const url=URL.createObjectURL(assets.blob),overlay=new Image();overlay.src=url;
+  try{await overlay.decode();}catch{URL.revokeObjectURL(url);return false;}
+  if(!body.isConnected||pending.get(body)!==job){URL.revokeObjectURL(url);return true;}
+  active.get(body)?.cleanup();
+  const rect=image.getBoundingClientRect();overlay.width=384;overlay.height=Math.round(384*(rect.height||256)/(rect.width||256));
+  overlay.className=image.className+' play-pose sprite-motion';overlay.setAttribute('aria-hidden','true');
+  let observer,timer,disposed=false;
+  const controller={canvas:overlay,idle:false,snapshot:()=>copySurface(overlay),cleanup(){
+    if(disposed)return;disposed=true;clearTimeout(timer);observer?.disconnect();overlay.remove();URL.revokeObjectURL(url);image.style.removeProperty('visibility');
+    if(active.get(body)===controller)active.delete(body);
+  }};
+  active.set(body,controller);image.after(overlay);image.style.visibility='hidden';
+  observer=new MutationObserver(()=>{if(!body.isConnected)controller.cleanup()});observer.observe(document.querySelector('#app'),{childList:true,subtree:true});
+  timer=setTimeout(()=>{if(!body.isConnected){controller.cleanup();return;}controller.idle=true;URL.revokeObjectURL(url);},config.duration);
+  return true;
+}
 export function warmFriend(pet,stage,scene){
-  return loadSheet(pet,stage).then(sheet=>{
+  return loadSheet(pet,stage).then(async sheet=>{
     const image=scene?.querySelector('.friend-image'),body=image?.closest('.pet');
+    const trial=feedingTrials.get(`${pet}:${stage}`);let idle;
+    if(trial)try{idle=(await loadFeedingTrial(trial)).idle;}catch{}
     if(!body?.isConnected||active.has(body))return sheet;
     const canvas=makeSurface(image),ctx=canvas.getContext('2d');if(!ctx)return sheet;
-    drawContained(ctx,sheet,canvas.width,canvas.height,1,0);image.after(canvas);image.style.visibility='hidden';
+    drawContained(ctx,idle??sheet,canvas.width,canvas.height,1,idle?null:0);image.after(canvas);image.style.visibility='hidden';
     let observer;const controller={canvas,idle:true,snapshot:()=>copySurface(canvas),cleanup(){observer?.disconnect();canvas.remove();image.style.removeProperty('visibility');if(active.get(body)===controller)active.delete(body);}};
     active.set(body,controller);observer=new MutationObserver(()=>{if(!body.isConnected)controller.cleanup()});
     observer.observe(document.querySelector('#app'),{childList:true,subtree:true});return sheet;
@@ -40,7 +72,7 @@ function makeSurface(image){
   canvas.width=384;canvas.height=Math.max(1,Math.round(384*(rect.height||256)/(rect.width||256)));
   canvas.className=image.className+' play-pose sprite-motion';canvas.setAttribute('aria-hidden','true');return canvas;
 }
-function copySurface(canvas){const copy=document.createElement('canvas');copy.width=canvas.width;copy.height=canvas.height;copy.getContext('2d').drawImage(canvas,0,0);return copy;}
+function copySurface(canvas){const copy=document.createElement('canvas');copy.width=canvas.width;copy.height=canvas.height;const ctx=copy.getContext('2d');if(canvas.naturalWidth)drawContained(ctx,canvas,copy.width,copy.height);else ctx.drawImage(canvas,0,0);return copy;}
 const pending=new WeakMap();
 const ease=t=>t*t*(3-2*t);
 function drawContained(ctx,source,width,height,alpha=1,cell=null){
@@ -63,6 +95,8 @@ export async function animateFriend(scene,pet,action,slot){
   if(!body)return;
   const job={};pending.set(body,job);
   const stage=Number(body.className.match(/stage-(\d)/)?.[1]??0);
+  const trial=action==='snack'?feedingTrials.get(`${pet}:${stage}`):null;
+  if(trial&&await playFeedingTrial(scene,body,image,trial,job))return;
   let sheet;try{[sheet]=await Promise.all([loadSheet(pet,stage),image.decode()]);}catch{return;}
   if(!body.isConnected||pending.get(body)!==job)return;
   // Keep the last visible pose when another decoration is tapped during an action.
