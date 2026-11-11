@@ -962,3 +962,43 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 .grove-scene>.pet{pointer-events:none}
 .forest-set .placed-ornament>.ornament-touch{pointer-events:auto;min-width:44px;min-height:44px;max-width:100%;padding:0;border:0;background:transparent;box-shadow:none;border-radius:8px;touch-action:manipulation}
 .forest-set .placed-ornament>.ornament-touch:focus-visible{outline:3px solid #ffe6a2;outline-offset:2px;background:#fff0b31c}
+
+
+/* Quiz learning flow: keep long choices readable and controls reachable. */
+.unit-card{display:grid;gap:2px;min-width:0}
+.unit-card>.subject{width:100%}
+.unit-card>.text-button{min-height:44px;text-align:left;padding:6px 16px}
+.quiz-progress{display:grid;gap:4px;margin:10px 0}
+.quiz-progress label{font-size:14px;font-weight:700}
+.quiz-progress progress{display:block;margin-top:4px;height:8px}
+.quiz-progress p{font-size:13px;overflow-wrap:anywhere}
+.quiz-page .quiz-progress p,.quiz-page .quiz-hint p{color:#e4efdf}
+.quiz-meta .tag{min-width:0;overflow-wrap:anywhere}
+.quiz-hint{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0}
+.quiz-hint summary{cursor:pointer;font-weight:700;min-height:32px}
+.quiz-hint p{margin-top:8px}
+.quiz .option{min-height:48px;min-width:0}
+.quiz-page .quiz .option>.option-copy{min-width:0;overflow-wrap:anywhere;white-space:normal;background:transparent;color:inherit;text-align:left;border-radius:0}
+.quiz .option>span:first-child{flex:0 0 26px}
+.quiz .option-copy small{display:block;margin-top:3px;font-size:13px}
+.quiz .answer-correct:disabled{opacity:1;border:2px solid #247a5b;background:#e5f4eb;color:#183c2d}
+.quiz .answer-wrong:disabled{opacity:1;border:2px solid #a44d37;background:#fff1e9;color:#633020}
+.quiz .option-copy small{color:inherit}
+.quiz .actions button{min-height:44px;white-space:normal}
+.quiz .notice{min-width:0;overflow-wrap:anywhere}
+.forest-effects{position:fixed;z-index:21;top:max(8px,env(safe-area-inset-top));right:calc(max(8px,env(safe-area-inset-right)) + 106px);min-height:44px;padding:4px 10px;border:1px solid #a69665;border-radius:20px;background:#183126;color:#f7ebc6;font-size:12px;white-space:nowrap}
+.forest-effects[hidden]{display:none}
+.forest-effects:focus-visible{outline:3px solid #ffe69b;outline-offset:2px}
+body .forest-music{min-height:44px;width:98px}
+.quiz-page .mast,.care-page .mast{padding-top:58px}
+@media(min-width:640px) and (orientation:landscape) and (max-height:640px){
+  body.quiz-page main{padding-top:60px}
+  .quiz>.quiz-meta{padding-right:0;flex-wrap:wrap}
+  .quiz>.quiz-progress{grid-column:1/-1;margin:4px 0 8px}
+  .quiz>.quiz-companion{grid-row:3}
+  .quiz>.intro{grid-row:4}
+  .quiz>.options{grid-row:3 / span 2}
+  .quiz>.quiz-hint{grid-column:2}
+  .quiz .option{min-height:48px}
+  .quiz .actions button{min-height:44px}
+}
