@@ -4,9 +4,24 @@ const chimes = {
   wrong: [392, 293.66],
 };
 let context;
+let enabled=true;
+try{enabled=localStorage.getItem('forest-quiz-sound')!=='off'}catch{}
+const soundButton=document.querySelector('.forest-effects');
+function showSoundSetting(){
+  if(!soundButton) return;
+  soundButton.hidden=false;
+  soundButton.setAttribute('aria-pressed',String(enabled));
+  soundButton.textContent=enabled?'효과음 켜짐':'효과음 꺼짐';
+}
+soundButton?.addEventListener('click',()=>{
+  enabled=!enabled;
+  try{localStorage.setItem('forest-quiz-sound',enabled?'on':'off')}catch{}
+  showSoundSetting();
+});
+if(AudioEngine) showSoundSetting();
 
 export async function playQuizSound(result) {
-  if (!AudioEngine) return;
+  if (!AudioEngine || !enabled) return;
   try {
     context ??= new AudioEngine();
     if (context.state !== 'running') await context.resume();
@@ -28,3 +43,4 @@ export async function playQuizSound(result) {
     // An unavailable audio device must not interrupt grading.
   }
 }
+

@@ -1,5 +1,6 @@
 import {additionalUnits} from './additional-questions.js';
 import {challengeUnits} from './challenge-questions.js';
+import {expansionUnits} from './expansion-units.js';
 
 export const pets = [
   {name:'사자', icon:'🦁', food:'고기', meal:'🍖', grown:'씩씩한 사자', color:'#fae8bb'},
@@ -143,7 +144,7 @@ challengeUnits.forEach(([subject, title, entries], unitIndex) => {
 });
 
 // New rounds go after the original 30 so saved progress keeps its meaning.
-additionalUnits.forEach(([subject, title, rows], unitIndex) => {
+[...additionalUnits, ...expansionUnits].forEach(([subject, title, rows], unitIndex) => {
   unit(subject, title, rows.map((row, questionIndex) => {
     const [prompt, answer, first, second, third, hint, explanation] = row.split('|');
     const options = [first, second, third];
@@ -156,3 +157,4 @@ additionalUnits.forEach(([subject, title, rows], unitIndex) => {
 export function questionsFor(unit) {
   return subjects[unit].questions;
 }
+
