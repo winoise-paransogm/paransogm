@@ -762,3 +762,17 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 @keyframes companion-glow{0%,100%{filter:brightness(1)}40%,65%{filter:brightness(1.3) drop-shadow(0 0 7px #ffe5a3)}}
 @keyframes companion-swing{0%,100%{transform:rotate(0)}35%,65%{transform:rotate(-7deg)}50%,80%{transform:rotate(7deg)}}
 @media(prefers-reduced-motion:reduce){.interaction-effect{display:none}.ornament-active[data-interaction] .gear-art{animation:none}.care-menu:active{transform:none}}
+
+/* Explicit placement overrides legacy slot-specific transforms and hit boxes. */
+.forest-set .forest-piece.placed-ornament{position:absolute!important;inset:auto!important;left:var(--prop-x)!important;top:var(--prop-y)!important;width:var(--prop-w)!important;height:var(--prop-h)!important;aspect-ratio:auto;transform:none!important;background:none!important;filter:none!important;opacity:1!important;animation:none!important;z-index:2}
+.forest-set .placed-ornament::before,.forest-set .placed-ornament::after{display:none!important}
+.forest-set .placed-ornament>.forest-prop,.forest-set .placed-ornament>.ornament-touch{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;transform:none;object-fit:contain;object-position:center bottom}
+.forest-set .placed-ornament>.forest-prop{filter:drop-shadow(0 4px 3px #10201666)}
+.food-icon,.toy-icon{display:inline-block;width:1.8em;height:1.8em;object-fit:contain;vertical-align:middle;flex-shrink:0;filter:drop-shadow(0 2px 2px #0003)}
+.play-prop .food-icon,.play-prop .toy-icon,.meal-fx .food-icon{width:clamp(42px,12vw,68px);height:clamp(42px,12vw,68px)}
+.reward-icon .food-icon{width:100%;height:100%}
+.pet .sprite-motion{animation:none!important;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 4px 6px #11251b42)}
+.meal-fx{left:47%;top:50%;animation:food-approach 3.4s ease both}
+.play-snack .play-prop{top:50%;left:48%;animation:food-approach 3.4s ease both}
+@keyframes food-approach{0%{opacity:0;transform:translate(-100px,55px) scale(.7)}18%,30%{opacity:1;transform:translate(-20px,-20px) scale(1)}48%{opacity:1;transform:translate(-10px,-25px) scale(.75)}59%,100%{opacity:0;transform:translate(0,-28px) scale(.2)}}
+@media(prefers-reduced-motion:reduce){.meal-fx,.play-prop{animation:none!important;opacity:0}}

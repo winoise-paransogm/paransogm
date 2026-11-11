@@ -1,9 +1,3 @@
-// Joint positions are normalized to each final-evolution portrait.
-const rigs = [
-  [[.74,.27,.24,.26],[.87,.88,.17,.18],[.17,.60,.16,.24]],
-  [[.66,.33,.23,.23],[.44,.16,.25,.23],[.66,.69,.22,.22]],
-  [[.81,.27,.22,.24],[.87,.90,.17,.16],[.24,.56,.25,.35]],
-];
 const ornaments = [
   ['왕관의 빛을 따라 사자가 고개를 들었어요!','사자가 앞발을 내밀자 보물함이 반짝여요!','사자가 고개를 숙여 장미 향을 맡아요!','사자가 태양석에 코를 가까이 대고 살펴봐요!','사자가 반딧불을 따라 시선을 옮겨요!','사자가 앞발로 태양 인장을 톡 건드려요!'],
   ['토끼가 초승달을 보며 귀를 쫑긋 세워요!','토끼가 몸을 낮춰 잔물결을 들여다봐요!','토끼가 아치 쪽을 향해 폴짝 뛰어요!','토끼가 고개를 돌려 달등을 바라봐요!','토끼가 귀를 흔들며 별빛을 좇아요!','토끼가 달의 물결 위로 가볍게 뛰어요!'],
@@ -16,115 +10,50 @@ const newReactions = [
 ];
 export const ornamentReaction = (pet,slot) => slot<6?ornaments[pet][slot]:newReactions[pet][slot-6];
 
-// Each beat moves head, paw/ear and tail/feet independently, then shifts the body.
-const toyBeats = [
-  [[-3,4, 1,-2, -3,2, -3,1],[5,-2, 15,-17, 5,-4, 8,-2],[4,5, 10,-5, -3,4, 9,1],[-3,-7, -4,-6, 6,-4, 1,-3]],
-  [[1,7, -8,10, 2,6, -4,2],[5,-5, 12,-9, -8,8, 5,-19],[2,6, -5,8, 3,5, 9,1],[-5,-5, 9,-9, 8,6, 1,-14]],
-  [[-6,5, -3,3, -8,5, -5,2],[8,-5, 7,-10, 14,-11, 7,-8],[5,2, 1,0, -9,7, 10,0],[-4,-6, -2,-4, 12,-8, 1,-3]],
-];
 // Each item has a named action rather than a shared lateral nudge.
 export const ornamentActions = [
   ['look','reach','sniff','inspect','follow','stamp','follow','inspect','splash','listen','step','reach'],
   ['perk','inspect','hop','look','follow','hop','pluck','look','sip','splash','double-hop','listen'],
   ['sway','warm','sway','look','follow','stamp','sway','look','sniff','reach','inspect','ring'],
 ];
-const beats = {
-  look: [[0,-9,0,-3,2,-3,0,0],[4,-12,0,-2,3,-4,0,0],[0,-8,0,0,0,0,0,0]],
-  reach: [[-2,4,0,4,0,0,0,0],[2,3,17,-22,2,-2,0,0],[1,1,10,-14,0,0,0,0]],
-  sniff: [[-3,6,0,1,1,2,0,0],[-6,13,1,3,2,3,0,1],[-4,10,0,2,0,1,0,0],[-6,13,1,3,2,2,0,1]],
-  inspect: [[-6,7,0,2,0,2,0,0],[-9,12,0,4,2,3,0,1],[3,8,0,1,-1,1,0,0]],
-  follow: [[-11,-5,-3,-3,-5,-2,0,0],[10,-9,3,-5,7,-6,0,0],[-7,-4,0,-2,-4,0,0,0]],
-  stamp: [[0,2,8,-20,0,2,0,0],[0,5,4,9,0,2,0,1],[0,-3,7,-9,1,-2,0,-1]],
-  perk: [[0,-3,0,10,0,0,0,0],[0,-7,0,-16,1,-1,0,0],[1,-4,-7,-12,0,0,0,0]],
-  hop: [[0,6,0,7,0,6,0,3],[0,-6,0,-8,0,-6,0,-15],[0,4,0,3,0,5,0,2]],
-  'double-hop': [[0,5,0,6,0,5,0,3],[0,-5,0,-8,0,-6,0,-12],[0,4,0,5,0,4,0,2],[0,-6,0,-9,0,-6,0,-17],[0,3,0,4,0,3,0,1]],
-  splash: [[0,3,8,-15,0,0,0,0],[0,5,12,8,0,0,0,1],[0,-4,-3,-9,0,-3,0,-10],[0,3,0,3,0,2,0,1]],
-  listen: [[-6,-2,9,-13,0,0,0,0],[6,-2,-7,-9,0,0,0,0],[-4,-1,8,-12,0,0,0,0]],
-  step: [[0,-2,10,-14,-4,8,0,-2],[0,2,-5,7,6,-10,0,0],[0,-2,8,-10,-3,5,0,-1]],
-  pluck: [[-2,4,-5,5,0,0,0,0],[0,1,17,-18,0,0,0,0],[0,-2,-9,-9,0,0,0,0],[0,0,13,-15,0,0,0,0]],
-  sip: [[0,7,-3,4,0,1,0,1],[0,12,4,-7,0,2,0,2],[0,10,2,-6,0,0,0,1],[0,-3,0,0,0,0,0,0]],
-  sway: [[-5,1,0,0,-17,-7,0,0],[5,-2,0,0,17,-10,0,0],[-4,0,0,0,-14,-5,0,0],[3,-1,0,0,12,-7,0,0]],
-  warm: [[0,6,7,-8,-5,3,0,2],[0,9,10,-10,5,3,0,2],[0,6,7,-8,-4,3,0,1]],
-  ring: [[0,-5,3,-8,2,-2,0,0],[2,-4,16,-23,5,-3,0,-1],[0,0,0,3,0,2,0,0]],
-};
-const rest = Array(8).fill(0);
-const lerp = (a,b,t) => a+(b-a)*t;
-
-export async function animateFriend(scene, pet, action, slot) {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if(!scene) return;
-  const image = scene.querySelector('.friend-image');
-  if(!image) return;
-  try { await image.decode(); } catch { return; }
-  if (!scene.isConnected) return;
-  const canvas = document.createElement('canvas');
-  canvas.className = image.className + ' play-pose';
-  canvas.setAttribute('aria-hidden','true');
-  const width = 320, height = Math.round(width*image.naturalHeight/image.naturalWidth);
-  canvas.width=width;
-  canvas.height=height;
-  const ctx=canvas.getContext('2d',{willReadFrequently:true});
-  if (!ctx) return;
-  ctx.drawImage(image,0,0,width,height);
-  const source=ctx.getImageData(0,0,width,height);
-  const frame=ctx.createImageData(width,height);
-  const weights=rigs[pet].map(([cx,cy,rx,ry])=>{
-    const grid=new Float32Array(width*height);
-    for(let y=0;y<height;y++) for(let x=0;x<width;x++){
-      const d=((x/width-cx)/rx)**2+((y/height-cy)/ry)**2;
-      grid[y*width+x]=Math.exp(-2*d);
-    }
-    return grid;
-  });
-  let poses=toyBeats[pet];
-  if(action==='snack') poses=[[3,6,3,-6,0,2,1,0],[0,-4,-2,-3,2,-3,0,-1],[3,5,2,0,-2,4,0,0],[-2,-4,0,-2,5,-4,0,-4]];
-  if(action==='ornament'){
-    const name=ornamentActions[pet]?.[slot];
-    poses=beats[name]??beats.look;
-    scene.dataset.interaction=name;
-    const ornament=scene.querySelector('.ornament-active');
-    if(ornament){
-      ornament.dataset.interaction=name;
-      const effect=document.createElement('span');
-      effect.className='interaction-effect effect-'+name;
-      effect.setAttribute('aria-hidden','true');
-      effect.innerHTML='<i></i><i></i><i></i>';
-      ornament.append(effect);
-    }
+const sheets=new Map();
+const active=new WeakMap();
+function loadSheet(pet,stage){
+  const path=`./motion/friend-${pet}-${stage}.webp`;
+  if(!sheets.has(path)) sheets.set(path,(async()=>{const img=new Image();img.src=path;await img.decode();return img;})().catch(error=>{sheets.delete(path);throw error;}));
+  return sheets.get(path);
+}
+const actionRows={look:1,reach:0,sniff:1,inspect:1,follow:1,stamp:0,perk:1,hop:2,'double-hop':2,splash:0,listen:1,step:2,pluck:0,sip:3,sway:2,warm:1,ring:0};
+export async function animateFriend(scene,pet,action,slot){
+  if(!scene||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  active.get(scene)?.();
+  const image=scene.querySelector('.friend-image');
+  if(!image)return;
+  const stage=Number(image.closest('.pet').className.match(/stage-(\d)/)?.[1]??0);
+  let sheet;try{sheet=await loadSheet(pet,stage);}catch{return;}
+  if(!scene.isConnected)return;
+  active.get(scene)?.();
+  const canvas=document.createElement('canvas');canvas.width=canvas.height=256;
+  canvas.className=image.className+' play-pose sprite-motion';canvas.setAttribute('aria-hidden','true');
+  const ctx=canvas.getContext('2d');if(!ctx)return;
+  const name=action==='ornament'?ornamentActions[pet][slot]:action;
+  const sequence=action==='snack'?[0,1,2,3,12,13,14,15,14,15,16,17,18,19]:action==='toy'?[0,1,2,3,4,5,6,7,8,9,10,11,16,17,18,19]:Array.from({length:4},(_,i)=>(actionRows[name]??1)*4+i).concat([16,17,18,19]);
+  const duration=action==='snack'?3400:2800;
+  const ornament=scene.querySelector('.ornament-active');
+  if(ornament){
+    scene.dataset.interaction=name;ornament.dataset.interaction=name;
+    const fx=document.createElement('span');fx.className='interaction-effect effect-'+name;fx.innerHTML='<i></i><i></i><i></i>';ornament.append(fx);
   }
-  const sequence=[rest,...poses,rest];
-  image.after(canvas);
-  image.style.visibility='hidden';
-  const start=performance.now();
-  const duration=action==='toy'?2400:2600;
+  let raf,observer;const start=performance.now();
+  function cleanup(){cancelAnimationFrame(raf);observer?.disconnect();canvas.remove();image.style.removeProperty('visibility');scene.querySelectorAll('.interaction-effect').forEach(el=>el.remove());delete scene.dataset.interaction;delete scene.dataset.motionBeat;active.delete(scene);}
+  active.set(scene,cleanup);image.after(canvas);image.style.visibility='hidden';
+  observer=new MutationObserver(()=>{if(!scene.isConnected)cleanup();});observer.observe(document.querySelector('#app'),{childList:true});
   function tick(now){
-    if(!scene.isConnected) return;
-    if(now-start>=duration){
-      scene.querySelectorAll('.interaction-effect').forEach(el=>el.remove());
-      delete scene.dataset.interaction;
-      canvas.remove();
-      image.style.removeProperty('visibility');
-      return;
-    }
-    const pos=Math.max(0,(now-start)/duration)*(sequence.length-1);
-    const step=Math.floor(pos), phase=pos-step, easing=phase*phase*(3-2*phase);
-    const pose=sequence[step].map((n,i)=>lerp(n,sequence[step+1][i],easing));
-    for(let y=0;y<height;y++) for(let x=0;x<width;x++){
-      const pixel=y*width+x;
-      const dx=weights[0][pixel]*pose[0]+weights[1][pixel]*pose[2]+weights[2][pixel]*pose[4];
-      const dy=weights[0][pixel]*pose[1]+weights[1][pixel]*pose[3]+weights[2][pixel]*pose[5];
-      const fromX=Math.round(x-dx),fromY=Math.round(y-dy);
-      const alpha=(pixel*4)+3;
-      if(fromX<0||fromX>=width||fromY<0||fromY>=height){frame.data[alpha]=0;continue;}
-      const from=(fromY*width+fromX)*4;
-      frame.data[alpha-3]=source.data[from];
-      frame.data[alpha-2]=source.data[from+1];
-      frame.data[alpha-1]=source.data[from+2];
-      frame.data[alpha]=source.data[from+3];
-    }
-    ctx.putImageData(frame,0,0);
-    canvas.style.transform=`translate(${pose[6]}%,${pose[7]}%)`;
-    requestAnimationFrame(tick);
+    if(!scene.isConnected||now-start>=duration){cleanup();return;}
+    const index=sequence[Math.min(sequence.length-1,Math.floor((now-start)/duration*sequence.length))];
+    ctx.clearRect(0,0,256,256);ctx.drawImage(sheet,index%4*256,Math.floor(index/4)*256,256,256,0,0,256,256);
+    scene.dataset.motionBeat=String(index);
+    raf=requestAnimationFrame(tick);
   }
-  requestAnimationFrame(tick);
+  raf=requestAnimationFrame(tick);
 }

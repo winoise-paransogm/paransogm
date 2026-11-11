@@ -8,6 +8,15 @@ const goals=[75,90,105,120,140];
 const formerDecorationMilestones=[3,8,15,24,36,51];
 const ornamentPrices=[2,3,4,5,6,8,3,4,5,6,7,9];
 const positionFor=id=>id%6;
+const foodArt=(pet)=>`<img class="food-icon" src="./props/food-${pet}.webp" alt="${pets[pet].food}">`;
+const toyArt=pet=>`<img class="toy-icon" src="./props/${['cone','bell','leaf'][pet]}.webp" alt="">`;
+// Positions refer to the whole habitat; images and touch targets share the same box.
+const decorPositions=[
+ [[4,8,24,21],[4,68,24,24],[76,53,23,36],[79,33,18,36],[75,7,23,22],[28,81,44,17],[3,55,24,32],[4,57,24,32],[74,57,25,33],[77,2,19,34],[64,75,34,23],[3,4,23,30]],
+ [[3,8,23,23],[3,76,32,20],[73,40,26,49],[79,32,18,39],[75,8,23,21],[28,81,44,17],[3,52,24,38],[3,55,26,35],[73,76,25,20],[75,54,23,38],[72,57,27,36],[73,67,25,27]],
+ [[76,75,23,23],[4,73,24,25],[74,42,25,48],[79,39,19,46],[75,6,23,23],[28,81,44,17],[3,40,23,43],[4,3,24,36],[75,66,23,29],[4,76,24,22],[75,58,23,36],[73,42,26,49]]
+];
+function placement(pet,slot){const [x,y,w,h]=decorPositions[pet][slot];return `--prop-x:${x}%;--prop-y:${y}%;--prop-w:${w}%;--prop-h:${h}%;`;}
 const sets=[
   ['태양 왕관의 광채','왕실 황금 보물함','황금 장미 화분','태양석 오벨리스크','황금 반딧불 성좌','태양 수호 인장','해바라기 해시계','황금 모래시계','호박빛 분수','금빛 풍경','태양석 다리','벌집 등불'],
   ['달빛 초승달','달연꽃 연못','달꽃 정원 아치','유리 달등','은하 별자리','달의 물결 문양','은빛 초승달 하프','달빛 망원경','클로버 찻잔 세트','자수정 분수','버섯 회전목마','초롱꽃 오르골'],
@@ -26,7 +35,7 @@ function glyph(pet,slot){
 }
 function scenery(pet,equipped,interactive=false,activeSlot=null){
   const ids=worn({equipped});
-  return ids.length?`<div class="forest-set gear-${pet}" ${interactive?'':'aria-hidden="true"'}>${ids.map(slot=>`<div class="forest-piece forest-slot-${positionFor(slot)} ${slot>=6?'new-ornament':''} ${activeSlot===slot?'ornament-active':''}">${glyph(pet,slot)}${interactive?`<button class="ornament-touch" type="button" data-action="play-ornament:${slot}" aria-label="${sets[pet][slot]} 반응 보기"></button>`:''}</div>`).join('')}</div>`:'';
+  return ids.length?`<div class="forest-set gear-${pet}" ${interactive?'':'aria-hidden="true"'}>${ids.map(slot=>`<div style="${placement(pet,slot)}" class="forest-piece placed-ornament ornament-${slot} forest-slot-${positionFor(slot)} ${slot>=6?'new-ornament':''} ${activeSlot===slot?'ornament-active':''}">${glyph(pet,slot)}${interactive?`<button class="ornament-touch" type="button" data-action="play-ornament:${slot}" aria-label="${sets[pet][slot]} 반응 보기"></button>`:''}</div>`).join('')}</div>`:'';
 }
 const worn=s=>Array.isArray(s.equipped)?s.equipped:Number.isInteger(s.equipped)?[s.equipped]:[];
 const fresh=pet=>({pet,xp:0,food:0,fed:0,stage:0,stageFed:0,correct:[],hinted:[],rewarded:[],active:null,equipped:[],ownedOrnaments:[]});
@@ -108,17 +117,17 @@ function render(focus=true) {
     </section>`;
   } else if(page==='home'){
     const xp=Math.min(state.xp,goal??0);
-    const play=playing&&state.stage===goals.length;
+    const play=playing;
     const [toy,icon,reaction]=playthings[state.pet];
-    html=`<div class="home-grid"><section class="home-grove"><div class="stage-top"><span class="tag">진화 ${state.stage} / 5</span><span class="tag food">${pet.meal} 먹이 ${state.food}개</span></div><div class="reveal-stage grove-scene ${motion?'fed':''} ${playAction?`friend-play friend-${state.pet} play-${playAction}`:''}"><div class="habitat habitat-${state.pet}" aria-hidden="true"></div>${scenery(state.pet,state.equipped,play,playSlot)}${art(state.pet,state.stage,motion?'feeding':'idle')}${playAction&&playAction!=='ornament'?`<span class="play-prop" aria-hidden="true">${playAction==='snack'?pet.meal:icon}</span>`:''}${motion?`<span class="meal-fx" aria-hidden="true">${pet.meal}</span>`:''}</div><div class="speech" role="status">${playAction==='snack'?'냠냠! 간식을 먹고 기분이 좋아졌어요!':playAction==='toy'?reaction:playAction==='ornament'?ornamentReaction(state.pet,playSlot):motion?'냠냠! 맛있어요!':ready?'이제 진화할 수 있어요!':goal?'함께 쑥쑥 자라요!':'오늘도 숲을 지켜요!'}</div>${play?`<div class="play-controls" aria-label="친구와 놀기">${button(pet.meal+' 간식 주기','play-snack','secondary')}${button(toy,'play-toy','secondary')}${button('놀이 마치기','play-end','text-button')}</div>`:''}</section><section class="panel ${ready?'evolution-ready':''}">${intro('나의 친구',stageName(pet,state.stage))}
+    html=`<div class="home-grid"><section class="home-grove"><div class="stage-top"><span class="tag">진화 ${state.stage} / 5</span><span class="tag food">${foodArt(state.pet)} 먹이 ${state.food}개</span></div><div class="reveal-stage grove-scene ${motion?'fed':''} ${playAction?`friend-play friend-${state.pet} play-${playAction}`:''}"><div class="habitat habitat-${state.pet}" aria-hidden="true"></div>${scenery(state.pet,state.equipped,play,playSlot)}${art(state.pet,state.stage,motion?'feeding':'idle')}${playAction&&playAction!=='ornament'?`<span class="play-prop" aria-hidden="true">${playAction==='snack'?foodArt(state.pet):toyArt(state.pet)}</span>`:''}${motion?`<span class="meal-fx" aria-hidden="true">${foodArt(state.pet)}</span>`:''}</div><div class="speech" role="status">${playAction==='snack'?'냠냠! 간식을 먹고 기분이 좋아졌어요!':playAction==='toy'?reaction:playAction==='ornament'?ornamentReaction(state.pet,playSlot):motion?'냠냠! 맛있어요!':ready?'이제 진화할 수 있어요!':goal?'함께 쑥쑥 자라요!':'오늘도 숲을 지켜요!'}</div>${play?`<div class="play-controls" aria-label="친구와 놀기">${button(foodArt(state.pet)+' 간식 주기','play-snack','secondary')}${button(toyArt(state.pet)+toy.replace(/^[^ ]+ /,''),'play-toy','secondary')}${button('놀이 마치기','play-end','text-button')}</div>`:''}</section><section class="panel ${ready?'evolution-ready':''}">${intro('나의 친구',stageName(pet,state.stage))}
     ${goal?`<div class="xp"><div><strong>성장 경험치</strong><b>${xp} / ${goal}</b></div><progress value="${xp}" max="${goal}" aria-label="성장 경험치"></progress></div>`:'<div class="done">✦ 다섯 번의 진화 완료</div>'}
     <p>${ready?'진화할 준비가 됐어요!':!goal?'퀴즈와 꾸미기를 계속 즐겨요.':xp===goal?'이번 단계에서 먹이를 한 번 주면 진화할 수 있어요.':state.food?'먹이를 주면 경험치가 올라요.':'단원 문제를 모두 맞히면 먹이를 받아요.'}</p>
-    <div class="actions">${ready?button('진화하기','evolve'):''}${state.food&&!ready?button('먹이 주기','feed'):''}${!goal&&!play?button('친구와 놀기','play-start'):''}${button('문제 풀러 가기','subjects',ready||state.food?'secondary':'primary')}<div class="care-links">${button('<span class="care-menu-art shop-menu-art" aria-hidden="true"><img src="./ornaments/royal-chest.webp" alt=""></span><span>장식 상점<small>숲을 꾸밀 보물 찾기</small></span><b aria-hidden="true">›</b>','wardrobe','care-menu shop-menu')}${button('<span class="care-menu-art friends-menu-art" aria-hidden="true">'+pets.map((_,i)=>`<img src="${picture(i,roster.friends[i]?.stage??0)}" alt="">`).join('')+'</span><span>다른 친구 선택<small>사자 · 토끼 · 여우 만나기</small></span><b aria-hidden="true">›</b>','choose-new','care-menu friends-menu')}</div></div></section></div>`;
+    <div class="actions">${ready?button('진화하기','evolve'):''}${state.food&&!ready?button('먹이 주기','feed'):''}${!play?button('친구와 놀기','play-start'):''}${button('문제 풀러 가기','subjects',ready||state.food?'secondary':'primary')}<div class="care-links">${button('<span class="care-menu-art shop-menu-art" aria-hidden="true"><img src="./ornaments/royal-chest.webp" alt=""></span><span>장식 상점<small>숲을 꾸밀 보물 찾기</small></span><b aria-hidden="true">›</b>','wardrobe','care-menu shop-menu')}${button('<span class="care-menu-art friends-menu-art" aria-hidden="true">'+pets.map((_,i)=>`<img src="${picture(i,roster.friends[i]?.stage??0)}" alt="">`).join('')+'</span><span>다른 친구 선택<small>사자 · 토끼 · 여우 만나기</small></span><b aria-hidden="true">›</b>','choose-new','care-menu friends-menu')}</div></div></section></div>`;
   } else if(page==='wardrobe'){
     const owned=state.ownedOrnaments, wearing=worn(state);
     html=`<section class="panel wardrobe">${intro('장식 상점',themeName[state.pet],'모은 먹이로 장식을 사고, 산 장식은 숲에 놓거나 거둘 수 있어요. 같은 자리의 장식은 서로 바꿔 놓을 수 있어요.')}
     <div class="reveal-stage grove-scene"><div class="habitat habitat-${state.pet}" aria-hidden="true"></div>${scenery(state.pet,state.equipped)}${art(state.pet,state.stage,'idle')}</div>
-    <p class="wardrobe-progress" role="status">${pet.meal} 보유 먹이 ${state.food}개<br><small>보유 장식 ${owned.length} / ${items.length} · 배치 ${wearing.length}개</small></p>
+    <p class="wardrobe-progress" role="status">${foodArt(state.pet)} 보유 먹이 ${state.food}개<br><small>보유 장식 ${owned.length} / ${items.length} · 배치 ${wearing.length}개</small></p>
     <div class="wardrobe-items gear-${state.pet}">${sets[state.pet].map((name,i)=>{
       const purchased=owned.includes(i), equipped=wearing.includes(i), price=ornamentPrices[i];
       return `<button class="option ${equipped?'picked':''}" data-action="${purchased?'equip':'buy-ornament'}:${i}" ${purchased?`aria-pressed="${equipped}"`:state.food<price?'disabled':''}><span class="gear-thumb">${glyph(state.pet,i)}</span><span class="gear-label">${name}<small>${purchased?(equipped?'숲에 놓음':'숲에 놓기'):`먹이 ${price}개 · ${state.food<price?'부족':'구매'}`}</small></span></button>`;
@@ -147,7 +156,7 @@ function render(focus=true) {
     const nextUnit=pendingUnits.find(index=>index>subject)??pendingUnits[0]??-1;
     const [prompt,options,,,explanation] = questionsFor(subject,state.pet)[question]; const last=question===unit.questions.length-1;
     const wrong=feedback?.type==='wrong', right=feedback?.type==='right';
-    html=`<section class="quiz panel ${right?(feedback.reward?"reward-scene":"correct-scene"):""}"><div class="quiz-meta"><span class="tag">${unit.name} · ${unit.unit}</span><b>${question+1} / ${unit.questions.length}</b></div><div class="quiz-companion ${right?"cheer":""}">${art(state.pet,state.stage,wrong?"sad":"idle")}<p>${wrong?"천천히 다시 해 봐요.":right?(feedback.reward?"우와, 먹이를 찾았어요!":"해냈어요!"):"같이 풀어 봐요!"}</p></div>${intro('보기 중 하나를 골라요',prompt)}<div class="options" role="group" aria-label="답 보기">${options.map((value,i)=>`<button type="button" class="option ${selected===i?'picked':''}" data-action="option:${i}" aria-pressed="${selected===i}" ${feedback?'disabled':''}><span>${i+1}</span>${value}</button>`).join('')}</div>${wrong?`<div class="notice wrong" role="status"><div class="sad-pet" role="img" aria-label="아쉬워하는 ${pet.name}">${art(state.pet,state.stage,"sad")}<span aria-hidden="true">💧</span></div><div><strong>아쉬워요. 다시 풀어 볼까요?</strong>${feedback.hint?`<p>${feedback.hint}</p>`:''}</div></div>`:''}${right?`<div class="notice right ${feedback.reward?"reward-notice":"correct-notice"}" role="status"><span class="reward-icon" aria-hidden="true">${feedback.reward?pet.meal:'✓'}</span><span class="reward-rays" aria-hidden="true"></span><div><strong>${feedback.reward?`단원 완료! ${pet.food} 1개를 모아뒀어요.`:'정답이에요!'}</strong>${feedback.points&&state.stage<goals.length?'<p>경험치 +5</p>':''}${explanation?`<p>${explanation}</p>`:''}</div></div>`:''}<div class="actions">${wrong?button('다시 풀기','retry'):right?button(last?(nextUnit<0?'단원 고르기':'다음 단원 풀기'):'다음 문제',last?(nextUnit<0?'subjects':`subject:${nextUnit}`):'next'):button('정답 확인','check','primary',selected===null)}${right&&last?(nextUnit<0?button('육성 화면으로','home','text-button'):button('단원 고르기','subjects','text-button')):button('과목 고르기','subjects','text-button')}</div></section>`;
+    html=`<section class="quiz panel ${right?(feedback.reward?"reward-scene":"correct-scene"):""}"><div class="quiz-meta"><span class="tag">${unit.name} · ${unit.unit}</span><b>${question+1} / ${unit.questions.length}</b></div><div class="quiz-companion ${right?"cheer":""}">${art(state.pet,state.stage,wrong?"sad":"idle")}<p>${wrong?"천천히 다시 해 봐요.":right?(feedback.reward?"우와, 먹이를 찾았어요!":"해냈어요!"):"같이 풀어 봐요!"}</p></div>${intro('보기 중 하나를 골라요',prompt)}<div class="options" role="group" aria-label="답 보기">${options.map((value,i)=>`<button type="button" class="option ${selected===i?'picked':''}" data-action="option:${i}" aria-pressed="${selected===i}" ${feedback?'disabled':''}><span>${i+1}</span>${value}</button>`).join('')}</div>${wrong?`<div class="notice wrong" role="status"><div class="sad-pet" role="img" aria-label="아쉬워하는 ${pet.name}">${art(state.pet,state.stage,"sad")}<span aria-hidden="true">💧</span></div><div><strong>아쉬워요. 다시 풀어 볼까요?</strong>${feedback.hint?`<p>${feedback.hint}</p>`:''}</div></div>`:''}${right?`<div class="notice right ${feedback.reward?"reward-notice":"correct-notice"}" role="status"><span class="reward-icon" aria-hidden="true">${feedback.reward?foodArt(state.pet):'✓'}</span><span class="reward-rays" aria-hidden="true"></span><div><strong>${feedback.reward?`단원 완료! ${pet.food} 1개를 모아뒀어요.`:'정답이에요!'}</strong>${feedback.points&&state.stage<goals.length?'<p>경험치 +5</p>':''}${explanation?`<p>${explanation}</p>`:''}</div></div>`:''}<div class="actions">${wrong?button('다시 풀기','retry'):right?button(last?(nextUnit<0?'단원 고르기':'다음 단원 풀기'):'다음 문제',last?(nextUnit<0?'subjects':`subject:${nextUnit}`):'next'):button('정답 확인','check','primary',selected===null)}${right&&last?(nextUnit<0?button('육성 화면으로','home','text-button'):button('단원 고르기','subjects','text-button')):button('과목 고르기','subjects','text-button')}</div></section>`;
   } else {
     html=`<section class="result panel reveal-pet-${state.pet} reveal-level-${state.stage} ${motion?'transform':''}">${intro(`${state.stage}번째 진화 성공`,stageName(pet,state.stage),formNotes[state.pet][state.stage-1])}<div class="reveal-stage"><div class="habitat habitat-${state.pet}" aria-hidden="true"></div><div class="evolution-halo" aria-hidden="true"></div>${scenery(state.pet,state.equipped)}${art(state.pet,state.stage,"reveal")}</div><div class="actions">${button('새로운 모습 보기','home')}</div></section>`;
   }
@@ -175,7 +184,7 @@ root.addEventListener('click', event => {
     case 'play-ornament':
     case 'play-snack':
     case 'play-toy':
-      if(page!=='home'||state.stage!==goals.length) return;
+      if(page!=='home') return;
       if(action==='play-start') playing=true;
       else if(action==='play-end') playing=false;
       else if(playing&&action==='play-ornament'){
@@ -261,11 +270,12 @@ root.addEventListener('click', event => {
   }
   if(editingDecoration) (root.querySelector(`[data-action="${action==='buy-ornament'?`equip:${value}`:control.dataset.action}"]`)??root.querySelector('.wardrobe-items button:not(:disabled)'))?.focus({preventScroll:true});
   if(action==='feed') {
+    void animateFriend(root.querySelector('.grove-scene'),state.pet,'snack');
     feedTimer=setTimeout(()=>{
       const focused=document.activeElement?.dataset.action;
       motion=false; render(false);
       if(focused) root.querySelector(`[data-action="${focused}"]`)?.focus({preventScroll:true});
-    },1250);
+    },3550);
   }
   if(action==='check') root.querySelector('.actions button')?.focus();
   if(action==='retry') root.querySelector('.option')?.focus();
