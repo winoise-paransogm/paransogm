@@ -1,0 +1,16 @@
+# 배포용 압축 파일은 저장소에 올리지 않습니다 (필요하면 Git 태그 사용)
+*.zip
+
+# OS / 에디터
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Vercel
+.vercel/
+
+# 작업 중 임시 파일
+node_modules/
+*.log
+*.tmp
