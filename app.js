@@ -1,6 +1,6 @@
 import {pets,subjects,questionsFor} from './content.js';
 import {playQuizSound} from './quiz-sounds.js';
-import {animateFriend,ornamentReaction} from './play-motion.js';
+import {animateFriend,ornamentReaction,warmFriend} from './play-motion.js';
 
 const key='lion-grow-v2';
 const root=document.querySelector('#app');
@@ -93,6 +93,7 @@ let openSubject=null;
 let playing=false, playAction=null, playSlot=null;
 
 function render(focus=true) {
+  const previousPet=page==='home'?root.querySelector('.grove-scene > .pet'):null;
   const pet = pets[state?.pet];
   const goal=goals[state?.stage]; const ready=state&&goal&&state.xp>=goal&&state.stageFed>0;
   let html;
@@ -164,6 +165,13 @@ function render(focus=true) {
   document.body.classList.toggle("quiz-page",page==="quiz"||page==="subjects");
   document.body.classList.toggle("care-page",page==="home"||page==="wardrobe"||page==="result");
   root.innerHTML=html+(storageError?'<p class="storage" role="status">이 브라우저에서 진행을 저장할 수 없어요. 화면을 닫기 전까지 플레이할 수 있어요.</p>':'');
+  if(page==='home'){
+    const nextPet=root.querySelector('.grove-scene > .pet');
+    if(nextPet&&previousPet?.matches?.(`.pet-${state.pet}.stage-${state.stage}`)){
+      previousPet.className=nextPet.className;nextPet.replaceWith(previousPet);
+    }
+    void warmFriend(state.pet,state.stage,root.querySelector('.grove-scene'));
+  }
   root.inert=false;
   if(focus) root.querySelector('h1')?.focus();
 }
