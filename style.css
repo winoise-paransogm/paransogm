@@ -776,3 +776,179 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 .play-snack .play-prop{top:50%;left:48%;animation:food-approach 3.4s ease both}
 @keyframes food-approach{0%{opacity:0;transform:translate(-100px,55px) scale(.7)}18%,30%{opacity:1;transform:translate(-20px,-20px) scale(1)}48%{opacity:1;transform:translate(-10px,-25px) scale(.75)}59%,100%{opacity:0;transform:translate(0,-28px) scale(.2)}}
 @media(prefers-reduced-motion:reduce){.meal-fx,.play-prop{animation:none!important;opacity:0}}
+
+/* =====================================================================
+   PC · 넓은 화면 최적화
+   - 모든 규칙은 @media 안에 있어 모바일(세로) 화면에는 영향이 없습니다.
+   - 장면(숲+친구+장식)은 컨테이너 단위(cqw)로 비율을 유지하며 커집니다.
+   ===================================================================== */
+
+/* 시작 화면: main의 max-width(928px)가 화면을 가운데 상자에 가두던 문제 */
+.opening-page main{max-width:none}
+
+/* 오프닝 영상(세로 480x854)은 가로 화면에서 3배 확대·잘림 없이 가운데에 */
+@media (min-aspect-ratio:1/1){
+  .forest-intro .intro-video{object-fit:contain;background:transparent}
+  .forest-intro.intro-video-playing .intro-canopy{filter:blur(22px) brightness(.6);transform:scale(1.14)}
+}
+
+/* 노트북·PC, 그리고 가로로 돌린 태블릿·휴대폰 */
+@media (min-width:1024px), (min-width:640px) and (orientation:landscape){
+  body.quiz-page main,body.care-page main{width:min(100%,760px);max-width:none;padding:28px 32px 64px}
+
+  /* ── 육성(홈): 왼쪽 숲 장면 / 오른쪽 조작 패널 2단 ── */
+  body.care-page main:has(.home-grid){width:min(100%,1180px)}
+  body.care-page main:has(.home-grid){min-height:calc(100svh - 108px);display:flex;flex-direction:column;justify-content:center;padding-block:8px 56px}
+  .home-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:32px;align-items:center}
+  .home-grid .panel{margin-top:0;padding:24px 26px}
+  .home-grid h1{font-size:30px}
+  .home-grid p{font-size:16px}
+  .home-grid .xp div{font-size:15px}
+  .home-grid .xp progress{height:11px}
+  .home-grove{container-type:inline-size}
+  .home-grove .grove-scene{padding-block:1.5cqw 9.2cqw}
+  .home-grove .grove-scene:has(.forest-slot-5){padding-bottom:14.4cqw}
+  .home-grove .grove-scene .pet{width:min(100%,45.2cqw)}
+  .home-grove .grove-scene:has(.forest-slot-2,.forest-slot-3)>.mature-pet{width:min(76%,42.3cqw)}
+  .home-grove .tag,.home-grove .speech{font-size:15px}
+
+  /* ── 장식 상점: 왼쪽 장면(고정) / 오른쪽 장식 목록 ── */
+  body.care-page main:has(.wardrobe){width:min(100%,1080px)}
+  .wardrobe{container-type:inline-size;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:28px;align-items:start;
+    grid-template-areas:"intro intro" "scene items" "prog items" "act act";grid-template-rows:auto auto 1fr auto;padding:24px 28px}
+  .wardrobe>.intro{grid-area:intro}
+  .wardrobe>.reveal-stage{grid-area:scene;position:sticky;top:16px}
+  .wardrobe>.wardrobe-progress{grid-area:prog}
+  .wardrobe>.wardrobe-items{grid-area:items}
+  .wardrobe>.actions{grid-area:act;max-width:520px;width:100%}
+  .wardrobe .grove-scene{padding-block:.8cqw 4.9cqw}
+  .wardrobe .grove-scene:has(.forest-slot-5){padding-bottom:7.7cqw}
+  .wardrobe .grove-scene .pet{width:min(100%,22.6cqw)}
+  .wardrobe .grove-scene:has(.forest-slot-2,.forest-slot-3)>.mature-pet{width:min(76%,22cqw)}
+  @container (max-width:760px){.wardrobe-items{grid-template-columns:minmax(0,1fr)}}
+
+  /* ── 퀴즈·단원 선택: 읽기 편한 폭과 큰 글자 ── */
+  .quiz{max-width:680px;padding:28px 32px}
+  .quiz h1{font-size:30px}
+  .quiz .option{min-height:56px;font-size:17px;padding:12px 16px}
+  .quiz-page .subject-list{max-width:680px}
+  .quiz-page .subject{padding:14px 18px}
+  .quiz-page .intro h1{font-size:34px}
+  .quiz-page .intro p{font-size:16px}
+
+  /* ── 진화 결과 ── */
+  .result{max-width:680px}
+}
+
+/* 아주 큰 모니터 */
+@media (min-width:1800px){
+  body.care-page main:has(.home-grid){width:min(100%,1440px)}
+  body.care-page main:has(.wardrobe){width:min(100%,1280px)}
+  body.quiz-page main{width:min(100%,860px)}
+  .quiz{max-width:780px}
+  .quiz-page .subject-list{max-width:780px}
+}
+/* 큰 모니터 */
+@media (min-width:1600px){
+  body.care-page main:has(.home-grid){width:min(100%,1280px)}
+  body.care-page main:has(.wardrobe){width:min(100%,1180px)}
+  .brand{font-size:22px}
+}
+
+/* 높이가 낮은 노트북(≈820px 이하): 퀴즈·상점이 스크롤 없이 보이도록 살짝 압축 */
+@media (min-width:1024px) and (max-height:820px){
+  body.quiz-page main,body.care-page main{padding-top:16px}
+  .quiz{padding:18px 32px}
+  .quiz .intro{margin:8px 0}
+  .quiz h1{font-size:26px}
+  .quiz .option{min-height:48px;padding:8px 16px}
+  .quiz .actions{margin-top:12px}
+  .quiz-companion{margin:2px 0 4px}
+  .wardrobe{padding:18px 28px}
+  .wardrobe>.intro{margin-bottom:12px}
+  .wardrobe>.intro p{display:none}
+  .wardrobe-items{gap:6px}
+  .wardrobe-items .option{padding:5px 8px}
+  .wardrobe>.actions{margin-top:12px;gap:4px}
+  .wardrobe>.actions button{min-height:44px}
+}
+
+/* =====================================================================
+   가로로 돌린 휴대폰·낮은 화면 (높이 640px 이하): 스크롤 없이 한눈에
+   ===================================================================== */
+@media (min-width:640px) and (orientation:landscape) and (max-height:640px){
+  /* 상단 제목줄은 숨겨 세로 공간 확보 (오프닝·화면 안에 제목이 이미 있음) */
+  body.quiz-page .mast,body.care-page .mast{display:none}
+  body.quiz-page main,body.care-page main{padding:10px 24px 20px}
+
+  /* 시작 화면 */
+  .opening h1{font-size:34px}
+  .opening-copy{padding-top:12px;padding-bottom:6px}
+  .opening-kicker{margin-bottom:4px}
+  .opening-guide{margin-top:4px;font-size:14px}
+  .opening-controls{padding-bottom:12px}
+  .opening .pet-option{min-height:44px}
+  .opening .primary{min-height:46px}
+  .opening .actions{margin-top:8px}
+
+  /* 육성(홈) */
+  body.care-page main:has(.home-grid){min-height:100svh;padding-block:10px}
+  .home-grid{gap:20px}
+  .home-grid .panel{padding:12px 16px}
+  .home-grid h1{font-size:22px}
+  .home-grid .panel>p{display:none}
+  .home-grid .intro{margin-bottom:4px}
+  .home-grid .xp{margin-bottom:4px}
+  .home-grid .actions{margin-top:8px;gap:6px}
+  .home-grid .actions button{min-height:38px;padding:4px 12px}
+  .home-grid .care-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .home-grid .care-menu{min-height:0;padding:8px 8px;justify-content:center;white-space:nowrap}
+  .home-grid .care-menu small,.home-grid .care-menu b,.home-grid .care-menu-art{display:none}
+  .home-grid .care-menu span{font-size:14px}
+  /* 음악 버튼을 작게 하고 퀴즈 우측 상단 표시와 겹치지 않게 */
+  .forest-music{min-height:28px;padding:2px 8px;font-size:11px}
+  .quiz>.quiz-meta{padding-right:84px}
+  .home-grove .stage-top{margin-bottom:4px}
+  .home-grove .speech{margin-top:4px;padding:3px 10px;min-height:0}
+
+  /* 단원 선택: 2열 */
+  .quiz-page .unit-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .quiz-page .unit-options>p{grid-column:1/-1}
+  .quiz-page .intro{margin-bottom:8px}
+  .quiz-page .intro h1{font-size:24px}
+  .quiz-page .quiz-companion{display:none}
+
+  /* 퀴즈: 왼쪽 문제 / 오른쪽 보기 */
+  .quiz{max-width:none;padding:12px 20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:24px;align-items:start}
+  .quiz>.quiz-meta{grid-column:1/-1}
+  .quiz>.quiz-companion{display:flex;grid-column:1;margin:2px 0;min-height:48px}
+  .quiz>.intro{grid-column:1;margin:2px 0}
+  .quiz h1{font-size:20px;line-height:1.35}
+  .quiz>.options{grid-column:2;grid-row:2 / span 2;gap:5px}
+  .quiz .option{min-height:40px;font-size:15px;padding:4px 12px}
+  .quiz>.notice{grid-column:2;margin-top:6px;padding:6px 10px}
+  .quiz>.actions{grid-column:2;margin-top:6px;gap:4px}
+  .quiz>.actions button{min-height:40px}
+
+  /* 상점 */
+  .wardrobe{padding:12px 18px;column-gap:20px}
+  .wardrobe>.intro{margin-bottom:4px}
+  .wardrobe>.intro p{display:none}
+  .wardrobe>.reveal-stage{top:8px}
+  .wardrobe .intro h1{font-size:22px}
+  .wardrobe-items .option{min-height:44px}
+  .wardrobe>.actions{max-width:none}
+
+  /* 진화 결과: 왼쪽 안내 / 오른쪽 장면 */
+  .result{max-width:none;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);column-gap:24px;align-items:center;padding:14px 20px;
+    grid-template-areas:"intro stage" "act stage"}
+  .result>.intro{grid-area:intro;margin:0}
+  .result>.reveal-stage{grid-area:stage;min-height:0}
+  .result>.actions{grid-area:act}
+  .result .pet{width:min(100%,230px)}
+}
+
+/* 가로 휴대폰(640~759px): 시작 화면도 좌우 2단 */
+@media(min-width:640px) and (max-width:759px) and (orientation:landscape){.opening{grid-template-columns:minmax(345px,43%) 1fr;grid-template-rows:1fr 1fr;min-height:100svh;align-content:center}.opening-art img{left:42%;width:58%;object-position:center 53%}.opening-art .pet{left:42%;right:0;top:50%;transform:translateY(-50%);width:min(53vw,570px)}.opening-shade{background:linear-gradient(90deg,#10231a 34%,#10231a77 55%,transparent 72%),linear-gradient(0deg,#10231a 0%,transparent 22%)}.opening-copy{grid-column:1;grid-row:1;align-self:end;padding-bottom:26px}.opening-controls{grid-column:1;grid-row:2;align-self:start}.opening-sparks{left:38%}}
+@media(min-width:640px) and (max-width:759px) and (orientation:landscape){.opening-art{left:43%;--forest-floor:94%}.opening-forest{background-position:center 62%}.opening-art .opening-friend{height:76%;width:90%;max-width:690px}.opening-shade{background:linear-gradient(90deg,#10231a 36%,#10231a66 51%,transparent 63%),linear-gradient(0deg,#10231a66 0%,transparent 18%)}}
+@media(min-width:640px) and (max-width:759px) and (orientation:landscape){.opening-baby .opening-art .opening-friend{width:74%;max-width:565px;height:62%}}
