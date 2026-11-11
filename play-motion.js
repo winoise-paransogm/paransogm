@@ -29,8 +29,10 @@ function loadFeedingTrial(config){
  return feedingAssets.get(config.motion);
 }
 function makeSurface(image){
- const canvas=document.createElement('canvas'),rect=image.getBoundingClientRect();canvas.width=384;
- canvas.height=Math.max(1,Math.round(384*(rect.height||256)/(rect.width||256)));
+ const canvas=document.createElement('canvas'),rect=image.getBoundingClientRect();
+ const density=Math.max(1,Math.min(3,window.devicePixelRatio||1));
+ canvas.width=Math.max(256,Math.min(768,Math.round((rect.width||256)*density)));
+ canvas.height=Math.max(1,Math.round(canvas.width*(rect.height||256)/(rect.width||256)));
  canvas.className=image.className+' play-pose sprite-motion';canvas.setAttribute('aria-hidden','true');return canvas;
 }
 function watch(body,cleanup){const observer=new MutationObserver(()=>{if(!body.isConnected)cleanup()});observer.observe(document.querySelector('#app'),{childList:true,subtree:true});return observer;}
