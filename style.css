@@ -990,7 +990,7 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 .forest-effects[hidden]{display:none}
 .forest-effects:focus-visible{outline:3px solid #ffe69b;outline-offset:2px}
 body .forest-music{min-height:44px;width:98px}
-.quiz-page .mast,.care-page .mast{padding-top:58px}
+body.quiz-page .mast,body.care-page .mast{padding-top:58px}
 @media(min-width:640px) and (orientation:landscape) and (max-height:640px){
   body.quiz-page main{padding-top:60px}
   .quiz>.quiz-meta{padding-right:0;flex-wrap:wrap}
