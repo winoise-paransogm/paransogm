@@ -7,12 +7,13 @@ const root=document.querySelector('#app');
 const goals=[75,90,105,120,140];
 const formerDecorationMilestones=[3,8,15,24,36,51];
 const ornamentPrices=[2,3,4,5,6,8,3,4,5,6,7,9];
-const positionFor=id=>id%6;
+const ornamentZones=[[1,3,4,3,2,5,3,4,4,0,3,2],[1,3,4,2,0,5,3,4,3,4,4,2],[0,3,4,2,1,5,3,0,4,3,2,4]];
+const positionFor=(id,pet=state.pet)=>ornamentZones[pet][id];
 const foodArt=(pet)=>`<img class="food-icon" src="./props/food-${pet}.webp" alt="${pets[pet].food}">`;
 const toyArt=pet=>`<img class="toy-icon" src="./props/${['cone','bell','leaf'][pet]}.webp" alt="">`;
 // Positions refer to the whole habitat; images and touch targets share the same box.
-// Reviewed placement; visible records the preview selection, not purchased inventory.
-const decorLayout=[[{"x":32.5,"y":3.4,"w":24.2,"h":21.2,"z":5,"visible":false},{"x":5.9,"y":66.4,"w":33.6,"h":33.6,"z":20,"visible":false},{"x":15.8,"y":37.2,"w":18.4,"h":28.8,"z":5,"visible":false},{"x":0,"y":29.1,"w":20.7,"h":41.4,"z":5,"visible":true},{"x":59.8,"y":11.4,"w":39.6,"h":37.8,"z":5,"visible":false},{"x":11,"y":68.4,"w":81.8,"h":31.6,"z":5,"visible":true},{"x":69.7,"y":68.3,"w":23.8,"h":31.7,"z":5,"visible":true},{"x":5.5,"y":68,"w":18.5,"h":24.6,"z":5,"visible":true},{"x":80.4,"y":42.5,"w":19.3,"h":25.4,"z":5,"visible":true},{"x":17.5,"y":3,"w":19,"h":34,"z":5,"visible":false},{"x":54.2,"y":39.4,"w":34,"h":23,"z":5,"visible":true},{"x":56.6,"y":0,"w":23,"h":30,"z":5,"visible":false}],[{"x":3,"y":8,"w":23,"h":23,"z":5,"visible":true},{"x":3,"y":76,"w":32,"h":20,"z":5,"visible":true},{"x":73,"y":40,"w":26,"h":49,"z":5,"visible":true},{"x":79,"y":32,"w":18,"h":39,"z":5,"visible":true},{"x":75,"y":8,"w":23,"h":21,"z":5,"visible":true},{"x":28,"y":81,"w":44,"h":17,"z":5,"visible":true},{"x":3,"y":52,"w":24,"h":38,"z":5,"visible":false},{"x":3,"y":55,"w":26,"h":35,"z":5,"visible":false},{"x":73,"y":76,"w":25,"h":20,"z":5,"visible":false},{"x":75,"y":54,"w":23,"h":38,"z":5,"visible":false},{"x":72,"y":57,"w":27,"h":36,"z":5,"visible":false},{"x":73,"y":67,"w":25,"h":27,"z":5,"visible":false}],[{"x":76,"y":75,"w":23,"h":23,"z":5,"visible":true},{"x":4,"y":73,"w":24,"h":25,"z":5,"visible":true},{"x":74,"y":42,"w":25,"h":48,"z":5,"visible":true},{"x":79,"y":39,"w":19,"h":46,"z":5,"visible":true},{"x":75,"y":6,"w":23,"h":23,"z":5,"visible":true},{"x":28,"y":81,"w":44,"h":17,"z":5,"visible":true},{"x":3,"y":40,"w":23,"h":43,"z":5,"visible":false},{"x":4,"y":3,"w":24,"h":36,"z":5,"visible":false},{"x":75,"y":66,"w":23,"h":29,"z":5,"visible":false},{"x":4,"y":76,"w":24,"h":22,"z":5,"visible":false},{"x":75,"y":58,"w":23,"h":36,"z":5,"visible":false},{"x":73,"y":42,"w":26,"h":49,"z":5,"visible":false}]];
+// Separate sky ornaments, grounded furniture and the central floor seal.
+const decorLayout=[[{"x":37,"y":2,"w":26,"h":20,"z":20,"visible":false},{"x":3,"y":61,"w":24,"h":23,"z":20,"visible":false},{"x":74,"y":52,"w":24,"h":32,"z":20,"visible":false},{"x":3,"y":43,"w":24,"h":41,"z":20,"visible":false},{"x":74,"y":3,"w":23,"h":26,"z":20,"visible":false},{"x":30,"y":86,"w":40,"h":12,"z":20,"visible":false},{"x":3,"y":54,"w":24,"h":30,"z":20,"visible":false},{"x":74,"y":55,"w":24,"h":29,"z":20,"visible":false},{"x":74,"y":49,"w":24,"h":35,"z":20,"visible":false},{"x":3,"y":2,"w":24,"h":27,"z":20,"visible":false},{"x":2,"y":66,"w":26,"h":18,"z":20,"visible":false},{"x":75,"y":2,"w":22,"h":27,"z":20,"visible":false}],[{"x":37,"y":2,"w":26,"h":20,"z":20,"visible":false},{"x":2,"y":66,"w":26,"h":18,"z":20,"visible":false},{"x":73,"y":43,"w":25,"h":41,"z":20,"visible":false},{"x":77,"y":2,"w":19,"h":27,"z":20,"visible":false},{"x":3,"y":3,"w":24,"h":25,"z":20,"visible":false},{"x":30,"y":86,"w":40,"h":12,"z":20,"visible":false},{"x":3,"y":48,"w":24,"h":36,"z":20,"visible":false},{"x":74,"y":49,"w":24,"h":35,"z":20,"visible":false},{"x":3,"y":65,"w":24,"h":19,"z":20,"visible":false},{"x":74,"y":49,"w":24,"h":35,"z":20,"visible":false},{"x":73,"y":49,"w":25,"h":35,"z":20,"visible":false},{"x":74,"y":2,"w":24,"h":27,"z":20,"visible":false}],[{"x":3,"y":3,"w":24,"h":25,"z":20,"visible":false},{"x":3,"y":59,"w":24,"h":25,"z":20,"visible":false},{"x":73,"y":43,"w":25,"h":41,"z":20,"visible":false},{"x":77,"y":2,"w":20,"h":27,"z":20,"visible":false},{"x":37,"y":2,"w":26,"h":20,"z":20,"visible":false},{"x":30,"y":86,"w":40,"h":12,"z":20,"visible":false},{"x":3,"y":43,"w":24,"h":41,"z":20,"visible":false},{"x":3,"y":2,"w":24,"h":27,"z":20,"visible":false},{"x":74,"y":53,"w":24,"h":31,"z":20,"visible":false},{"x":3,"y":63,"w":24,"h":21,"z":20,"visible":false},{"x":75,"y":2,"w":23,"h":27,"z":20,"visible":false},{"x":73,"y":43,"w":25,"h":41,"z":20,"visible":false}]];
 function placement(pet,slot){const {x,y,w,h,z}=decorLayout[pet][slot];return `--prop-x:${x}%;--prop-y:${y}%;--prop-w:${w}%;--prop-h:${h}%;--prop-z:${z===20?3:1};`;}
 const sets=[
   ['태양 왕관의 광채','왕실 황금 보물함','황금 장미 화분','태양석 오벨리스크','황금 반딧불 성좌','태양 수호 인장','해바라기 해시계','황금 모래시계','호박빛 분수','금빛 풍경','태양석 다리','벌집 등불'],
@@ -31,10 +32,15 @@ function glyph(pet,slot){
   return `<img class="gear-art forest-prop" src="./ornaments/${prop}.webp" alt="" aria-hidden="true">`;
 }
 function scenery(pet,equipped,interactive=false,activeSlot=null){
-  const ids=worn({equipped});
-  return ids.length?`<div class="forest-set gear-${pet}" ${interactive?'':'aria-hidden="true"'}>${ids.map(slot=>`<div style="${placement(pet,slot)}" class="forest-piece placed-ornament ornament-${slot} forest-slot-${positionFor(slot)} ${slot>=6?'new-ornament':''} ${activeSlot===slot?'ornament-active':''}">${glyph(pet,slot)}${interactive?`<button class="ornament-touch" type="button" data-action="play-ornament:${slot}" aria-label="${sets[pet][slot]} 반응 보기"></button>`:''}</div>`).join('')}</div>`:'';
+  const ids=worn({pet,equipped});
+  return ids.length?`<div class="forest-set gear-${pet}" ${interactive?'':'aria-hidden="true"'}>${ids.map(slot=>`<div style="${placement(pet,slot)}" class="forest-piece placed-ornament ornament-${slot} forest-slot-${positionFor(slot,pet)} ${slot>=6?'new-ornament':''} ${activeSlot===slot?'ornament-active':''}">${glyph(pet,slot)}${interactive?`<button class="ornament-touch" type="button" data-action="play-ornament:${slot}" aria-label="${sets[pet][slot]} 반응 보기"></button>`:''}</div>`).join('')}</div>`:'';
 }
-const worn=s=>Array.isArray(s.equipped)?s.equipped:Number.isInteger(s.equipped)?[s.equipped]:[];
+const worn=s=>{
+  const ids=Array.isArray(s.equipped)?s.equipped:Number.isInteger(s.equipped)?[s.equipped]:[];
+  const slots=new Map();
+  for(const id of ids) if(Number.isInteger(id)&&id>=0&&id<12) slots.set(positionFor(id,s.pet??state.pet),id);
+  return [...slots.values()];
+};
 const fresh=pet=>({pet,xp:0,food:0,fed:0,stage:0,stageFed:0,correct:[],hinted:[],rewarded:[],active:null,equipped:[],ownedOrnaments:[]});
 function read(k){try{return JSON.parse(localStorage.getItem(k))}catch{return null}}
 let roster=read(key);
@@ -378,5 +384,3 @@ function playOpening(){
 }
 
 if(typeof window!=='undefined')playOpening();
-
-
