@@ -952,3 +952,9 @@ main{width:min(100%,560px);padding:20px 20px 36px}.intro{margin-bottom:16px}.int
 @media(min-width:640px) and (max-width:759px) and (orientation:landscape){.opening{grid-template-columns:minmax(345px,43%) 1fr;grid-template-rows:1fr 1fr;min-height:100svh;align-content:center}.opening-art img{left:42%;width:58%;object-position:center 53%}.opening-art .pet{left:42%;right:0;top:50%;transform:translateY(-50%);width:min(53vw,570px)}.opening-shade{background:linear-gradient(90deg,#10231a 34%,#10231a77 55%,transparent 72%),linear-gradient(0deg,#10231a 0%,transparent 22%)}.opening-copy{grid-column:1;grid-row:1;align-self:end;padding-bottom:26px}.opening-controls{grid-column:1;grid-row:2;align-self:start}.opening-sparks{left:38%}}
 @media(min-width:640px) and (max-width:759px) and (orientation:landscape){.opening-art{left:43%;--forest-floor:94%}.opening-forest{background-position:center 62%}.opening-art .opening-friend{height:76%;width:90%;max-width:690px}.opening-shade{background:linear-gradient(90deg,#10231a 36%,#10231a66 51%,transparent 63%),linear-gradient(0deg,#10231a66 0%,transparent 18%)}}
 @media(min-width:640px) and (max-width:759px) and (orientation:landscape){.opening-baby .opening-art .opening-friend{width:74%;max-width:565px;height:62%}}
+
+/* Keep every decoration reachable even when a mature portrait fills the scene. */
+.grove-scene>.forest-set{z-index:3;pointer-events:none}
+.grove-scene>.pet{pointer-events:none}
+.forest-set .placed-ornament>.ornament-touch{pointer-events:auto;min-width:44px;min-height:44px;max-width:100%;padding:0;border:0;background:transparent;box-shadow:none;border-radius:8px;touch-action:manipulation}
+.forest-set .placed-ornament>.ornament-touch:focus-visible{outline:3px solid #ffe6a2;outline-offset:2px;background:#fff0b31c}
