@@ -24,36 +24,90 @@ function loadSheet(pet,stage){
   return sheets.get(path);
 }
 const actionRows={look:1,reach:0,sniff:1,inspect:1,follow:1,stamp:0,perk:1,hop:2,'double-hop':2,splash:0,listen:1,step:2,pluck:0,sip:3,sway:2,warm:1,ring:0};
+export function warmFriend(pet,stage,scene){
+  return loadSheet(pet,stage).then(sheet=>{
+    const image=scene?.querySelector('.friend-image'),body=image?.closest('.pet');
+    if(!body?.isConnected||active.has(body))return sheet;
+    const canvas=makeSurface(image),ctx=canvas.getContext('2d');if(!ctx)return sheet;
+    drawContained(ctx,sheet,canvas.width,canvas.height,1,0);image.after(canvas);image.style.visibility='hidden';
+    let observer;const controller={canvas,idle:true,snapshot:()=>copySurface(canvas),cleanup(){observer?.disconnect();canvas.remove();image.style.removeProperty('visibility');if(active.get(body)===controller)active.delete(body);}};
+    active.set(body,controller);observer=new MutationObserver(()=>{if(!body.isConnected)controller.cleanup()});
+    observer.observe(document.querySelector('#app'),{childList:true,subtree:true});return sheet;
+  }).catch(()=>null);
+}
+function makeSurface(image){
+  const canvas=document.createElement('canvas'),rect=image.getBoundingClientRect();
+  canvas.width=384;canvas.height=Math.max(1,Math.round(384*(rect.height||256)/(rect.width||256)));
+  canvas.className=image.className+' play-pose sprite-motion';canvas.setAttribute('aria-hidden','true');return canvas;
+}
+function copySurface(canvas){const copy=document.createElement('canvas');copy.width=canvas.width;copy.height=canvas.height;copy.getContext('2d').drawImage(canvas,0,0);return copy;}
+const pending=new WeakMap();
+const ease=t=>t*t*(3-2*t);
+function drawContained(ctx,source,width,height,alpha=1,cell=null){
+  const sw=cell!==null?256:source.naturalWidth,sh=cell!==null?256:source.naturalHeight;
+  const scale=Math.min(width/sw,height/sh),w=sw*scale,h=sh*scale;
+  ctx.globalAlpha=alpha;
+  if(cell!==null)ctx.drawImage(source,cell%4*256,Math.floor(cell/4)*256,256,256,(width-w)/2,height-h,w,h);
+  else ctx.drawImage(source,(width-w)/2,height-h,w,h);
+}
+function sequenceFor(action,name){
+  if(action==='snack')return [0,1,2,3,12,13,14,15,14,15,16,17,18,19,0];
+  if(action==='toy')return [0,1,2,3,4,5,6,7,8,9,10,11,7,4,0];
+  const first=(actionRows[name]??1)*4;
+  // Return through adjacent poses; looking at a lamp should not suddenly turn into a jump.
+  return [0,first,first+1,first+2,first+3,first+2,first+1,first,0];
+}
 export async function animateFriend(scene,pet,action,slot){
   if(!scene||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  active.get(scene)?.();
-  const image=scene.querySelector('.friend-image');
-  if(!image)return;
-  const stage=Number(image.closest('.pet').className.match(/stage-(\d)/)?.[1]??0);
-  let sheet;try{sheet=await loadSheet(pet,stage);}catch{return;}
-  if(!scene.isConnected)return;
-  active.get(scene)?.();
-  const canvas=document.createElement('canvas');canvas.width=canvas.height=256;
-  canvas.className=image.className+' play-pose sprite-motion';canvas.setAttribute('aria-hidden','true');
+  const image=scene.querySelector('.friend-image'),body=image?.closest('.pet');
+  if(!body)return;
+  const job={};pending.set(body,job);
+  const stage=Number(body.className.match(/stage-(\d)/)?.[1]??0);
+  let sheet;try{[sheet]=await Promise.all([loadSheet(pet,stage),image.decode()]);}catch{return;}
+  if(!body.isConnected||pending.get(body)!==job)return;
+  // Keep the last visible pose when another decoration is tapped during an action.
+  const prior=active.get(body),snapshot=prior?.idle?null:prior?.snapshot();prior?.cleanup();
+  const canvas=makeSurface(image);
   const ctx=canvas.getContext('2d');if(!ctx)return;
-  const name=action==='ornament'?ornamentActions[pet][slot]:action;
-  const sequence=action==='snack'?[0,1,2,3,12,13,14,15,14,15,16,17,18,19]:action==='toy'?[0,1,2,3,4,5,6,7,8,9,10,11,16,17,18,19]:Array.from({length:4},(_,i)=>(actionRows[name]??1)*4+i).concat([16,17,18,19]);
-  const duration=action==='snack'?3400:2800;
-  const ornament=scene.querySelector('.ornament-active');
+  ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';
+  const name=action==='ornament'?ornamentActions[pet]?.[slot]:action;
+  const sequence=sequenceFor(action,name),duration=action==='snack'?3400:action==='toy'?3000:2600;
+  const ornament=scene.querySelector('.ornament-active');let fx;
   if(ornament){
     scene.dataset.interaction=name;ornament.dataset.interaction=name;
-    const fx=document.createElement('span');fx.className='interaction-effect effect-'+name;fx.innerHTML='<i></i><i></i><i></i>';ornament.append(fx);
+    fx=document.createElement('span');fx.className='interaction-effect effect-'+name;fx.innerHTML='<i></i><i></i><i></i>';ornament.append(fx);
   }
-  let raf,observer;const start=performance.now();
-  function cleanup(){cancelAnimationFrame(raf);observer?.disconnect();canvas.remove();image.style.removeProperty('visibility');scene.querySelectorAll('.interaction-effect').forEach(el=>el.remove());delete scene.dataset.interaction;delete scene.dataset.motionBeat;active.delete(scene);}
-  active.set(scene,cleanup);image.after(canvas);image.style.visibility='hidden';
-  observer=new MutationObserver(()=>{if(!scene.isConnected)cleanup();});observer.observe(document.querySelector('#app'),{childList:true});
+  const {width,height}=canvas;const entry=240,exit=300;
+  let raf,observer,finished=false;const start=performance.now();
+  function cleanup(){
+    if(finished)return;finished=true;cancelAnimationFrame(raf);observer?.disconnect();canvas.remove();
+    image.style.removeProperty('visibility');fx?.remove();delete scene.dataset.interaction;delete scene.dataset.motionBeat;
+    if(active.get(body)?.canvas===canvas)active.delete(body);
+  }
+  const controller={canvas,cleanup,idle:false,snapshot:()=>copySurface(canvas)};active.set(body,controller);
+  function rest(alpha){
+    if(snapshot){ctx.globalAlpha=alpha;ctx.drawImage(snapshot,0,0,width,height);}
+    else drawContained(ctx,sheet,width,height,alpha,0);
+  }
+  function pose(index,alpha){drawContained(ctx,sheet,width,height,alpha,index);}
   function tick(now){
-    if(!scene.isConnected||now-start>=duration){cleanup();return;}
-    const index=sequence[Math.min(sequence.length-1,Math.floor((now-start)/duration*sequence.length))];
-    ctx.clearRect(0,0,256,256);ctx.drawImage(sheet,index%4*256,Math.floor(index/4)*256,256,256,0,0,256,256);
-    scene.dataset.motionBeat=String(index);
-    raf=requestAnimationFrame(tick);
+    if(!body.isConnected){cleanup();return;}
+    const elapsed=Math.max(0,now-start);ctx.clearRect(0,0,width,height);
+    // Add premultiplied layers so overlapping opaque fur stays opaque during the blend.
+    ctx.globalCompositeOperation='lighter';
+    if(elapsed<entry){const t=ease(elapsed/entry);rest(1-t);pose(sequence[0],t);}
+    else if(elapsed>duration-exit){const t=ease(Math.min(1,(elapsed-duration+exit)/exit));pose(sequence.at(-1),1-t);pose(0,t);}
+    else{
+      const position=(elapsed-entry)/(duration-entry-exit)*(sequence.length-1);
+      const from=Math.min(sequence.length-2,Math.floor(position)),t=ease(position-from);
+      pose(sequence[from],1-t);pose(sequence[from+1],t);
+      scene.dataset.motionBeat=String(sequence[from]);
+    }
+    ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';
+    if(elapsed>=duration){controller.idle=true;delete scene.dataset.motionBeat;fx?.remove();delete scene.dataset.interaction;return;}raf=requestAnimationFrame(tick);
   }
+  // Draw the current appearance before hiding it: no empty canvas on the first frame.
+  rest(1);image.after(canvas);image.style.visibility='hidden';
+  observer=new MutationObserver(()=>{if(!body.isConnected)cleanup();});observer.observe(document.querySelector('#app'),{childList:true,subtree:true});
   raf=requestAnimationFrame(tick);
 }
