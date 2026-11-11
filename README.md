@@ -12,7 +12,7 @@
 | `app.js` | 화면 전환, 육성·진화·장식 상점, 저장 로직 |
 | `content.js` | 캐릭터 정보와 문제 데이터 (통합과학·통합사회·한국사, 90단원 / 270문제) |
 | `additional-questions.js`, `challenge-questions.js`, `expansion-units.js` | 추가·도전 문제 |
-| `play-motion.js`, `quiz-sounds.js`, `forest-music.js` | 놀이 동작, 효과음, 배경 음악 |
+| `play-motion.js`, `quiz-sounds.js`, `forest-music.js`, `forest-composition.js` | 놀이 동작, 효과음, 배경 음악 |
 | `pet-*-stage-*.webp`, `motion/`, `ornaments/`, `props/` | 캐릭터·장식·소품 이미지 |
 | `forest-opening.mp4`, `forest-opening.m4a`, `run-*.png` | 오프닝 영상·소리와 대체 애니메이션 |
 
@@ -42,3 +42,10 @@ Vercel 프로젝트의 배포 루트를 이 저장소 루트로 설정합니다.
 
 `node tests/quiz-flow.mjs`로 원본 화면 로직의 저장·채점·복습 보상·기존 기록 호환성을 검사합니다.
 브라우저·실기기 UI 검증은 별도로 수행해야 합니다.
+
+## 숲 배경 음악
+
+약 107초 길이의 오리지널 64마디 곡을 앱에서 합성합니다. 하프·플루트 계열 음색, 부드러운 패드, 작은 종소리와 합성 바람·새소리로 구성하며 녹음 샘플이나 외부 음원 요청은 없습니다.
+스테레오 잔향과 페이드, 문제풀이 중 볼륨 감소, 백그라운드 정지를 지원합니다. 사용자가 음악 버튼을 누르면 시작합니다.
+
+`node tests/forest-music.mjs`로 악보·샘플 신호와 음악 재생 상태 전환을 검사합니다. 실제 모바일 기기에서의 청감과 브라우저 오디오 출력 검증은 별도입니다.
