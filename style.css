@@ -1002,3 +1002,12 @@ body.quiz-page .mast,body.care-page .mast{padding-top:58px}
   .quiz .option{min-height:48px}
   .quiz .actions button{min-height:44px}
 }
+
+/* 축하 폭죽: 먹이 보상과 진화 순간에 색종이처럼 터집니다 */
+.burst{pointer-events:none;position:absolute;left:38px;top:50%;width:0;height:0;z-index:3}
+.burst i{position:absolute;left:0;top:0;width:var(--s);height:var(--s);margin:calc(var(--s)/-2);border-radius:40%;background:var(--c);opacity:0;animation:burst-fly 1.35s cubic-bezier(.12,.7,.3,1) var(--t) both}
+.result .burst{left:50%;top:46%;z-index:4}
+.result .burst i{animation-duration:1.8s}
+.quiz-page .notice.reward-notice{position:relative}
+@keyframes burst-fly{0%{opacity:0;transform:translate(0,0) scale(.3) rotate(0)}12%{opacity:1}70%{opacity:1;transform:translate(var(--x),var(--y)) scale(1) rotate(260deg)}100%{opacity:0;transform:translate(var(--x),calc(var(--y) + var(--g))) scale(.6) rotate(420deg)}}
+@media (prefers-reduced-motion:reduce){.burst{display:none}}
